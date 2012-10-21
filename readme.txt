@@ -1,9 +1,11 @@
                              CSCI 2270  Project 2
                               Network (The Game)
-                       Due 11:55pm Saturday, November 17, 2012
+                       due 11:55pm Saturday, November 17, 2012
 
 Warning:  This project is substantially more time-consuming than Project 1.
           Start early.
+
+This is an editThis is an editThis is an editThis is an editThis is an edit
 
 This is a team project.  Form a team of 2 or 3 people.  If you absolutely
 MUST work alone, you can.  However, we strongly prefer you work in a team.
