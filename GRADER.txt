@@ -6,8 +6,8 @@ Login of student running submit:
 Second team member's name (if any):
 Second team member's login:
 
-Third team member's name (if any):
-Third team member's login:
+Third team member's name (if any):Ian McLaughlin
+Third team member's login:iamc6160
 
 IMPORTANT:  Only one team member should submit their project to the moodle.
 If a different teammate must submit, inform me (John Black) via email 
