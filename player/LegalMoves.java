@@ -3,11 +3,8 @@
 package player; 
 
 /**
- *	A public class with its own internal copy of the board.  
- *	It contains static methods that can return all possible moves for a certain
- *	player, and also whether a move is valid or not. 
- *
- *
+ *	A package protected class that contains static methods that can return
+ *	all possible moves for a certain player, and also whether a move is valid or not. 
  */
 
 class LegalMoves{
