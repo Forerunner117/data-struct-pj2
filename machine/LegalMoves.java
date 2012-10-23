@@ -1,6 +1,8 @@
 /* LegalMoves.java */
 
-package player; 
+package machine; 
+
+import player.*;
 
 /**
  *	A package protected class that contains static methods that can return
