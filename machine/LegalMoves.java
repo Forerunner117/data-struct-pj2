@@ -9,15 +9,23 @@ import player.*;
  *	all possible moves for a certain player, and also whether a move is valid or not. 
  */
 
-class LegalMoves{
+class LegalMoves{	
 
-	static int[][] possibleMoves(int[][] board){
-		int[][] valid = new int[8][8];
-		
-		return valid;
-	}
-
-	static boolean isLegal(int x, int y){
+	// A package protected static method that takes a move and a color as 
+	// parameters and returns true for a legal move and false for an illegal
+	// move.
+	static boolean isLegal(Move m, int col){
 		return false;
 	}
+
+	
+ 	// A package protected static method that takes the color of the current player
+ 	// and returns a Board object consisting of null pointers (invalid moves) and
+ 	// Chip objects (valid moves). Calls the isLegal method.	
+	static Board possibleMoves(int col){
+		Board possibleMoves = new Board();
+		
+		return possibleMoves;
+	}
+	
 }
