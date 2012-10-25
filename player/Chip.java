@@ -9,7 +9,7 @@ public class Chip{
 	private boolean flagged = false;
 	
 	public Chip()
-	{
+	{                                                           
 	Color = EMPTY;	
 	}
 	public Chip(int color){
