@@ -22,7 +22,7 @@ class LegalMoves{
 		if(!isOnBoard(m.x1, m.y1))
 			return false;
 
-		//checks for the corners
+		//checks for the corners and excludes them
 		if((m.x1 == 0 && m.y1 == 0) || (m.x1 == 0 && m.y1 == 7) || (m.x1 == 7 && 
 		   m.y1 == 0) || (m.x1 == 7 && m.y1 == 7)){
 			return false;
@@ -45,16 +45,83 @@ class LegalMoves{
 		if(Board.numPieces[col] < 10 && m.moveKind == m.STEP)
 			return false;
 		
-		if(m.moveKind == m.STEP)
+		//if(m.moveKind == m.STEP)
 					
 
-		return false;
+		return true;
 	}
 
 	// A static boolean class that returns true if the move is on the board and
 	// false if not.
 	static boolean isOnBoard(int x, int y){
 		return(x >= 0 && x <= 7 && y >= 0 && y <= 7);
+	}
+
+	static boolean makesCluster(Move m, int col){
+		int x = m.x1;
+		int y = m.y1;
+		Chip src = null;
+		Chip neighbor = null;
+		int numNeighbors = 0;
+
+		if(m.moveKind == m.STEP)
+			src = Board.board[m.x2][m.y2];
+
+		//nested for loop that checks all 8 adjacent neighboring cells
+		for(int i = -1; i < 1; i++){
+			for(int j = -1; j < 1; j++){
+				//skips the center position
+				if(i == 0 && j == 0)
+					continue;
+				//skips any consideration of a spot that is not on the board
+				if(i == -1 && x == 0 || i == 1 && x == 7 || j == -1 && y == 0 ||
+				   j == 1 && y == 7){
+					continue;
+				}
+				if(Board.board[x+i][x+j] != null && Board.board[x+i][x+j].color
+				   == col){
+					if(src != null && Board.board[x+i][x+j] == src)
+						continue;
+					//we found a neighbor
+					neighbor = Board.board[x+i][y+j];
+					++numNeighbors;
+				}
+			}			
+		}
+
+		//if we already found 2 or more neighbors, the move is invalid
+		if(numNeighbors >= 2)
+			return true;
+		//if there were no neighbors, it is a valid move
+		if(numNeighbors == 0)
+			return false;
+		//if we found 1 neighbor, we need to see if it has a neighbor
+		if(numNeighbors == 1){		
+			x = neighbor.x;
+			y = neighbor.y;	
+			for(int i = -1; i < 1; i++){
+				for(int j = -1; j < 1; j++){
+					//skips the center position
+					if(i == 0 && j == 0)
+						continue;
+					//skips any consideration of a spot that is not on the board
+					if(i == -1 && x == 0 || i == 1 && x == 7 || j == -1 && y == 0 ||
+				   	   j == 1 && y == 7){
+						continue;
+					}
+					if(Board.board[x+i][x+j] != null && Board.board[x+i][x+j].color
+				   	   == col){
+						if(src != null && Board.board[x+i][x+j] == src)
+							continue;
+						//we found a neighbor
+						neighbor = Board.board[x+i][y+j];
+						++numNeighbors;
+						return true;
+					}
+				}			
+			}
+		}
+		return false;
 	}
 	
  	// A package protected static method that takes the color of the current player
