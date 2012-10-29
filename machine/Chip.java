@@ -5,10 +5,11 @@ package machine;
 import player.*;
 
 class Chip{
-	static final int WHITE = 10;
-	static final int BLACK = 11;
-	static final int EMPTY = 12;
-	static final int GREY = 13;
+	static final int BLACK = 0;
+	static final int WHITE = 1;
+	static final int GREY =  2;
+	static final int EMPTY = 3;
+	
 	static private int color;
 	boolean visited = false;
 	int x;
