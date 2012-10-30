@@ -65,6 +65,9 @@ Project 2 grade.
 
 Modules:
 
+Board/Chip Module (Ian McLaughlin):
+
+
 Legality Checking Module (Austin Longo):
 
   isLegal is a package protected class that contains static methods that can 
