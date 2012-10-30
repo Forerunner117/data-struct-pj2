@@ -91,13 +91,21 @@ Legality Checking Module (Austin Longo):
     // @return a Board object of Chips indicating possible moves 
     static Board possibleMoves(int col)
 
-Network Checking Module:
+Network Checking Module: (Chris Costello)
 
     // hasNetwork() is a package protected static method that takes a color and
     // returns true if that color has a network on the board, or false is not.
     // @param col is the color of the player we wish to consider
     // @return true to indicate a network was found, or false if not
     static boolean hasNetwork(int col)
+
+    // explore() is a private method that searches the board for potential moves to hop to.
+    // @param color is the current chip color that might have a network.
+    // @param c is the current chip I'm exploring from.
+    // @param length is the amount of hops taken.
+    // @param direction is the direction I came from.
+    // @return true to indicate a network was found, or false if not
+    static boolean explore(int color, Chip c, int length, int direction)
 
 Evaluation / Search Module:
 
