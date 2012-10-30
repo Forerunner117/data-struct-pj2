@@ -7,6 +7,9 @@ import player.*;
 class Board{
 
 	private Chip[][] board = new Chip[8][8];
+	int whitePieces;
+	int blackPieces;
+
 		
 	public Board(){
 		/*for(int i = 0; i < 8; i++){
@@ -21,7 +24,7 @@ class Board{
 		board[7][7].changeColor(Chip.GREY);
 	}
 
-	static Chip returnChip(int x, int y){		
+	Chip returnChip(int x, int y){		
 		return board[x][y];
 	}
 	static void main (String[] args){
@@ -30,7 +33,11 @@ class Board{
 		int color = d.returnColor();
 		System.out.println(color);*/
 	}
-	static void addChip(int x, int y, int color){
+	void addChip(int x, int y, int color){
 		board[x][y].changeColor(color);					
-	}		
+	}	
+
+	int numPieces(int col){
+		
+	}
 }

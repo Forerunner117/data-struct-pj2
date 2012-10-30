@@ -9,7 +9,7 @@ import player.*;
  */
 public class MachinePlayer extends Player {
 
-  private Board bd;
+  Board bd; 
   private int myColor;
   private int oppColor;
   int searchDepth; //package protected

@@ -40,9 +40,9 @@ class LegalMoves{
 
 		//checks if there are 10 BLACK or WHITE pieces and determines if the
 		//moveKind is accurate
-		if(Board.numPieces[col] > 9 && m.moveKind == m.ADD)
+		if(Board.numPieces(col) > 9 && m.moveKind == m.ADD)
 			return false;
-		if(Board.numPieces[col] < 10 && m.moveKind == m.STEP)
+		if(Board.numPieces(col) < 10 && m.moveKind == m.STEP)
 			return false;
 		
 		//if(m.moveKind == m.STEP)
