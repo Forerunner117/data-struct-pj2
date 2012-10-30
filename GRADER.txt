@@ -65,70 +65,88 @@ Project 2 grade.
 
 Modules:
 
-Board/Chip Module (Ian McLaughlin):
- Chip is a package protected class. The chip construct takes in a int 	parameter called color, inter to be either BLACK or WHITE, both final ints.
-It has a boolean variable called visited that is initially false, but can be set to true by the method flag().
-	returnColor() returns the int value corresponding to the color. 
-	changeColor(int color) is a method that changes the color of a chip.
-	unflag() is a method that sets visited to false.
-	isFlagged() is a boolean method that returns true if visited is true.
+/**
+*Board/Chip Module (Ian McLaughlin):
+* 
+*  Chip is a package protected class. The chip constructor takes in an int 
+*  parameter called color, which can be either BLACK or WHITE, both final ints,
+*  as well as the x and y coords for the Chip's location. It has a boolean 
+*  variable called visited that is initially false, but can be set to true by
+*  the method flag().
+*	
+*   // returnColor() returns the int value corresponding to the color. 
+*	  // changeColor(int color) is a method that changes the color of a chip.
+*	  // unflag() is a method that sets visited to false.
+*	  // isFlagged() is a boolean method that returns true if visited is true.
+*
+*	 The Board class is also package protected. A board object is simply an array
+*  of Chips. The Board object has a zero parameter constructer, that allocates 
+*  an 8 by 8 size chip array--all null.
+*	
+*    // addChip() is a method that adds a chip of a certain color at specific 
+*    // point in the array of chips.
+*	   // addChip(int x, int y, int color) 
+*	   // returnChip(in x, int y) returns a chip object at a given point in the chip array.
+*	   // removeChip(int x, int y) is a method that sets a given point of the chip array as null.
+**/
 
-	The Board class is also package protected. A board object is simply an array of Chips.
-	addChip(int x, int y, int color) is a method that adds a chip of a certain color at specific point in the array of chips.
-	The Board object has a zero parameter constructer, that allocates an 8 by 8 size chip array--all null.
-	returnChip(in x, int y) returns a chip object at a given point in the chip array.
-	removeChip(int x, int y) is a method that sets a given point of the chip array as null.
+/**
+*Legality Checking Module (Austin Longo):
+*
+*  LegalMoves is a package protected class that contains static methods that can 
+*  return all possible moves for a certain player, and also whether a move is
+*  valid or not. 
+*  class LegalMoves
+*  
+*    // isLegal() is a package protected static method that takes a move and a 
+*    // color as parameters and returns true for a legal move and false for an
+*    // illegal move.
+*    // @param m is the move we wish to check for legality
+*    // @param col is the color of the player making the move
+*    // @return true if the move is legal, false otherwise
+*    static boolean isLegal(Move m, int col)
+*
+*    // possibleMoves() is a package protected static method that takes the 
+*    // color of the current player and returns a Board object consisting of
+*    // null pointers (invalid moves) and Chip objects (valid moves). Calls 
+*    // the isLegal() method. 
+*    // @param col is the color of the player we wish to consider
+*    // @return a Board object of Chips indicating possible moves 
+*    static Board possibleMoves(int col)
+**/
 
-Legality Checking Module (Austin Longo):
+/**
+*Network Checking Module: (Chris Costello)
+*
+*    // hasNetwork() is a package protected static method that takes a color and
+*    // returns true if that color has a network on the board, or false is not.
+*    // @param col is the color of the player we wish to consider
+*    // @return true to indicate a network was found, or false if not
+*    static boolean hasNetwork(int col)
+*
+*   // explore() is a private method that searches the board for potential moves to hop to.
+*    // @param color is the current chip color that might have a network.
+*    // @param c is the current chip I'm exploring from
+*    // @param length is the amount of hops taken.
+*    // @param direction is the direction I came from.
+*    // @return true to indicate a network was found, or false if not
+*    static boolean explore(int color, Chip c, int length, int direction)
+**/
 
-  LegalMoves is a package protected class that contains static methods that can 
-  return all possible moves for a certain player, and also whether a move is
-  valid or not. 
-  class LegalMoves
-  
-    // isLegal() is a package protected static method that takes a move and a 
-    // color as parameters and returns true for a legal move and false for an
-    // illegal move.
-    // @param m is the move we wish to check for legality
-    // @param col is the color of the player making the move
-    // @return true if the move is legal, false otherwise
-    static boolean isLegal(Move m, int col)
-
-    // possibleMoves() is a package protected static method that takes the 
-    // color of the current player and returns a Board object consisting of
-    // null pointers (invalid moves) and Chip objects (valid moves). Calls 
-    // the isLegal() method. 
-    // @param col is the color of the player we wish to consider
-    // @return a Board object of Chips indicating possible moves 
-    static Board possibleMoves(int col)
-
-Network Checking Module: (Chris Costello)
-
-    // hasNetwork() is a package protected static method that takes a color and
-    // returns true if that color has a network on the board, or false is not.
-    // @param col is the color of the player we wish to consider
-    // @return true to indicate a network was found, or false if not
-    static boolean hasNetwork(int col)
-
-   // explore() is a private method that searches the board for potential moves to hop to.
-    // @param color is the current chip color that might have a network.
-    // @param c is the current chip I'm exploring from
-    // @param length is the amount of hops taken.
-    // @param direction is the direction I came from.
-    // @return true to indicate a network was found, or false if not
-    static boolean explore(int color, Chip c, int length, int direction)
-
-
-Evaluation / Search Module:
-
-  AI is a package protected class that contains methods that will perform 
-  game-tree search and implement the mini-max algorithm to search for all
-  possible moves and evaluate them. The search method will then return the 
-  highest rated Move.
-
-  // smartMove() returns the best possible move for a given color. It
-  // implements game-tree search and the mini-max algorithm.
-  static Move smartMove(int col, int sDepth)
-  
+/**
+*Evaluation / Search Module:
+*
+*  AI is a package protected class that contains methods that will perform 
+*  game-tree search and implement the mini-max algorithm to search for all
+*  possible moves and evaluate them. The search method will then return the 
+*  highest rated Move.
+*
+*    // smartMove() returns the best possible move for a given color. It
+*    // implements game-tree search and the mini-max algorithm.
+*    // @param col is the color of the player we wish to evaluate for
+*    // @param sDepth is the search depth that will be used
+*    // @return a Move object
+*    static Move smartMove(int col, int sDepth)
+**/  
 
 
