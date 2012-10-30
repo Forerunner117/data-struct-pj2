@@ -81,7 +81,7 @@ It has a boolean variable called visited that is initially false, but can be set
 
 Legality Checking Module (Austin Longo):
 
-  isLegal is a package protected class that contains static methods that can 
+  LegalMoves is a package protected class that contains static methods that can 
   return all possible moves for a certain player, and also whether a move is
   valid or not. 
   class LegalMoves
@@ -112,5 +112,14 @@ Network Checking Module:
 
 Evaluation / Search Module:
 
+  AI is a package protected class that contains methods that will perform 
+  game-tree search and implement the mini-max algorithm to search for all
+  possible moves and evaluate them. The search method will then return the 
+  highest rated Move.
+
+  // smartMove() returns the best possible move for a given color. It
+  // implements game-tree search and the mini-max algorithm.
+  static Move smartMove(int col, int sDepth)
+  
 
 
