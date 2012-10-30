@@ -7,17 +7,12 @@ import player.*;
 class Chip{
 	static final int BLACK = 0;
 	static final int WHITE = 1;
-	static final int GREY =  2;
-	static final int EMPTY = 3;
 	
-	static private int color;
+	int color;
 	boolean visited = false;
 	int x;
 	int y;
-	
-	Chip(){                                                           
-		color = EMPTY;	
-	}
+	                                                      
 
 	Chip(int color){		
 		this.color = color;
