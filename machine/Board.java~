@@ -34,14 +34,10 @@ class Board{
 		System.out.println(color);*/
 	}
 	void addChip(int x, int y, int color){
-		board[x][y]=new Chip(x,y,color);					
+		board[x][y].changeColor(color);					
 	}	
 
 	int numPieces(int col){
 		
-	}
-	void removeChip(int x, int y)
-	{
-	board[x][y]= null;	
 	}
 }

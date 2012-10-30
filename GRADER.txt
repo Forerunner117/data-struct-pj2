@@ -77,6 +77,7 @@ It has a boolean variable called visited that is initially false, but can be set
 	addChip(int x, int y, int color) is a method that adds a chip of a certain color at specific point in the array of chips.
 	The Board object has a zero parameter constructer, that allocates an 8 by 8 size chip array--all null.
 	returnChip(in x, int y) returns a chip object at a given point in the chip array.
+	removeChip(int x, int y) is a method that sets a given point of the chip array as null.
 
 Legality Checking Module (Austin Longo):
 
