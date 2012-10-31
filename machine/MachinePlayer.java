@@ -1,6 +1,6 @@
 /* MachinePlayer.java */
 
-package machine;
+import machine.*;
 
 import player.*;
 /**
@@ -9,7 +9,7 @@ import player.*;
  */
 public class MachinePlayer extends Player {
 
-  Board bd; 
+  private Board bd; 
   private int myColor;
   private int oppColor;
   int searchDepth; //package protected
