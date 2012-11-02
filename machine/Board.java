@@ -83,8 +83,9 @@ class Board{
 		chip.flag();
 		int x = chip.getX();
 		int y = chip.getY();
-		Chip neighbor;
-
+		Chip neighbor = board[0][0];
+		neighbor = null;  //Haven't found a neighbor yet.
+		int curr_dir = -1; //There is not current direction yet.
 		for (int i=-1; i<=1; i++) {
 			for (int j=-1; j<=1; j++) {
 
@@ -97,26 +98,215 @@ class Board{
 				if( (x + i == 0 && y + j == 0)  ||  (x + i == 7 && y + j == 0)   ||  
 				    (x + i == 7 && y + j == 7)  ||  (x + i == 0 && y + j == 7) )
 					continue;
+				
+				/**Finding a neighbor.
+				 * The looking functions make sure
+				 * that I don't run off the board. 
+				 */
+				if( i == -1 && j == -1){
+					//look SW
+					neighbor = lookSW(x, y);
+					if(neighbor != null)
+						curr_dir = Direction.SW;
+				}
+				if( i == -1 && j == 0){
+					//look W
+					neighbor = lookW(x, y);
+					if(neighbor != null)
+						curr_dir = Direction.W;
+				}
+				if( i == -1 && j == 1){
+					//look NW
+					neighbor = lookNW(x, y);
+					if(neighbor != null)
+						curr_dir = Direction.NW;
+				}
+				if ( i == 0 && j == 1){
+					//look N
+					neighbor = lookN(x, y);
+					if(neighbor != null)
+						curr_dir = Direction.N;
+				}
+				if (i == 1 && j == 1){
+					//look NE
+					neighbor = lookNE(x, y);
+					if(neighbor != null)
+						curr_dir = Direction.NE;
+				}
+				if( i == 1 && j == 0){
+					//look E
+					neighbor = lookE(x, y);
+					if(neighbor != null)
+						curr_dir = Direction.E;
+				}
+				if( i == 1 && j == -1){
+					//look SE
+					neighbor = lookSE(x ,y);
+					if(neighbor != null)
+						curr_dir = Direction.SE;
+				}
+				if ( i == 0 && j == -1){
+					//look S
+					neighbor = lookS(x, y);
+					if(neighbor != null)
+						curr_dir = Direction.S;
+				}
+		
+				//Applying logic to neighbors
 
+				if(neighbor == null)//If you have no neighbors, there must not be a network.
+					continue;
+				if(neighbor.returnColor() != col)//wrong color
+					continue;
+				if(curr_dir == dir)//same direction
+					continue;
 
-
-				//neighbor = findNeighbor(x, y, col);
-
-
-			}
-		}
+				if(neighbor.isFlagged())//already visited
+					continue;
+				if( (col == Chip.WHITE && neighbor.getX() == 0) || //NOTE: I'm assuming white start_goal is left column
+				    (col == Chip.BLACK && neighbor.getY() == 0))  //NOTE: I'm assuming black start_goal is top row
+					continue;
+				
+				if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
+					if (len >= 5) return true;
+				}
+				else
+					if(explore(col, neighbor, len+1, curr_dir))
+						return true;
+				}//end inner for
+			}//end outer for
+		
+		chip.unflag();//chip has no neighbors...how sad.
 		return false;
 	}
-		
-	/*Chip findNeighbor(int x, int y, int col){
-		Chip temp = board[x][y];
-		
-		while(temp != null){
-			temp = board[x][y];
-			x++;
-		}
-	}*/
 
+
+
+      /*if no neighbor (because you ran off board), continue;
+      if neighbor is not your color, continue;
+      if neighbor is the same direction you just came from, continue;
+      if neighbor was already visited, continue;
+      if neighbor is in start_goal, continue;
+      if neighbor is in end_goal {
+	if (len >= 5) return true;
+      }
+      else
+	if (explore(color, neighbor, len+1, curr_direction)) return true;
+    }
+
+    mark chip as unvisited
+    return false;
+  }*/
+
+
+	Chip lookN(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && y>8){
+			y--;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
+	Chip lookNE(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && x<8 && y>0){
+			x++;
+			y--;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
+	Chip lookE(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && x<8){
+			x++;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
+	Chip lookSE(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && x<8 && y<8){
+			x++;
+			y++;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
+	Chip lookS(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && y<8){
+			y++;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
+	Chip lookSW(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && x>0 && y<8){
+			x--;
+			y++;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
+	Chip lookW(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && x>0){
+			x--;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
+	Chip lookNW(int i, int j){
+		int x = i;
+		int y = j;
+		Chip neighbor = board[x][y];
+		while(neighbor != null && x>0 && y>0){
+			x--;
+			y--;
+			neighbor = board[x][y];
+		}
+		if(neighbor == null)
+			return null;
+		else
+			return neighbor;
+	}
   // hasNetwork() code skeleton
   //
 
