@@ -83,14 +83,15 @@ class Board{
 		chip.flag();
 		int x = chip.getX();
 		int y = chip.getY();
-		Chip neighbor = board[0][0];
+		Chip neighbor = board[0][0];//I want it to be null, but this is so it will compile.
 		neighbor = null;  //Haven't found a neighbor yet.
 		int curr_dir = -1; //There is not current direction yet.
 		for (int i=-1; i<=1; i++) {
 			for (int j=-1; j<=1; j++) {
-
-				//Running off board.
+				
 				if( (i == 0) && (j==0)) continue;
+				
+				//Running off board.
 				if( ((x + i ) < 0)  ||  ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) ) 
 					continue; 
 
