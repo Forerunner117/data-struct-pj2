@@ -66,22 +66,57 @@ class Board{
 		for (int i=1; i<7; i++) {//Check the first goal on the left.
 			if(board[0][i].returnColor() == col)						
 				unflagAllChipsOfColor(col);
-				return explore(col, board[0][i], 1, Direction.W);
+				return explore(col, board[0][i], 1, Direction.E);
 			}
 
 		}
-		if(col == Chip.BLACK){//Check the goal on the right.
+		if(col == Chip.BLACK){//Check the goal on the top.
 		for (int i=0; i<7; i++) {
 			if(board[i][0].returnColor() == col)						
 				unflagAllChipsOfColor(col);
-				return explore(col, board[0][i], 1, Direction.W);
+				return explore(col, board[i][0], 1, Direction.S);
 			}
 		}
 		return false;
 	}
 	boolean explore(int col, Chip chip, int len, int dir){
+		chip.flag();
+		int x = chip.getX();
+		int y = chip.getY();
+		Chip neighbor;
+
+		for (int i=-1; i<=1; i++) {
+			for (int j=-1; j<=1; j++) {
+
+				//Running off board.
+				if( (i == 0) && (j==0)) continue;
+				if( ((x + i ) < 0)  ||  ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) ) 
+					continue; 
+
+				//Eliminating Corners.
+				if( (x + i == 0 && y + j == 0)  ||  (x + i == 7 && y + j == 0)   ||  
+				    (x + i == 7 && y + j == 7)  ||  (x + i == 0 && y + j == 7) )
+					continue;
+
+
+
+				//neighbor = findNeighbor(x, y, col);
+
+
+			}
+		}
 		return false;
 	}
+		
+	/*Chip findNeighbor(int x, int y, int col){
+		Chip temp = board[x][y];
+		
+		while(temp != null){
+			temp = board[x][y];
+			x++;
+		}
+	}*/
+
   // hasNetwork() code skeleton
   //
 

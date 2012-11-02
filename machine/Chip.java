@@ -43,7 +43,12 @@ class Chip{
 	int returnColor(){
 		return color;	
 	}
-	
+	int getX(){
+		return x;
+	}
+	int getY(){
+		return y;
+	}
 	void changeColor( int color){
 		this.color = color;			
 	}
