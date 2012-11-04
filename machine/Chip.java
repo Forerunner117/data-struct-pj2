@@ -8,7 +8,8 @@ class Chip{
 	static final int BLACK = 0;
 	static final int WHITE = 1;
 	static final int GREY = 2;
-	
+	static final int EMPTY = 3;
+
 	int color;
 	boolean visited = false;
 	int x;
