@@ -1,6 +1,6 @@
 /* MachinePlayer.java */
 
-import machine.*;
+package machine;
 
 import player.*;
 /**
@@ -9,7 +9,7 @@ import player.*;
  */
 public class MachinePlayer extends Player {
 
-  private Board bd; 
+  Board bd; 
   private int myColor;
   private int oppColor;
   int searchDepth; //package protected
@@ -31,12 +31,14 @@ public class MachinePlayer extends Player {
   // Creates a machine player with the given color and search depth.  Color is
   // either 0 (black) or 1 (white).  (White has the first move.)
   public MachinePlayer(int color, int searchDepth) {
+    this(color);
+    this.searchDepth = searchDepth;
   }
 
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {
-    //call to evaluation function should return a Move object that ranked highest
+    //call to evaluation function should return a Move object that ranked highest    
     return new Move();
   } 
 
@@ -45,9 +47,9 @@ public class MachinePlayer extends Player {
   // illegal, returns false without modifying the internal state of "this"
   // player.  This method allows your opponents to inform you of their moves.
   public boolean opponentMove(Move m) {
-    if(LegalMoves.isLegal(m, oppColor))
-      bd.board[m.x1][m.x2] = new Chip(m.x1, m.y1, oppColor); //should be replaced with a bd.makeMove(Move m) call
-    else
+    //if(LegalMoves.isLegal(m, oppColor))
+     // bd.board[m.x1][m.x2] = new Chip(m.x1, m.y1, oppColor); //should be replaced with a bd.makeMove(Move m) call
+    //else
       return false;
   }
 
