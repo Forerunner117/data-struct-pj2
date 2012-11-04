@@ -27,11 +27,12 @@ class Chip{
 	}
 	void flag(){
 		visited = true;
+		// System.out.println("Chip at (" + x + " " + y + ") is visited");
 	}
 
 	void unflag(){
 		if(visited == false)
-			System.out.println("This isn't visited");
+			// System.out.println("Chip at (" + x + " " + y + ") isn't visited");
 		visited = false;	
 	}
 	
