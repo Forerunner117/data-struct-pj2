@@ -35,14 +35,14 @@ class LegalMoves{
 			return false;
 
 		//checks if the slot is filled
-		if(Board.board[m.x1][m.y1] != Board.EMPTY)
+		if(mp.bd.returnChip(m.x1, m.y1).color != Chip.EMPTY)
 			return false;
 
 		//checks if there are 10 BLACK or WHITE pieces and determines if the
 		//moveKind is accurate
-		if(Board.numPieces(col) > 9 && m.moveKind == m.ADD)
+		if(mp.bd.numPieces(col) > 9 && m.moveKind == m.ADD)
 			return false;
-		if(Board.numPieces(col) < 10 && m.moveKind == m.STEP)
+		if(mp.bd.numPieces(col) < 10 && m.moveKind == m.STEP)
 			return false;
 		
 		//if(m.moveKind == m.STEP)
@@ -57,7 +57,7 @@ class LegalMoves{
 		return(x >= 0 && x <= 7 && y >= 0 && y <= 7);
 	}
 
-	static boolean makesCluster(Move m, int col){
+	static boolean makesCluster(MachinePlayer mp, Move m, int col){
 		int x = m.x1;
 		int y = m.y1;
 		Chip src = null;
@@ -65,7 +65,7 @@ class LegalMoves{
 		int numNeighbors = 0;
 
 		if(m.moveKind == m.STEP)
-			src = Board.board[m.x2][m.y2];
+			src = mp.bd.returnChip(m.x2, m.y2);
 
 		//nested for loop that checks all 8 adjacent neighboring cells
 		for(int i = -1; i < 1; i++){
@@ -78,12 +78,12 @@ class LegalMoves{
 				   j == 1 && y == 7){
 					continue;
 				}
-				if(Board.board[x+i][x+j] != null && Board.board[x+i][x+j].color
+				if(mp.bd.returnChip(x+i, x+j) != null && mp.bd.returnChip(x+i, x+j).color
 				   == col){
-					if(src != null && Board.board[x+i][x+j] == src)
+					if(src != null && mp.bd.returnChip(x+i, x+j) == src)
 						continue;
 					//we found a neighbor
-					neighbor = Board.board[x+i][y+j];
+					neighbor = mp.bd.returnChip(x+i, y+j);
 					++numNeighbors;
 				}
 			}			
@@ -109,12 +109,12 @@ class LegalMoves{
 				   	   j == 1 && y == 7){
 						continue;
 					}
-					if(Board.board[x+i][x+j] != null && Board.board[x+i][x+j].color
+					if(mp.bd.returnChip(x+i, x+j) != null && mp.bd.returnChip(x+i, x+j).color
 				   	   == col){
-						if(src != null && Board.board[x+i][x+j] == src)
+						if(src != null && mp.bd.returnChip(x+i, x+j) == src)
 							continue;
 						//we found a neighbor
-						neighbor = Board.board[x+i][y+j];
+						neighbor = mp.bd.returnChip(x+i, y+j);
 						++numNeighbors;
 						return true;
 					}
@@ -127,7 +127,7 @@ class LegalMoves{
  	// A package protected static method that takes the color of the current player
  	// and returns a Board object consisting of null pointers (invalid moves) and
  	// Chip objects (valid moves). Calls the isLegal method.	
-	static Board possibleMoves(int col){
+	Board possibleMoves(int col){
 		Board possibleMoves = new Board();
 		
 		return possibleMoves;
