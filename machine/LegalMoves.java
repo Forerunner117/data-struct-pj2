@@ -80,8 +80,8 @@ class LegalMoves{
 			src = bd.returnChip(m.x2, m.y2);
 
 		//nested for loop that checks all 8 adjacent neighboring cells
-		for(int i = -1; i < 1; i++){
-			for(int j = -1; j < 1; j++){
+		for(int i = -1; i <= 1; i++){
+			for(int j = -1; j <= 1; j++){
 				//skips the center position
 				if(i == 0 && j == 0)
 					continue;
@@ -90,9 +90,9 @@ class LegalMoves{
 				   j == 1 && y == 7){
 					continue;
 				}
-				if(bd.returnChip(x+i, x+j) != null && bd.returnChip(x+i, x+j).color
+				if(bd.returnChip(x+i, y+j) != null && bd.returnChip(x+i, y+j).color
 				   == col){
-					if(src != null && bd.returnChip(x+i, x+j) == src)
+					if(src != null && bd.returnChip(x+i, y+j) == src)
 						continue;
 					//we found a neighbor
 					neighbor = bd.returnChip(x+i, y+j);
@@ -110,9 +110,11 @@ class LegalMoves{
 		//if we found 1 neighbor, we need to see if it has a neighbor
 		if(numNeighbors == 1){		
 			x = neighbor.x;
+			//System.out.println(neighbor.x);			
 			y = neighbor.y;	
-			for(int i = -1; i < 1; i++){
-				for(int j = -1; j < 1; j++){
+			//System.out.println(neighbor.y);
+			for(int i = -1; i <= 1; i++){
+				for(int j = -1; j <= 1; j++){
 					//skips the center position
 					if(i == 0 && j == 0)
 						continue;
@@ -121,9 +123,9 @@ class LegalMoves{
 				   	   j == 1 && y == 7){
 						continue;
 					}
-					if(bd.returnChip(x+i, x+j) != null && bd.returnChip(x+i, x+j).color
+					if(bd.returnChip(x+i, y+j) != null && bd.returnChip(x+i, y+j).color
 				   	   == col){
-						if(src != null && bd.returnChip(x+i, x+j) == src)
+						if(src != null && bd.returnChip(x+i, y+j) == src)
 							continue;
 						//we found a neighbor
 						neighbor = bd.returnChip(x+i, y+j);

@@ -30,6 +30,7 @@ class Board{
     Chip returnChip(int x, int y){
         return board[x][y];
     }
+    
     public static void main (String[] args){
         Board c = new Board();
         c.addChip(0, 2, Chip.WHITE);
@@ -46,7 +47,8 @@ class Board{
           int color = d.returnColor();
           System.out.println(color);*/
     }
-    void addChip(int x, int y, int color){
+  
+  void addChip(int x, int y, int color){
     board[x][y]=new Chip(x,y,color);          
   } 
 
@@ -248,5 +250,5 @@ class Board{
       	  System.out.println();
         }      	            	            	            	            	      
       }
-      
+
 }

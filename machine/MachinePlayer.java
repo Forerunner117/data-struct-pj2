@@ -39,8 +39,21 @@ public class MachinePlayer extends Player {
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {
+    if(makeFirstMoves() != null)
+      return makeFirstMoves();
     //call to evaluation function should return a Move object that ranked highest    
-    return new Move();
+      int x;
+      int y;
+      Random rn = new Random();
+      x = rn.nextInt(8);
+      y = rn.nextInt(8);
+      
+      Move random = new Move(x,y);
+      if(LegalMoves.isLegal(bd, random, myColor)) 
+        return random;
+      else 
+        chooseMove();        
+      return new Move(0, 0); 
   } 
 
   // If the Move m is legal, records the move as a move by the opponent
@@ -48,9 +61,11 @@ public class MachinePlayer extends Player {
   // illegal, returns false without modifying the internal state of "this"
   // player.  This method allows your opponents to inform you of their moves.
   public boolean opponentMove(Move m) {
-    //if(LegalMoves.isLegal(m, oppColor))
-     // bd.board[m.x1][m.x2] = new Chip(m.x1, m.y1, oppColor); //should be replaced with a bd.makeMove(Move m) call
-    //else
+    if(LegalMoves.isLegal(bd, m, oppColor)){
+      bd.addChip(m.x1, m.y1, oppColor);
+      return true;
+    } 
+    else
       return false;
   }
 
@@ -63,8 +78,7 @@ public class MachinePlayer extends Player {
     return false;
   }
   
-  public Move randomMove(int color)
-  {
+  public Move randomMove(int color){
   	  int x;
   	  int y;
   	  Random rn = new Random();
@@ -72,19 +86,33 @@ public class MachinePlayer extends Player {
   	  y = rn.nextInt() % 8;
   	  
   	  Move random = new Move(x,y);
-  	 LegalMoves legal = new LegalMoves();
-  	  if(legal.isLegal(bd, random, color)) return random;
-  	  	else randomMove(color);
+  	  if(LegalMoves.isLegal(bd, random, color)) 
+        return random;
+  	  else 
+        randomMove(color);
   	  	
-  	  return null;
-  	  	
-  	  
-  	  
-  	  
-  	  
-  	  
-  	  
-  	  
+  	  return null;  	  	  	    	    	    	    	
+  }
+
+  public Move makeFirstMoves(){
+    Move center1 = new Move(3, 3);
+    Move center2 = new Move(3, 4);
+    Move center3 = new Move(4, 3);
+    Move center4 = new Move(4, 4);
+
+    if(LegalMoves.isLegal(bd, center1, myColor))
+      return center1;
+
+    if(LegalMoves.isLegal(bd, center2, myColor))
+      return center2;
+
+    if(LegalMoves.isLegal(bd, center3, myColor))
+      return center3;
+
+    if(LegalMoves.isLegal(bd, center4, myColor))
+      return center4;
+
+    return null;
   }
 
 }
