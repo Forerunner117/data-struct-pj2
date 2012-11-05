@@ -4,8 +4,7 @@ import player.*;
 public class LegalMovesTestDrive{
 
 	public static void main(String[] args){
-		MachinePlayer white = new MachinePlayer(Chip.WHITE);
-		MachinePlayer black = new MachinePlayer(Chip.BLACK);
+		MachinePlayer whitePlayer = new MachinePlayer(Chip.WHITE);
 
 		// constructs perfectly legal center moves
 		Move center1 = new Move(3, 3);
@@ -43,43 +42,43 @@ public class LegalMovesTestDrive{
 		**************************************************************************************************/
 		
 		//Center empty moves
-		System.out.println("Center move should be true: " + LegalMoves.isLegal(white, center1, Chip.WHITE));
-		System.out.println("Center move should be true: " + LegalMoves.isLegal(white, center2, Chip.WHITE));
-		System.out.println("Center move should be true: " + LegalMoves.isLegal(black, center3, Chip.BLACK));
-		System.out.println("Center move should be true: " + LegalMoves.isLegal(black, center4, Chip.BLACK));
+		System.out.println("Center move should be true: " + LegalMoves.isLegal(whitePlayer.bd, center1, Chip.WHITE));
+		System.out.println("Center move should be true: " + LegalMoves.isLegal(whitePlayer.bd, center2, Chip.WHITE));
+		System.out.println("Center move should be true: " + LegalMoves.isLegal(whitePlayer.bd, center3, Chip.BLACK));
+		System.out.println("Center move should be true: " + LegalMoves.isLegal(whitePlayer.bd, center4, Chip.BLACK));
 
 		//Fill spaces with chips and check for legality (same 4 spaces as above)
-		white.bd.addChip(3, 3, Chip.WHITE);
-		white.bd.addChip(3, 4, Chip.BLACK);
+		whitePlayer.bd.addChip(3, 3, Chip.WHITE);
+		whitePlayer.bd.addChip(3, 4, Chip.BLACK);
 		//white.bd.addChip(4, 3, Chip.BLACK);
 		//white.bd.addChip(4, 4, Chip.WHITE);
 
-	    System.out.println("Center move should be false: " + LegalMoves.isLegal(white, center1, Chip.WHITE));
-		System.out.println("Center move should be true: " + LegalMoves.isLegal(white, center2, Chip.WHITE));
-		System.out.println("Center move should be true: " + LegalMoves.isLegal(black, center3, Chip.BLACK));
-		System.out.println("Center move should be true: " + LegalMoves.isLegal(black, center4, Chip.BLACK));
+	    System.out.println("Center move should be false: " + LegalMoves.isLegal(whitePlayer.bd, center1, Chip.WHITE));
+		System.out.println("Center move should be true: " + LegalMoves.isLegal(whitePlayer.bd, center2, Chip.WHITE));
+		System.out.println("Center move should be true: " + LegalMoves.isLegal(whitePlayer.bd, center3, Chip.BLACK));
+		System.out.println("Center move should be true: " + LegalMoves.isLegal(whitePlayer.bd, center4, Chip.BLACK));
 
 		//Center filled moves
 
 		//Corners (false)
-		System.out.println("Corner move should be false: " + LegalMoves.isLegal(white, corner1, Chip.WHITE));
-		System.out.println("Corner move should be false: " + LegalMoves.isLegal(white, corner2, Chip.WHITE));
-		System.out.println("Corner move should be false: " + LegalMoves.isLegal(white, corner3, Chip.WHITE));
-		System.out.println("Corner move should be false: " + LegalMoves.isLegal(white, corner4, Chip.WHITE));
+		System.out.println("Corner move should be false: " + LegalMoves.isLegal(whitePlayer.bd, corner1, Chip.WHITE));
+		System.out.println("Corner move should be false: " + LegalMoves.isLegal(whitePlayer.bd, corner2, Chip.WHITE));
+		System.out.println("Corner move should be false: " + LegalMoves.isLegal(whitePlayer.bd, corner3, Chip.WHITE));
+		System.out.println("Corner move should be false: " + LegalMoves.isLegal(whitePlayer.bd, corner4, Chip.WHITE));
 
 		//Opponent's goal
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal1, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal2, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal3, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal4, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal5, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal6, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal7, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal8, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal9, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal10, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal11, Chip.BLACK));
-		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(black, whiteGoal12, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal1, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal2, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal3, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal4, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal5, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal6, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal7, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal8, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal9, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal10, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal11, Chip.BLACK));
+		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal12, Chip.BLACK));
 		
 
 

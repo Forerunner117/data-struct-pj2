@@ -14,7 +14,7 @@ class LegalMoves{
 	// A package protected static method that takes a move and a color as 
 	// parameters and returns true for a legal move and false for an illegal
 	// move.
-	static boolean isLegal(Move m, int col){
+	static boolean isLegal(Board bd, Move m, int col){
 		if(m.moveKind == m.QUIT)
 			return true;
 
@@ -35,15 +35,21 @@ class LegalMoves{
 			return false;
 
 		//checks if the slot is filled
-		if(mp.bd.returnChip(m.x1, m.y1).color != Chip.EMPTY)
+		if(bd.returnChip(m.x1, m.y1).color != Chip.EMPTY)
 			return false;
 
 		//checks if there are 10 BLACK or WHITE pieces and determines if the
 		//moveKind is accurate
-		if(mp.bd.numPieces(col) > 9 && m.moveKind == m.ADD)
+		if(bd.numPieces(col) > 9 && m.moveKind == m.ADD)
 			return false;
-		if(mp.bd.numPieces(col) < 10 && m.moveKind == m.STEP)
+		if(bd.numPieces(col) < 10 && m.moveKind == m.STEP)
 			return false;
+
+		//checks if the move would make a cluster
+		if(makesCluster(bd, m, col)){
+			System.out.println("This makes a cluster!");
+			return false;
+		}
 		
 		//if(m.moveKind == m.STEP)
 					
@@ -57,7 +63,7 @@ class LegalMoves{
 		return(x >= 0 && x <= 7 && y >= 0 && y <= 7);
 	}
 
-	static boolean makesCluster(MachinePlayer mp, Move m, int col){
+	static boolean makesCluster(Board bd, Move m, int col){
 		int x = m.x1;
 		int y = m.y1;
 		Chip src = null;
@@ -65,7 +71,7 @@ class LegalMoves{
 		int numNeighbors = 0;
 
 		if(m.moveKind == m.STEP)
-			src = mp.bd.returnChip(m.x2, m.y2);
+			src = bd.returnChip(m.x2, m.y2);
 
 		//nested for loop that checks all 8 adjacent neighboring cells
 		for(int i = -1; i < 1; i++){
@@ -78,12 +84,12 @@ class LegalMoves{
 				   j == 1 && y == 7){
 					continue;
 				}
-				if(mp.bd.returnChip(x+i, x+j) != null && mp.bd.returnChip(x+i, x+j).color
+				if(bd.returnChip(x+i, x+j) != null && bd.returnChip(x+i, x+j).color
 				   == col){
-					if(src != null && mp.bd.returnChip(x+i, x+j) == src)
+					if(src != null && bd.returnChip(x+i, x+j) == src)
 						continue;
 					//we found a neighbor
-					neighbor = mp.bd.returnChip(x+i, y+j);
+					neighbor = bd.returnChip(x+i, y+j);
 					++numNeighbors;
 				}
 			}			
@@ -109,12 +115,12 @@ class LegalMoves{
 				   	   j == 1 && y == 7){
 						continue;
 					}
-					if(mp.bd.returnChip(x+i, x+j) != null && mp.bd.returnChip(x+i, x+j).color
+					if(bd.returnChip(x+i, x+j) != null && bd.returnChip(x+i, x+j).color
 				   	   == col){
-						if(src != null && mp.bd.returnChip(x+i, x+j) == src)
+						if(src != null && bd.returnChip(x+i, x+j) == src)
 							continue;
 						//we found a neighbor
-						neighbor = mp.bd.returnChip(x+i, y+j);
+						neighbor = bd.returnChip(x+i, y+j);
 						++numNeighbors;
 						return true;
 					}
