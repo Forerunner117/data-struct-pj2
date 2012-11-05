@@ -54,16 +54,4 @@ class Chip{
 	void changeColor( int color){
 		this.color = color;			
 	}
-	public String toString()
-	{
-		if(color== BLACK)
-			return "BK";
-		else if(color == WHITE)
-			return "WH";
-		else if(color == GREY)
-			return "--";
-		else
-			return "__";
-		
-	}
 }

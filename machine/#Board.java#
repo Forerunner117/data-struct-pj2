@@ -47,7 +47,7 @@ class Board{
           int color = d.returnColor();
           System.out.println(color);*/
     }
-  
+
   void addChip(int x, int y, int color){
     board[x][y]=new Chip(x,y,color);          
   } 
