@@ -74,7 +74,7 @@ class Board{
     for (int i=1; i<7; i++) {//Check the first goal on the left.
       if(board[0][i].returnColor() == col){
         unflagAllChipsOfColor(col);
-        return explore(col, board[0][i], 1, Direction.E);
+        return explore(col, board[0][i], 1, Direction.W);
       }
       }
     }
@@ -90,16 +90,17 @@ class Board{
   }
     boolean explore(int col, Chip chip, int len, int dir){
        System.out.println("\n\n\n####ENTERING EXPLORE###");
-       System.out.println("Flag status of explore chip is " + chip.isFlagged() + " which should be false");
+       // System.out.println("Flag status of explore chip is " + chip.isFlagged() + " which should be false");
         chip.flag();
 
         int x = chip.getX();
-        System.out.println("X position of explore chip is " + x);
+        // System.out.println("X position of explore chip is " + x);
 
         int y = chip.getY();
-        System.out.println("Y position of explore Chip is " + y);        
-
+        // System.out.println("Y position of explore Chip is " + y);        
         Chip neighbor = board[x][y];
+        if(x == 2 && y == 7)
+          System.out.println("\nEnd Goal neighbor before loops and logic: length is " + len);
         // System.out.println("neighbor is " + neighbor + " which should be null");
         int curr_dir = -1; //There is not current direction yet.
         for (int i=-1; i<=1; i++) {
@@ -124,7 +125,10 @@ class Board{
                     neighbor = board[x + i*k][y + j*k];
                     curr_dir = Direction.getCurrDir(i, j);
 
-
+                    // if(neighbor.getX() == 2 && neighbor.getY() == 7)
+                      // System.out.println("##Found end goal neighbor## length is " + len);
+                    // System.out.println("\nneighbor's is at (" + neighbor.getX() + ", " +neighbor.getY()
+                        // + ") and the his color is " + neighbor.returnColor() + " and current color is " + col);
                     /*System.out.println("At i = " + i + " , j = " + j + " and k = " + k +
                         " curr_dir is " + curr_dir);                
                     System.out.println("\nneighbor's color at (" + neighbor.getX() + ", " +neighbor.getY()
@@ -143,32 +147,38 @@ class Board{
                     System.out.println("neighbor's color is " + neighbor.returnColor() + " and current color is " + col);
                 }*/
                 
+
                 if( neighbor.returnColor() != col){//wrong color
                      // System.out.println("\nNeighbor color is, " + neighbor.returnColor() + " and col is " + col + "...The If thinks these are different");
                     continue;
                 }
                 if(curr_dir == dir){ //same direction
-                   System.out.println("The directions are the same\ncurr_dir is " + curr_dir + " dir is " + dir);
+                   // System.out.println("The directions are the same\ncurr_dir is " + curr_dir + " dir is " + dir);
                     continue;
                   }
+
+                if(len == 5){
+                  System.out.println("\n@@ len is 5 right before isFlagged check @@ ( "+ neighbor.getX() + ", " + neighbor.getY() + 
+                    ")\nneighbor flagged status is " + neighbor.isFlagged());
+
+                }
+
                 if(neighbor.isFlagged()){//already visited
-                   System.out.println("The neighbor already visited");
+                   // System.out.println("The neighbor already visited");
                     continue;
                   }
                 if( (col == Chip.WHITE && neighbor.getX() == 0) || //NOTE: I'm assuming white start_goal is left column
                     (col == Chip.BLACK && neighbor.getY() == 0)){  //NOTE: I'm assuming black start_goal is top row
-                    System.out.println("Found neighbor in start goal" + "neighbor.getX() is " + neighbor.getX() 
-                      + " and neighbor.getY() is " + neighbor.getY());
+                    // System.out.println("Found neighbor in start goal" + "neighbor.getX() is " + neighbor.getX() 
+                      // + " and neighbor.getY() is " + neighbor.getY());
                     continue;
                   }
-
                 if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
-                  System.out.println("Found neighbor in end goal. " + "neighbor.getY() is " + neighbor.getY() + " neighbor.getX() is "
-                    + neighbor.getX());
+                  System.out.println("Found neighbor in end goal at  (" + neighbor.getY() + ", "  + neighbor.getX() + ") and length is " + len);
                     if (len >= 5) return true;
-                }
-                else{
-                  System.out.println("Recurssing");
+                
+                }else{
+                  System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
                     if(explore(col, neighbor, len+1, curr_dir))
                         return true;
                     }
