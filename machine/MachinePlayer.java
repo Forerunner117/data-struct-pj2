@@ -45,8 +45,8 @@ public class MachinePlayer extends Player {
       int x;
       int y;
       Random rn = new Random();
-      x = rn.nextInt(8);
-      y = rn.nextInt(8);
+      x = rn.nextInt(7);
+      y = rn.nextInt(7);
       
       Move random = new Move(x,y);
       if(LegalMoves.isLegal(bd, random, myColor)) 
