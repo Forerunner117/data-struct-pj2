@@ -60,10 +60,7 @@ class Board{
     }
     return pieces;
   }
-  void removeChip(int x, int y)
-  {
-  board[x][y]= null;  
-  }
+ 
   void unflagAllChipsOfColor(int col){
     for (int i=0; i<7; i++) {
       for (int j=0; j<7; j++) {
@@ -235,4 +232,26 @@ class Board{
       return false;
       }
       }*/
+      public void dumpBoard()
+      {
+      	      for( int i = 0; i < 8; i++){
+      	      
+      	      System.out.println("| ");	      
+      	      	for(int j = 0; j < 8; j++)
+      	      	{
+      	      	System.out.println( board[i][j]+" | ");	
+      	      		
+      	      		
+      	      	}
+      	        System.out.println();
+      	      }
+      	      
+      	      
+      	      
+      	      
+      	      
+      }
+
+
+
 }

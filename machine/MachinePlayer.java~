@@ -3,7 +3,6 @@
 package machine;
 
 import player.*;
-import java.util.Random;
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves
  *  made by both players.  Can select a move for itself.
@@ -61,30 +60,6 @@ public class MachinePlayer extends Player {
   // player to solve.
   public boolean forceMove(Move m) {
     return false;
-  }
-  
-  public Move randomMove(int color)
-  {
-  	  int x;
-  	  int y;
-  	  Random rn = new Random();
-  	  x = rn.nextInt() % 8;
-  	  y = rn.nextInt() % 8;
-  	  
-  	  Move random = new Move(x,y);
-  	 LegalMoves legal = new LegalMoves();
-  	  if(legal.isLegal(bd, random, color)) return random;
-  	  	else randomMove(color);
-  	  	
-  	  return null;
-  	  	
-  	  
-  	  
-  	  
-  	  
-  	  
-  	  
-  	  
   }
 
 }
