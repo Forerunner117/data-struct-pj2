@@ -80,6 +80,7 @@ public class LegalMovesTestDrive{
 		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal11, Chip.BLACK));
 		System.out.println("Black move into white goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, whiteGoal12, Chip.BLACK));
 		
+		whitePlayer.bd.dumpBoard();
 
 
 	}

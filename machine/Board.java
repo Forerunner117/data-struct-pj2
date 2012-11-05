@@ -232,26 +232,21 @@ class Board{
       return false;
       }
       }*/
-      public void dumpBoard()
-      {
-      	      for( int i = 0; i < 8; i++){
-      	      
-      	      System.out.println("| ");	      
-      	      	for(int j = 0; j < 8; j++)
-      	      	{
-      	      	System.out.println( board[i][j]+" | ");	
-      	      		
-      	      		
-      	      	}
-      	        System.out.println();
-      	      }
-      	      
-      	      
-      	      
-      	      
-      	      
+      public void dumpBoard(){
+        for( int j = 0; j < 8; j++){      	         	      	      
+          for(int i = 0; i < 8; i++){
+            System.out.print("| ");
+            if(board[i][j].color == Chip.BLACK)
+              System.out.print( "B | ");
+            else if(board[i][j].color == Chip.WHITE)
+              System.out.print( "W | ");
+            else if(board[i][j].color == Chip.EMPTY)
+              System.out.print( "_ | ");
+            else
+              System.out.print( "* | ");
+      	  }
+      	  System.out.println();
+        }      	            	            	            	            	      
       }
-
-
-
+      
 }
