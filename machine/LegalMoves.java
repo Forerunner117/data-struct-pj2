@@ -10,12 +10,6 @@ import player.*;
  */
 
 class LegalMoves{	
-	
-		public LegalMoves()
-		{
-			
-			
-		}
 
 	// A package protected static method that takes a move and a color as 
 	// parameters and returns true for a legal move and false for an illegal
@@ -41,8 +35,10 @@ class LegalMoves{
 			return false;
 
 		//checks if the slot is filled
-		if(bd.returnChip(m.x1, m.y1).color != Chip.EMPTY)
+		if(bd.returnChip(m.x1, m.y1).color != Chip.EMPTY){
+			System.out.println("Slot is filled!");
 			return false;
+		}
 
 		//checks if there are 10 BLACK or WHITE pieces and determines if the
 		//moveKind is accurate
@@ -57,7 +53,13 @@ class LegalMoves{
 			return false;
 		}
 		
-		//if(m.moveKind == m.STEP)
+		if(m.moveKind == Move.STEP){
+			if(m.x1 == m.x2 && m.y1 == m.y2){
+				System.out.println("STEP move must move piece!");
+				return false;
+			}
+
+		}
 					
 
 		return true;

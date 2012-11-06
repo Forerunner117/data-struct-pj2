@@ -45,15 +45,19 @@ public class MachinePlayer extends Player {
       int x;
       int y;
       Random rn = new Random();
+
       x = rn.nextInt(7);
       y = rn.nextInt(7);
-      
+
+      //x = (int)(Math.random() * 8);
+      //y = (int)(Math.random() * 8);
+      System.out.println(x + "" + y);
       Move random = new Move(x,y);
       if(LegalMoves.isLegal(bd, random, myColor)) 
         return random;
       else 
-        chooseMove();        
-      return new Move(0, 0); 
+        this.chooseMove();  
+      return this.chooseMove();      
   } 
 
   // If the Move m is legal, records the move as a move by the opponent

@@ -59,6 +59,9 @@ public class LegalMovesTestDrive{
 		Move whiteCluster1 = new Move(3, 1);
 		Move whiteCluster2 = new Move(4, 3);
 
+		//constructs STEP moves
+		Move step1 = new Move(3, 2, 3, 2);
+
 
 
 
@@ -134,6 +137,11 @@ public class LegalMovesTestDrive{
 		System.out.println("White move into black goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, blackGoal11, Chip.WHITE));
 		System.out.println("White move into black goal should be false: " + LegalMoves.isLegal(whitePlayer.bd, blackGoal12, Chip.WHITE));
 
+
+		//STEP moves
+		System.out.println("\nCHECKING STEP MOVES");
+		System.out.println("*****************************************************************");
+		System.out.println("STEP move to same position should be false: " + LegalMoves.isLegal(whitePlayer.bd, step1, Chip.WHITE));
 
 		Move random = whitePlayer.chooseMove();
 
