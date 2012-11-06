@@ -2,27 +2,69 @@
 
 package player;
 
+import machine.*;
+import java.util.Random;
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves
  *  made by both players.  Can select a move for itself.
  */
 public class MachinePlayer extends Player {
 
+  private Board bd; 
+  private int myColor;
+  private int oppColor;
+  private int searchDepth; //package protected
+
   // Creates a machine player with the given color.  Color is either 0 (black)
   // or 1 (white).  (White has the first move.)
   public MachinePlayer(int color) {
+    System.out.println("Created MachinePlayer.");
+    bd = new Board();
+    myColor = color;
+
+    if(myColor == Chip.WHITE)
+      oppColor = Chip.BLACK;
+    else
+      oppColor = Chip.WHITE;
+
   }
 
 
   // Creates a machine player with the given color and search depth.  Color is
   // either 0 (black) or 1 (white).  (White has the first move.)
   public MachinePlayer(int color, int searchDepth) {
+    this(color);
+    this.searchDepth = searchDepth;
   }
 
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {
-    return new Move();
+    if(makeFirstMoves() != null)
+      return makeFirstMoves();
+    //call to evaluation function should return a Move object that ranked highest    
+      int x;
+      int y;
+      Random rn = new Random();
+
+      x = rn.nextInt(7);
+      y = rn.nextInt(7);
+
+      //x = (int)(Math.random() * 8);
+      //y = (int)(Math.random() * 8);
+
+      System.out.println(x + "" + y);
+      Move random = new Move(x,y);
+
+      while(!LegalMoves.isLegal(bd, random, myColor)){
+        x = rn.nextInt(8);
+        y = rn.nextInt(8);
+        random = new Move(x, y);
+      }
+
+      bd.addChip(random.x1, random.y1, myColor); 
+      return random;
+        
   } 
 
   // If the Move m is legal, records the move as a move by the opponent
@@ -30,7 +72,17 @@ public class MachinePlayer extends Player {
   // illegal, returns false without modifying the internal state of "this"
   // player.  This method allows your opponents to inform you of their moves.
   public boolean opponentMove(Move m) {
-    return false;
+    System.out.println("oppMove called.");
+    if(LegalMoves.isLegal(bd, m, oppColor)){
+      bd.addChip(m.x1, m.y1, oppColor);
+      return true;
+    } 
+    else{
+      System.out.println("Cheater!");
+      return false;
+    }
+
+      
   }
 
   // If the Move m is legal, records the move as a move by "this" player
@@ -40,6 +92,51 @@ public class MachinePlayer extends Player {
   // player to solve.
   public boolean forceMove(Move m) {
     return false;
+  }
+  
+  public Move randomMove(int color){
+  	  int x;
+  	  int y;
+  	  Random rn = new Random();
+  	  x = rn.nextInt() % 8;
+  	  y = rn.nextInt() % 8;
+  	  
+  	  Move random = new Move(x,y);
+  	  if(LegalMoves.isLegal(bd, random, color)) 
+        return random;
+  	  else 
+        randomMove(color);
+  	  	
+  	  return null;  	  	  	    	    	    	    	
+  }
+
+  public Move makeFirstMoves(){
+    Move center1 = new Move(3, 3);
+    Move center2 = new Move(3, 4);
+    Move center3 = new Move(4, 3);
+    Move center4 = new Move(4, 4);
+
+    if(LegalMoves.isLegal(bd, center1, myColor)){
+      bd.addChip(center1.x1, center1.y1, myColor);
+      return center1;
+    }
+
+    if(LegalMoves.isLegal(bd, center2, myColor)){
+      bd.addChip(center2.x1, center2.y1, myColor);
+      return center2;
+    }
+
+    if(LegalMoves.isLegal(bd, center3, myColor)){
+      bd.addChip(center3.x1, center3.y1, myColor);
+      return center3;
+    }
+
+    if(LegalMoves.isLegal(bd, center4, myColor)){
+      bd.addChip(center4.x1, center4.y1, myColor);
+      return center4;
+    }
+
+    return null;
   }
 
 }

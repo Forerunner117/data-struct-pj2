@@ -4,7 +4,7 @@ package machine;
 
 import player.*;
 
-class Board{
+public class Board{
 
     private Chip[][] board = new Chip[8][8];
     int whitePieces;
@@ -27,7 +27,7 @@ class Board{
         board[7][7] = new Chip (7, 7, Chip.GREY);
     }
 
-    Chip returnChip(int x, int y){
+    public Chip returnChip(int x, int y){
         return board[x][y];
     }
     
@@ -48,7 +48,7 @@ class Board{
           System.out.println(color);*/
     }
   
-  void addChip(int x, int y, int color){
+  public void addChip(int x, int y, int color){
     board[x][y]=new Chip(x,y,color);          
   } 
 

@@ -9,12 +9,12 @@ import player.*;
  *	all possible moves for a certain player, and also whether a move is valid or not. 
  */
 
-class LegalMoves{	
+public class LegalMoves{	
 
 	// A package protected static method that takes a move and a color as 
 	// parameters and returns true for a legal move and false for an illegal
 	// move.
-	static boolean isLegal(Board bd, Move m, int col){
+	public static boolean isLegal(Board bd, Move m, int col){
 		if(m.moveKind == m.QUIT)
 			return true;
 
@@ -36,7 +36,7 @@ class LegalMoves{
 
 		//checks if the slot is filled
 		if(bd.returnChip(m.x1, m.y1).color != Chip.EMPTY){
-			System.out.println("Slot is filled!");
+			System.out.println("Slot is filled at " + m.x1 + ", " + m.y1);
 			return false;
 		}
 
