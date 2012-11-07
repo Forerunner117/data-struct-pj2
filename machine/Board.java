@@ -6,7 +6,9 @@ import player.*;
 
 public class Board{
 
-    private Chip[][] board = new Chip[8][8];
+    private Chip[][] board = new Chip[8][8]; 
+    private Move whiteLastMove;
+    private Move blackLastMove;   
     int whitePieces;
     int blackPieces;
 
@@ -14,12 +16,9 @@ public class Board{
     public Board(){
         for(int i = 0; i < 8; i++){
           for(int j = 0; j < 8; j++){
-          board[i][j] = new Chip(i, j, Chip.EMPTY);
+            board[i][j] = new Chip(i, j, Chip.EMPTY);
           }
-          }
-          
-          /*I don't think we should set each cell to have a color equal to empty,
-          I think we should leave empty cells as just null references.*/
+        }
 
         board[0][0] = new Chip (0, 0, Chip.GREY);
         board[0][7] = new Chip (0, 7, Chip.GREY);
@@ -33,13 +32,21 @@ public class Board{
     
     public static void main (String[] args){
         Board c = new Board();
-        c.addChip(0, 2, Chip.WHITE);
-        c.addChip(2, 2, Chip.WHITE);
-        c.addChip(2, 5, Chip.WHITE);
-        c.addChip(3, 4, Chip.BLACK);
-        c.addChip(5, 5, Chip.WHITE);
-        c.addChip(5, 2, Chip.WHITE);
-        c.addChip(7, 2, Chip.WHITE);
+        Move m1 = new Move(0, 2);
+        Move m2 = new Move(2, 2);
+        Move m3 = new Move(2, 5);
+        Move m4 = new Move(3, 4);
+        Move m5 = new Move(5, 5);
+        Move m6 = new Move(5, 2);
+        Move m7 = new Move(7, 2);        
+
+        c.addChip(m1, Chip.WHITE);
+        c.addChip(m2, Chip.WHITE);
+        c.addChip(m3, Chip.WHITE);
+        c.addChip(m4, Chip.BLACK);
+        c.addChip(m5, Chip.WHITE);
+        c.addChip(m6, Chip.WHITE);
+        c.addChip(m7, Chip.WHITE);
         if(c.hasNetwork(Chip.WHITE))
             System.out.println("Found Network!");
         else
@@ -49,9 +56,21 @@ public class Board{
           System.out.println(color);*/
     }
   
- public void addChip(int x, int y, int color){
-    board[x][y]=new Chip(x,y,color);          
-  } 
+ public void addChip(Move m, int color){
+    if(m.moveKind == m.ADD){
+      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color);            
+    }
+    else if(m.moveKind == m.STEP){
+      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
+      removeChip(m.x2, m.y2);   
+    }  
+    else
+      return;  
+  }
+
+  public void removeChip(int x, int y){
+    board[x][y].color = Chip.EMPTY;
+  }
 
   public int numPieces(int col){
     int pieces = 0;
@@ -261,6 +280,20 @@ public class Board{
       return false;
       }
       }*/
+
+      public void setLastMove(Move m, int color){
+        if(color == Chip.BLACK)
+          blackLastMove = new Move(m.x1, m.y1);
+        else
+          whiteLastMove = new Move(m.x1, m.y1);
+      }
+
+      public Move getLastMove(int color){
+        if(color == Chip.BLACK)
+          return blackLastMove;
+        else
+          return whiteLastMove;
+      }
       public void dumpBoard(){
         for( int j = 0; j < 8; j++){                                
           for(int i = 0; i < 8; i++){

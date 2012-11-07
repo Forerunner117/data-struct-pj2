@@ -18,7 +18,6 @@ public class MachinePlayer extends Player {
   // Creates a machine player with the given color.  Color is either 0 (black)
   // or 1 (white).  (White has the first move.)
   public MachinePlayer(int color) {
-    System.out.println("Created MachinePlayer.");
     bd = new Board();
     myColor = color;
 
@@ -26,7 +25,6 @@ public class MachinePlayer extends Player {
       oppColor = Chip.BLACK;
     else
       oppColor = Chip.WHITE;
-
   }
 
 
@@ -55,7 +53,7 @@ public class MachinePlayer extends Player {
   public boolean opponentMove(Move m) {
     System.out.println("oppMove called.");
     if(LegalMoves.isLegal(bd, m, oppColor)){
-      bd.addChip(m.x1, m.y1, oppColor);
+      bd.addChip(m, oppColor);
       return true;
     } 
     else{
@@ -78,6 +76,7 @@ public class MachinePlayer extends Player {
   Move randomMove(){
     int x1, x;
     int y1, y;
+    int prev_x, prev_y;
     Random rn = new Random();
 
     x = rn.nextInt(8);
@@ -85,21 +84,26 @@ public class MachinePlayer extends Player {
 
     System.out.println(x + "" + y);
     Move random = new Move(x,y);
+    Move prev;
 
     while(!LegalMoves.isLegal(bd, random, myColor)){
+      //prev = new Move(random.x1, random.y1);
       x = rn.nextInt(8);
       y = rn.nextInt(8);
+
+      //create STEP move if 10 pieces are down
       if(bd.numPieces(myColor) >= 10){
-        x1 = rn.nextInt(8);
-        y1 = rn.nextInt(8);
-        random = new Move(x1, y1, x, y);
+        random = new Move(x, y, bd.getLastMove(myColor).x1, bd.getLastMove(myColor).y1);
         System.out.println("Created a STEP move.");
         continue;
       }
+
       random = new Move(x, y);
     }
 
-    bd.addChip(random.x1, random.y1, myColor); 
+    bd.addChip(random, myColor); 
+    prev_x = random.x1;
+    prev_y = random.y1;
     return random; 	  	  	    	    	    	    	
   }
 
@@ -110,26 +114,30 @@ public class MachinePlayer extends Player {
     Move center4 = new Move(4, 4);
 
     if(LegalMoves.isLegal(bd, center1, myColor)){
-      bd.addChip(center1.x1, center1.y1, myColor);
+      bd.addChip(center1, myColor);
       return center1;
     }
 
     if(LegalMoves.isLegal(bd, center2, myColor)){
-      bd.addChip(center2.x1, center2.y1, myColor);
+      bd.addChip(center2, myColor);
       return center2;
     }
 
     if(LegalMoves.isLegal(bd, center3, myColor)){
-      bd.addChip(center3.x1, center3.y1, myColor);
+      bd.addChip(center3, myColor);
       return center3;
     }
 
     if(LegalMoves.isLegal(bd, center4, myColor)){
-      bd.addChip(center4.x1, center4.y1, myColor);
+      bd.addChip(center4, myColor);
       return center4;
     }
 
     return null;
+  }
+
+  public Board getBoard(){
+    return bd;
   }
 
 }
