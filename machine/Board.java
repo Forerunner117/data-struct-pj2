@@ -27,7 +27,7 @@ public class Board{
         board[7][7] = new Chip (7, 7, Chip.GREY);
     }
 
-    public Chip returnChip(int x, int y){
+   public Chip returnChip(int x, int y){
         return board[x][y];
     }
     
@@ -36,6 +36,7 @@ public class Board{
         c.addChip(0, 2, Chip.WHITE);
         c.addChip(2, 2, Chip.WHITE);
         c.addChip(2, 5, Chip.WHITE);
+        c.addChip(3, 4, Chip.BLACK);
         c.addChip(5, 5, Chip.WHITE);
         c.addChip(5, 2, Chip.WHITE);
         c.addChip(7, 2, Chip.WHITE);
@@ -48,7 +49,7 @@ public class Board{
           System.out.println(color);*/
     }
   
-  public void addChip(int x, int y, int color){
+ public void addChip(int x, int y, int color){
     board[x][y]=new Chip(x,y,color);          
   } 
 
@@ -76,15 +77,15 @@ public class Board{
     for (int i=1; i<7; i++) {//Check the first goal on the left.
       if(board[0][i].returnColor() == col){
         unflagAllChipsOfColor(col);
-        return explore(col, board[0][i], 1, Direction.W);
+        return explore(col, board[0][i], 0, Direction.W);
       }
       }
     }
     if(col == Chip.BLACK){//Check the goal on the top.
-    for (int i=0; i<7; i++) {
+    for (int i=1; i<7; i++) {
       if(board[i][0].returnColor() == col){       
         unflagAllChipsOfColor(col);
-        return explore(col, board[i][0], 1, Direction.S);
+        return explore(col, board[i][0], 0, Direction.N);
       }
       }
     }
@@ -95,23 +96,25 @@ public class Board{
        // System.out.println("Flag status of explore chip is " + chip.isFlagged() + " which should be false");
         chip.flag();
 
-        int x = chip.getX();
+        int x = chip.getX();//x position of chip exploring from
         // System.out.println("X position of explore chip is " + x);
 
-        int y = chip.getY();
-        // System.out.println("Y position of explore Chip is " + y);        
-        Chip neighbor = board[x][y];
+        int y = chip.getY();//y position of chip exploring from
+        // System.out.println("Y position of explore Chip is " + y);
+                
+        Chip neighbor = board[0][0];//arbitrary to satisfy compiler.
+        
         if(x == 2 && y == 7)
           System.out.println("\nEnd Goal neighbor before loops and logic: length is " + len);
         // System.out.println("neighbor is " + neighbor + " which should be null");
-        int curr_dir = -1; //There is not current direction yet.
+        
+        int curr_dir = -1; // -1 is arbirary. There is not current direction yet.
         for (int i=-1; i<=1; i++) {
             for (int j=-1; j<=1; j++) {
-
                 if( (i == 0) && (j==0)) continue;
 
                 //Running off board.
-                if( ((x + i ) < 0)  ||  ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
+                if( ((x + i) < 0)  ||  ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
                     continue;
 
                 //Eliminating Corners.
@@ -120,17 +123,16 @@ public class Board{
                     continue;
 
                 
-                for(int k=0; k<8; k++){
+                for(int k=1; k<8; k++){
                     if(((x + i*k) < 0)  ||  ((y + j*k) < 0) || ((x + i*k) > 7) || ((y + j*k) > 7))//Ran off the board
-                        continue;
-                    
+                        break;
+                    //System.out.println("i is " + i + " j is " + j);
+                    //System.out.println("\nk is " + k);
                     neighbor = board[x + i*k][y + j*k];
                     curr_dir = Direction.getCurrDir(i, j);
 
                     // if(neighbor.getX() == 2 && neighbor.getY() == 7)
                       // System.out.println("##Found end goal neighbor## length is " + len);
-                    // System.out.println("\nneighbor's is at (" + neighbor.getX() + ", " +neighbor.getY()
-                        // + ") and the his color is " + neighbor.returnColor() + " and current color is " + col);
                     /*System.out.println("At i = " + i + " , j = " + j + " and k = " + k +
                         " curr_dir is " + curr_dir);                
                     System.out.println("\nneighbor's color at (" + neighbor.getX() + ", " +neighbor.getY()
@@ -148,25 +150,38 @@ public class Board{
                     System.out.println("I got to the logic");
                     System.out.println("neighbor's color is " + neighbor.returnColor() + " and current color is " + col);
                 }*/
+          if(neighbor.returnColor() == Chip.EMPTY )
+            continue;
+          else{
+                     // System.out.println("\nneighbor's is at (" + neighbor.getX() + ", " +neighbor.getY()
+                         // + ") and the his color is " + neighbor.returnColor() + " and current color is " + col);
+            break;
+          }
+      
+      }//end third for
                 
-
-                if( neighbor.returnColor() != col){//wrong color
-                     // System.out.println("\nNeighbor color is, " + neighbor.returnColor() + " and col is " + col + "...The If thinks these are different");
+                
+                if( neighbor.returnColor() != col ){//wrong color
+                      // System.out.println("\nNeighbor color is, " + neighbor.returnColor() + " and col is " + col + "...The If thinks these are different");
                     continue;
                 }
+                
+                if(neighbor.getX() == 3 && neighbor.getY() == 4)
+                  System.out.println("\nFound a black chip. That got past color checker");
+
                 if(curr_dir == dir){ //same direction
-                   // System.out.println("The directions are the same\ncurr_dir is " + curr_dir + " dir is " + dir);
+                    System.out.println("The directions are the same\ncurr_dir is " + curr_dir + " dir is " + dir);
                     continue;
-                  }
+                 }
 
                 if(len == 5){
-                  System.out.println("\n@@ len is 5 right before isFlagged check @@ ( "+ neighbor.getX() + ", " + neighbor.getY() + 
+                  System.out.println("\nlen is 5 right before isFlagged check @ ( "+ neighbor.getX() + ", " + neighbor.getY() + 
                     ")\nneighbor flagged status is " + neighbor.isFlagged());
 
                 }
 
                 if(neighbor.isFlagged()){//already visited
-                   // System.out.println("The neighbor already visited");
+                    System.out.println("The neighbor already visited");
                     continue;
                   }
                 if( (col == Chip.WHITE && neighbor.getX() == 0) || //NOTE: I'm assuming white start_goal is left column
@@ -184,10 +199,11 @@ public class Board{
                     if(explore(col, neighbor, len+1, curr_dir))
                         return true;
                     }
-            }//end third for
+            
         }//end second for
 }//end first for
         chip.unflag();//chip has no neighbors...how sad.
+        System.out.println("\nReturning false.");
         return false;
     }
 
@@ -245,7 +261,7 @@ public class Board{
       }
       }*/
       public void dumpBoard(){
-        for( int j = 0; j < 8; j++){      	         	      	      
+        for( int j = 0; j < 8; j++){                                
           for(int i = 0; i < 8; i++){
             System.out.print("| " + board[i][j].toString() + " | ");
 
@@ -257,9 +273,9 @@ public class Board{
               System.out.print( "_ | ");
             else
               System.out.print( "* | ");*/
-      	  }
-      	  System.out.println();
-        }      	            	            	            	            	      
+          }
+          System.out.println();
+        }                                                                     
       }
 
 }
