@@ -113,6 +113,7 @@ public class Board{
             for (int j=-1; j<=1; j++) {
                 if( (i == 0) && (j==0)) continue;
 
+
                 //Running off board.
                 if( ((x + i) < 0)  ||  ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
                     continue;
@@ -131,7 +132,7 @@ public class Board{
                     neighbor = board[x + i*k][y + j*k];
                     curr_dir = Direction.getCurrDir(i, j);
 
-                    // if(neighbor.getX() == 2 && neighbor.getY() == 7)
+                   // if(neighbor.getX() == 2 && neighbor.getY() == 7)
                       // System.out.println("##Found end goal neighbor## length is " + len);
                     /*System.out.println("At i = " + i + " , j = " + j + " and k = " + k +
                         " curr_dir is " + curr_dir);                
@@ -143,6 +144,8 @@ public class Board{
                     /*if (neighbor.getX() == 2 && neighbor.getY() == 2) {
                       System.out.println(" x and y are 2");
                     }*/
+                if(neighbor.getX() == 3 && neighbor.getY() == 4)
+                  System.out.println("\nFound a black chip in the k loop\ncurr_dir is " + curr_dir + "\ndir is " + dir);
 
                 /*if(neighbor == Color.WHITE)
                     continue;*/
@@ -166,16 +169,14 @@ public class Board{
                     continue;
                 }
                 
-                if(neighbor.getX() == 3 && neighbor.getY() == 4)
-                  System.out.println("\nFound a black chip. That got past color checker");
 
                 if(curr_dir == dir){ //same direction
                     System.out.println("The directions are the same\ncurr_dir is " + curr_dir + " dir is " + dir);
                     continue;
                  }
 
-                if(len == 5){
-                  System.out.println("\nlen is 5 right before isFlagged check @ ( "+ neighbor.getX() + ", " + neighbor.getY() + 
+                if(len == 4){
+                  System.out.println("\nlen is 4 right before isFlagged check @ ( "+ neighbor.getX() + ", " + neighbor.getY() + 
                     ")\nneighbor flagged status is " + neighbor.isFlagged());
 
                 }
@@ -203,7 +204,7 @@ public class Board{
         }//end second for
 }//end first for
         chip.unflag();//chip has no neighbors...how sad.
-        System.out.println("\nReturning false.");
+        System.out.println("\nReturning false. At (" + neighbor.getX() + ", " + neighbor.getY() + ") ");
         return false;
     }
 
