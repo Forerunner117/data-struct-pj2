@@ -53,7 +53,7 @@ public class Board{
     board[x][y]=new Chip(x,y,color);          
   } 
 
-  int numPieces(int col){
+  public int numPieces(int col){
     int pieces = 0;
     for (int i=0; i<7; i++) {
       for (int j=0; j<7; j++) {
@@ -64,7 +64,7 @@ public class Board{
     return pieces;
   }
  
-  void unflagAllChipsOfColor(int col){
+  public void unflagAllChipsOfColor(int col){
     for (int i=0; i<7; i++) {
       for (int j=0; j<7; j++) {
         if(board[i][j].returnColor() == col)
@@ -72,7 +72,7 @@ public class Board{
       }
     }
   }
-  boolean hasNetwork(int col){
+  public boolean hasNetwork(int col){
     if(col == Chip.WHITE){
     for (int i=1; i<7; i++) {//Check the first goal on the left.
       if(board[0][i].returnColor() == col){

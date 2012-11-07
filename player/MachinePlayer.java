@@ -43,27 +43,8 @@ public class MachinePlayer extends Player {
     if(makeFirstMoves() != null)
       return makeFirstMoves();
     //call to evaluation function should return a Move object that ranked highest    
-      int x;
-      int y;
-      Random rn = new Random();
 
-      x = rn.nextInt(7);
-      y = rn.nextInt(7);
-
-      //x = (int)(Math.random() * 8);
-      //y = (int)(Math.random() * 8);
-
-      System.out.println(x + "" + y);
-      Move random = new Move(x,y);
-
-      while(!LegalMoves.isLegal(bd, random, myColor)){
-        x = rn.nextInt(8);
-        y = rn.nextInt(8);
-        random = new Move(x, y);
-      }
-
-      bd.addChip(random.x1, random.y1, myColor); 
-      return random;
+    return randomMove();
         
   } 
 
@@ -94,20 +75,32 @@ public class MachinePlayer extends Player {
     return false;
   }
   
-  public Move randomMove(int color){
-  	  int x;
-  	  int y;
-  	  Random rn = new Random();
-  	  x = rn.nextInt() % 8;
-  	  y = rn.nextInt() % 8;
-  	  
-  	  Move random = new Move(x,y);
-  	  if(LegalMoves.isLegal(bd, random, color)) 
-        return random;
-  	  else 
-        randomMove(color);
-  	  	
-  	  return null;  	  	  	    	    	    	    	
+  Move randomMove(){
+    int x1, x;
+    int y1, y;
+    Random rn = new Random();
+
+    x = rn.nextInt(8);
+    y = rn.nextInt(8);
+
+    System.out.println(x + "" + y);
+    Move random = new Move(x,y);
+
+    while(!LegalMoves.isLegal(bd, random, myColor)){
+      x = rn.nextInt(8);
+      y = rn.nextInt(8);
+      if(bd.numPieces(myColor) >= 10){
+        x1 = rn.nextInt(8);
+        y1 = rn.nextInt(8);
+        random = new Move(x1, y1, x, y);
+        System.out.println("Created a STEP move.");
+        continue;
+      }
+      random = new Move(x, y);
+    }
+
+    bd.addChip(random.x1, random.y1, myColor); 
+    return random; 	  	  	    	    	    	    	
   }
 
   public Move makeFirstMoves(){
