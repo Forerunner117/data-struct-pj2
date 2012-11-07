@@ -110,7 +110,7 @@ public class Board{
     }
     return false;
   }
-    boolean explore(int col, Chip chip, int len, int dir){
+    boolean explore(int col, Chip chip, int len, Direction dir){
        System.out.println("\n\n\n####ENTERING EXPLORE###");
        // System.out.println("Flag status of explore chip is " + chip.isFlagged() + " which should be false");
         chip.flag();
@@ -127,7 +127,7 @@ public class Board{
           System.out.println("\nEnd Goal neighbor before loops and logic: length is " + len);
         // System.out.println("neighbor is " + neighbor + " which should be null");
         
-        int curr_dir = -1; // -1 is arbirary. There is not current direction yet.
+        Direction curr_dir = Direction.N; // N is arbirary. There is not current direction yet.
         for (int i=-1; i<=1; i++) {
             for (int j=-1; j<=1; j++) {
                 if( (i == 0) && (j==0)) continue;
