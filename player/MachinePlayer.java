@@ -37,9 +37,13 @@ public class MachinePlayer extends Player {
 
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
-  public Move chooseMove() {
-    if(makeFirstMoves() != null)
-      return makeFirstMoves();
+  public Move chooseMove() {    
+    System.out.println("chooseMove called.");
+    if(makeFirstMoves() != null){
+      Move firstMove = makeFirstMoves();
+      bd.addChip(firstMove, myColor);
+      return firstMove;
+    }
     //call to evaluation function should return a Move object that ranked highest    
 
     return randomMove();
@@ -57,11 +61,9 @@ public class MachinePlayer extends Player {
       return true;
     } 
     else{
-      System.out.println("Cheater!");
-      return false;
-    }
-
-      
+        System.out.println("Cheater!");
+        return false;      
+    }     
   }
 
   // If the Move m is legal, records the move as a move by "this" player
@@ -114,22 +116,18 @@ public class MachinePlayer extends Player {
     Move center4 = new Move(4, 4);
 
     if(LegalMoves.isLegal(bd, center1, myColor)){
-      bd.addChip(center1, myColor);
       return center1;
     }
 
     if(LegalMoves.isLegal(bd, center2, myColor)){
-      bd.addChip(center2, myColor);
       return center2;
     }
 
     if(LegalMoves.isLegal(bd, center3, myColor)){
-      bd.addChip(center3, myColor);
       return center3;
     }
 
     if(LegalMoves.isLegal(bd, center4, myColor)){
-      bd.addChip(center4, myColor);
       return center4;
     }
 
