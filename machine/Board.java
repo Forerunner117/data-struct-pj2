@@ -9,6 +9,7 @@ public class Board{
     private Chip[][] board = new Chip[8][8]; 
     private Move whiteLastMove;
     private Move blackLastMove;   
+    private Chip neighbor;
     int whitePieces;
     int blackPieces;
 
@@ -24,45 +25,28 @@ public class Board{
         board[0][7] = new Chip (0, 7, Chip.GREY);
         board[7][0] = new Chip (7 ,0, Chip.GREY);
         board[7][7] = new Chip (7, 7, Chip.GREY);
+        neighbor = board[0][0];//arbitrary to satisfy compiler.
     }
 
    public Chip returnChip(int x, int y){
         return board[x][y];
     }
     
-    public static void main (String[] args){
-        Board c = new Board();
-        Move m1 = new Move(0, 2);
-        Move m2 = new Move(2, 2);
-        Move m3 = new Move(2, 5);
-        Move m4 = new Move(3, 4);
-        Move m5 = new Move(5, 5);
-        Move m6 = new Move(5, 2);
-        Move m7 = new Move(7, 2);        
-
-        c.addChip(m1, Chip.WHITE);
-        c.addChip(m2, Chip.WHITE);
-        c.addChip(m3, Chip.WHITE);
-        // c.addChip(m4, Chip.BLACK);
-        c.addChip(m5, Chip.WHITE);
-        c.addChip(m6, Chip.WHITE);
-        c.addChip(m7, Chip.WHITE);
-        if(c.hasNetwork(Chip.WHITE))
-            System.out.println("Found Network!");
-        else
-            System.out.println("Didn't find network");
-        /*Chip d = c.returnChip(0,0);
-          int color = d.returnColor();
-          System.out.println(color);*/
-    }
-  
+  private void testNetwork(int color){
+    if(hasNetwork(color))
+      System.out.println("Found Network");
+  else
+    System.out.println("Not found Network");
+  }
  public void addChip(Move m, int color){
     if(m.moveKind == m.ADD){
-      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color);            
+      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color);  
+      testNetwork(color);          
     }
     else if(m.moveKind == m.STEP){
       board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
       removeChip(m.x2, m.y2);   
+      testNetwork(color);
     }  
     else
       return;  
@@ -92,36 +76,37 @@ public class Board{
     }
   }
   public boolean hasNetwork(int col){
+    boolean exp = false;
     if(col == Chip.WHITE){
-    for (int i=1; i<7; i++) {//Check the first goal on the left.
+    for (int i=1; i<7 && !exp; i++) {//Check the first goal on the left.
       if(board[0][i].returnColor() == col){
         unflagAllChipsOfColor(col);
-        return explore(col, board[0][i], 1, Direction.W);
+        exp = explore(col, board[0][i].getX(), board[0][i].getY(), 1, Direction.W);
       }
       }
     }
     if(col == Chip.BLACK){//Check the goal on the top.
-    for (int i=1; i<7; i++) {
+    for (int i=1; i<7 && !exp; i++) {
       if(board[i][0].returnColor() == col){       
         unflagAllChipsOfColor(col);
-        return explore(col, board[i][0], 1, Direction.N);
+        exp = explore(col, board[i][0].getX(), board[i][0].getY(), 1, Direction.N);
       }
       }
     }
-    return false;
+    return exp;
   }
     
 // replace chip with board[i][j], when you unflag, you're unflagging a local variable which is getting lost.
   //just refer to the instance variable board[][]. 
 
-    boolean explore(int col, Chip chip, int len, Direction dir){
+    boolean explore(int col, int x, int y, int len, Direction dir){
        System.out.println("\n\n\n####ENTERING EXPLORE###");
-        chip.flag();
-
-        int x = chip.getX();//x position of chip exploring from
-        int y = chip.getY();//y position of chip exploring from
-     
-        Chip neighbor = board[0][0];//arbitrary to satisfy compiler.
+       board[x][y].flag();
+        
+       //int x = chip.getX();//x position of chip exploring from
+        //int y = chip.getY();//y position of chip exploring from
+      //board[x][y].flag();
+        
         
         Direction curr_dir = Direction.N; // N is arbirary. There is not current direction yet.
         
@@ -172,7 +157,7 @@ public class Board{
                  }
 
 
-                if(neighbor.isFlagged()){//already visited
+                if(board[neighbor.getX()][neighbor.getY()].isFlagged()){//already visited
                     System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
@@ -187,18 +172,27 @@ public class Board{
                 
                 }else{
                   System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
-                    if(explore(col, neighbor, len+1, curr_dir))
+                    if(explore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                         return true;
                     }
             
         }//end second for
 }//end first for
-        chip.unflag();//chip has no neighbors...how sad.
-        System.out.println("Unflagged a chip at (" + chip.getX() + ", " + chip.getY() + ") ");
+        board[x][y].unflag();//chip has no neighbors...how sad.
         System.out.println("Returning false. At (" + neighbor.getX() + ", " + neighbor.getY() + ") \n");
+        System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
         return false;
     }
-
+   /* private void flagChip(Chip c){
+    int x = c.getX();
+    int y = c.getY();
+    board[x][y].flag();
+  }
+  private void unflagChip(Chip c){
+    int x = c.getX();
+    int y = c.getY();
+    board[x][y].unflag();
+  }*/
       /*if no neighbor (because you ran off board), continue;
 >>>>>>> fc425eb3256acc60c1ee48933ff493abae415105
       if neighbor is not your color, continue;

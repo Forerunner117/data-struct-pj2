@@ -31,8 +31,6 @@ public class Chip{
 	}
 
 	void unflag(){
-		if(visited == false)
-			// System.out.println("Chip at (" + x + " " + y + ") isn't visited");
 		visited = false;	
 	}
 	
