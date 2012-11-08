@@ -100,12 +100,9 @@ public class Board{
   //just refer to the instance variable board[][]. 
 
     boolean explore(int col, int x, int y, int len, Direction dir){
-       System.out.println("\n\n\n####ENTERING EXPLORE###");
+       //System.out.println("\n\n\n####ENTERING EXPLORE###");
        board[x][y].flag();
-        
-       //int x = chip.getX();//x position of chip exploring from
-        //int y = chip.getY();//y position of chip exploring from
-      //board[x][y].flag();
+      
         
         
         Direction curr_dir = Direction.N; // N is arbirary. There is not current direction yet.
@@ -152,13 +149,13 @@ public class Board{
                 
 
                 if(curr_dir == dir){ //same direction
-                    System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
+                   // System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
                     continue;
                  }
 
 
                 if(board[neighbor.getX()][neighbor.getY()].isFlagged()){//already visited
-                    System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
+                    //System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
                 if( (col == Chip.WHITE && neighbor.getX() == 0) || //NOTE: I'm assuming white start_goal is left column
@@ -167,11 +164,11 @@ public class Board{
                     continue; 
                   }
                 if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
-                  System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
+                  //System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
                     if (len >= 5) return true;
                 
                 }else{
-                  System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
+                  //System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
                     if(explore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                         return true;
                     }
@@ -179,8 +176,8 @@ public class Board{
         }//end second for
 }//end first for
         board[x][y].unflag();//chip has no neighbors...how sad.
-        System.out.println("Returning false. At (" + neighbor.getX() + ", " + neighbor.getY() + ") \n");
-        System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
+        //System.out.println("Returning false. At (" + neighbor.getX() + ", " + neighbor.getY() + ") \n");
+        //System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
         return false;
     }
    /* private void flagChip(Chip c){
