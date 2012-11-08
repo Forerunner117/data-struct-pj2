@@ -43,7 +43,7 @@ public class Board{
         c.addChip(m1, Chip.WHITE);
         c.addChip(m2, Chip.WHITE);
         c.addChip(m3, Chip.WHITE);
-        c.addChip(m4, Chip.BLACK);
+        // c.addChip(m4, Chip.BLACK);
         c.addChip(m5, Chip.WHITE);
         c.addChip(m6, Chip.WHITE);
         c.addChip(m7, Chip.WHITE);
@@ -96,7 +96,7 @@ public class Board{
     for (int i=1; i<7; i++) {//Check the first goal on the left.
       if(board[0][i].returnColor() == col){
         unflagAllChipsOfColor(col);
-        return explore(col, board[0][i], 0, Direction.W);
+        return explore(col, board[0][i], 1, Direction.W);
       }
       }
     }
@@ -104,13 +104,15 @@ public class Board{
     for (int i=1; i<7; i++) {
       if(board[i][0].returnColor() == col){       
         unflagAllChipsOfColor(col);
-        return explore(col, board[i][0], 0, Direction.N);
+        return explore(col, board[i][0], 1, Direction.N);
       }
       }
     }
     return false;
   }
     
+// replace chip with board[i][j], when you unflag, you're unflagging a local variable which is getting lost.
+  //just refer to the instance variable board[][]. 
 
     boolean explore(int col, Chip chip, int len, Direction dir){
        System.out.println("\n\n\n####ENTERING EXPLORE###");
@@ -171,16 +173,16 @@ public class Board{
 
 
                 if(neighbor.isFlagged()){//already visited
-                    System.out.println("The neighbor already visited");
+                    System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
                 if( (col == Chip.WHITE && neighbor.getX() == 0) || //NOTE: I'm assuming white start_goal is left column
                     (col == Chip.BLACK && neighbor.getY() == 0)) {  //NOTE: I'm assuming black start_goal is top row
 
-                    continue;
+                    continue; 
                   }
                 if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
-                  System.out.println("Found neighbor in end goal at  (" + neighbor.getY() + ", "  + neighbor.getX() + ") and length is " + len);
+                  System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
                     if (len >= 5) return true;
                 
                 }else{
@@ -192,7 +194,8 @@ public class Board{
         }//end second for
 }//end first for
         chip.unflag();//chip has no neighbors...how sad.
-        System.out.println("\nReturning false. At (" + neighbor.getX() + ", " + neighbor.getY() + ") ");
+        System.out.println("Unflagged a chip at (" + chip.getX() + ", " + chip.getY() + ") ");
+        System.out.println("Returning false. At (" + neighbor.getX() + ", " + neighbor.getY() + ") \n");
         return false;
     }
 
