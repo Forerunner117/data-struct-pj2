@@ -50,18 +50,19 @@ public class LegalMoves{
 
 		//checks if there are 10 BLACK or WHITE pieces and determines if the
 		//moveKind is accurate
-		if(bd.numPieces(col) > 9 && m.moveKind == m.ADD){
+		if(bd.getPieces(col) > 9 && m.moveKind == m.ADD){
 			System.out.println("Not Legal: Must make a STEP move!");
 			return false;
 		}
-		if(bd.numPieces(col) < 10 && m.moveKind == m.STEP){
+		if(bd.getPieces(col) < 10 && m.moveKind == m.STEP){
 			System.out.println("Not Legal: Must make an ADD move!");
+			System.out.println("You only have " + bd.getPieces(col) + " pieces down.");
 			return false;
 		}
 
 		//checks if the move would make a cluster
 		if(makesCluster(bd, m, col)){
-			System.out.println("Not Legal: this makes a cluster!");
+			System.out.println("Not Legal: this makes a cluster!");		
 			return false;
 		}
 		

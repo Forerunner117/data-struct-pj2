@@ -39,9 +39,12 @@ public class MachinePlayer extends Player {
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {    
     System.out.println("chooseMove called.");
+
     if(makeFirstMoves() != null){
       Move firstMove = makeFirstMoves();
       bd.addChip(firstMove, myColor);
+      bd.setPieces(myColor);
+      bd.setLastMove(firstMove, myColor);
       return firstMove;
     }
     //call to evaluation function should return a Move object that ranked highest    
@@ -58,6 +61,8 @@ public class MachinePlayer extends Player {
     System.out.println("oppMove called.");
     if(LegalMoves.isLegal(bd, m, oppColor)){
       bd.addChip(m, oppColor);
+      bd.setPieces(oppColor);
+      bd.setLastMove(m, oppColor);
       return true;
     } 
     else{
@@ -75,27 +80,30 @@ public class MachinePlayer extends Player {
     return false;
   }
   
-  Move randomMove(){
-    int x1, x;
-    int y1, y;
+  private Move randomMove(){
+    int x;
+    int y;
     int prev_x, prev_y;
     Random rn = new Random();
+    Move prev; 
 
     x = rn.nextInt(8);
     y = rn.nextInt(8);
 
-    System.out.println(x + "" + y);
+    
     Move random = new Move(x,y);
-    Move prev;
+    
 
     while(!LegalMoves.isLegal(bd, random, myColor)){
+      prev = bd.getLastMove(myColor);
       //prev = new Move(random.x1, random.y1);
       x = rn.nextInt(8);
       y = rn.nextInt(8);
 
+      System.out.println(x + "" + y);
       //create STEP move if 10 pieces are down
-      if(bd.numPieces(myColor) >= 10){
-        random = new Move(x, y, bd.getLastMove(myColor).x1, bd.getLastMove(myColor).y1);
+      if(bd.getPieces(myColor) >= 10){
+        random = new Move(x, y, prev.x1, prev.y1);
         System.out.println("Created a STEP move.");
         continue;
       }
@@ -106,10 +114,12 @@ public class MachinePlayer extends Player {
     bd.addChip(random, myColor); 
     prev_x = random.x1;
     prev_y = random.y1;
+    bd.setPieces(myColor);
+    bd.setLastMove(random, myColor);
     return random; 	  	  	    	    	    	    	
   }
 
-  public Move makeFirstMoves(){
+  private Move makeFirstMoves(){
     Move center1 = new Move(3, 3);
     Move center2 = new Move(3, 4);
     Move center3 = new Move(4, 3);

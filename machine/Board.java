@@ -6,31 +6,31 @@ import player.*;
 
 public class Board{
 
-    private Chip[][] board = new Chip[8][8]; 
-    private Move whiteLastMove;
-    private Move blackLastMove;   
-    private Chip neighbor;
-    int whitePieces;
-    int blackPieces;
+  private Chip[][] board = new Chip[8][8]; 
+  private Move whiteLastMove;
+  private Move blackLastMove;   
+  private Chip neighbor;
+  private int whitePieces;
+  private int blackPieces;
 
 
-    public Board(){
-        for(int i = 0; i < 8; i++){
-          for(int j = 0; j < 8; j++){
-            board[i][j] = new Chip(i, j, Chip.EMPTY);
-          }
-        }
-
-        board[0][0] = new Chip (0, 0, Chip.GREY);
-        board[0][7] = new Chip (0, 7, Chip.GREY);
-        board[7][0] = new Chip (7 ,0, Chip.GREY);
-        board[7][7] = new Chip (7, 7, Chip.GREY);
-        neighbor = board[0][0];//arbitrary to satisfy compiler.
+  public Board(){
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 8; j++){
+        board[i][j] = new Chip(i, j, Chip.EMPTY);
+      }
     }
 
-   public Chip returnChip(int x, int y){
-        return board[x][y];
-    }
+    board[0][0] = new Chip (0, 0, Chip.GREY);
+    board[0][7] = new Chip (0, 7, Chip.GREY);
+    board[7][0] = new Chip (7 ,0, Chip.GREY);
+    board[7][7] = new Chip (7, 7, Chip.GREY);
+    neighbor = board[0][0];//arbitrary to satisfy compiler.
+  }
+
+  public Chip returnChip(int x, int y){
+    return board[x][y];
+  }
     
   private void testNetwork(int color){
     if(hasNetwork(color))
@@ -38,7 +38,8 @@ public class Board{
   else
     System.out.println("Not found Network");
   }
- public void addChip(Move m, int color){
+
+  public void addChip(Move m, int color){
     if(m.moveKind == m.ADD){
       board[m.x1][m.y1] = new Chip(m.x1, m.y1, color);  
       testNetwork(color);          
@@ -56,7 +57,23 @@ public class Board{
     board[x][y].color = Chip.EMPTY;
   }
 
-  public int numPieces(int col){
+  public void setPieces(int col){
+    if(col == Chip.BLACK)
+      ++blackPieces;
+    if(col == Chip.WHITE)
+      ++whitePieces;
+  }
+
+  public int getPieces(int col){
+    if(col == Chip.BLACK)
+      return blackPieces;
+    else if(col == Chip.WHITE)
+      return whitePieces;
+    else
+      return 0;
+  }
+
+  /*public int numPieces(int col){
     int pieces = 0;
     for (int i=0; i<7; i++) {
       for (int j=0; j<7; j++) {
@@ -65,7 +82,7 @@ public class Board{
       }
     }
     return pieces;
-  }
+  }*/
  
   public void unflagAllChipsOfColor(int col){
     for (int i=0; i<7; i++) {
@@ -78,11 +95,11 @@ public class Board{
   public boolean hasNetwork(int col){
     boolean exp = false;
     if(col == Chip.WHITE){
-    for (int i=1; i<7 && !exp; i++) {//Check the first goal on the left.
-      if(board[0][i].returnColor() == col){
-        unflagAllChipsOfColor(col);
-        exp = explore(col, board[0][i].getX(), board[0][i].getY(), 1, Direction.W);
-      }
+      for (int i=1; i<7 && !exp; i++) {//Check the first goal on the left.
+        if(board[0][i].returnColor() == col){
+          unflagAllChipsOfColor(col);
+          exp = explore(col, board[0][i].getX(), board[0][i].getY(), 1, Direction.W);
+        }
       }
     }
     if(col == Chip.BLACK){//Check the goal on the top.
