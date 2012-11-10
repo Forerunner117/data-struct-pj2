@@ -8,7 +8,7 @@ package machine;
 import player.*;
 
 public enum Direction{
-        N, NE, E, SE, S ,SW, W, NW;
+        N, NE, E, SE, S ,SW, W, NW, X;
 	/*public final static int N = 1;
 	public final static int NE = 2;
 	public final static int E = 3;
@@ -43,6 +43,6 @@ public static Direction getCurrDir(int i, int j){
                 if ( i == 0 && j == -1){
                         return S;
                 }
-	return N;//some number to satisfy the compiler
+	return X;//some enum to satisfy the compiler
 	}
 }
