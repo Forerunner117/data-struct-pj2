@@ -38,7 +38,7 @@ public class MachinePlayer extends Player {
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {    
-    System.out.println("chooseMove called.");
+    System.out.println("chooseMove called. And it got passed " + myColor + " for a color");
 
     if(makeFirstMoves() != null){
       Move firstMove = makeFirstMoves();
@@ -116,6 +116,10 @@ public class MachinePlayer extends Player {
     prev_y = random.y1;
     bd.setPieces(myColor);
     bd.setLastMove(random, myColor);
+    
+    //Network Testing
+    bd.testNetwork(myColor);
+    
     return random; 	  	  	    	    	    	    	
   }
 

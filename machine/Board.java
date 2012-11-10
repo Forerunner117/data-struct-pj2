@@ -32,7 +32,7 @@ public class Board{
     return board[x][y];
   }
     
-  private void testNetwork(int color){
+  public void testNetwork(int color){
     if(hasNetwork(color))
       System.out.println("Found Network");
   else
@@ -42,12 +42,10 @@ public class Board{
   public void addChip(Move m, int color){
     if(m.moveKind == m.ADD){
       board[m.x1][m.y1] = new Chip(m.x1, m.y1, color);  
-      testNetwork(color);          
     }
     else if(m.moveKind == m.STEP){
       board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
       removeChip(m.x2, m.y2);   
-      testNetwork(color);
     }  
     else
       return;  
@@ -96,7 +94,7 @@ public class Board{
     boolean exp = false;
     if(col == Chip.WHITE){
       for (int i=1; i<7 && !exp; i++) {//Check the first goal on the left.
-        if(board[0][i].returnColor() == col){
+        if(board[0][i].returnColor() == col && !endGoalEmpty(col)){
           unflagAllChipsOfColor(col);
           exp = explore(col, board[0][i].getX(), board[0][i].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
         }
@@ -104,7 +102,8 @@ public class Board{
     }
     if(col == Chip.BLACK){//Check the goal on the top.
     for (int i=1; i<7 && !exp; i++) {
-      if(board[i][0].returnColor() == col){       
+      // System.out.println("color at board (" + i + ", 0) is " + board[i][0].returnColor() + " looking for color: " + Chip.BLACK );
+      if(board[i][0].returnColor() == col && !endGoalEmpty(col)){       
         unflagAllChipsOfColor(col);
         exp = explore(col, board[i][0].getX(), board[i][0].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
       }
@@ -193,73 +192,30 @@ public class Board{
         }//end second for
 }//end first for
         board[x][y].unflag();//chip has no neighbors...how sad.
-        System.out.println("Returning false. At (" + neighbor.getX() + ", " + neighbor.getY() + ") \n");
+        System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
         System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
         return false;
     }
-   /* private void flagChip(Chip c){
-    int x = c.getX();
-    int y = c.getY();
-    board[x][y].flag();
-  }
-  private void unflagChip(Chip c){
-    int x = c.getX();
-    int y = c.getY();
-    board[x][y].unflag();
-  }*/
-      /*if no neighbor (because you ran off board), continue;
->>>>>>> fc425eb3256acc60c1ee48933ff493abae415105
-      if neighbor is not your color, continue;
-      if neighbor is the same direction you just came from, continue;
-      if neighbor was already visited, continue;
-      if neighbor is in start_goal, continue;
-      if neighbor is in end_goal {
-      if (len >= 5) return true;
+
+    private boolean endGoalEmpty(int col){
+      if (col == Chip.WHITE) {
+        for (int i = 1; i<7; i++) {
+          if(board[7][i].returnColor() == Chip.WHITE)
+            return false;
+          else
+            return true;
+        }
       }
-      else
-      if (explore(color, neighbor, len+1, curr_direction)) return true;
+      if (col == Chip.BLACK) {
+        for (int i = 1; i<7; i++) {
+          if(board[i][7].returnColor() == Chip.BLACK)
+            return false;
+          else
+            return true;
+        }
       }
-
-      mark chip as unvisited
-      return false;
-      }*/
-
-
-    // hasNetwork() code skeleton
-    //
-
-    /*hasNework(int color) {
-
-      for each goal_chip in start_goal:
-      set visited = false for every chip on the board of our color
-
-      explore(color, goal_chip, int len, int dir)
-      }
-      }
-
-      explore(int color, Chip chip, int len, int dir) {
-
-      mark chip as visited
-
-      for each direction (there are 8 of them!) look for first chip you
-      can see in that direction; call it "neighbor"
-      {
-      if no neighbor (because you ran off board), continue;
-      if neighbor is not your color, continue;
-      if neighbor is the same direction you just came from, continue;
-      if neighbor was already visited, continue;
-      if neighbor is in start_goal, continue;
-      if neighbor is in end_goal {
-      if (len >= 5) return true;
-      }
-      else
-      if (explore(color, neighbor, len+1, curr_direction)) return true;
-      }
-
-      mark chip as unvisited
-      return false;
-      }
-      }*/
+      return true;
+    }
 
       public void setLastMove(Move m, int color){
         if(color == Chip.BLACK)
@@ -334,4 +290,67 @@ public class Board{
                 //     ")\nneighbor flagged status is " + neighbor.isFlagged());
 
                 // }
+   /* private void flagChip(Chip c){
+    int x = c.getX();
+    int y = c.getY();
+    board[x][y].flag();
+  }
+  private void unflagChip(Chip c){
+    int x = c.getX();
+    int y = c.getY();
+    board[x][y].unflag();
+  }*/
+      /*if no neighbor (because you ran off board), continue;
+>>>>>>> fc425eb3256acc60c1ee48933ff493abae415105
+      if neighbor is not your color, continue;
+      if neighbor is the same direction you just came from, continue;
+      if neighbor was already visited, continue;
+      if neighbor is in start_goal, continue;
+      if neighbor is in end_goal {
+      if (len >= 5) return true;
+      }
+      else
+      if (explore(color, neighbor, len+1, curr_direction)) return true;
+      }
+
+      mark chip as unvisited
+      return false;
+      }*/
+
+
+    // hasNetwork() code skeleton
+    //
+
+    /*hasNework(int color) {
+
+      for each goal_chip in start_goal:
+      set visited = false for every chip on the board of our color
+
+      explore(color, goal_chip, int len, int dir)
+      }
+      }
+
+      explore(int color, Chip chip, int len, int dir) {
+
+      mark chip as visited
+
+      for each direction (there are 8 of them!) look for first chip you
+      can see in that direction; call it "neighbor"
+      {
+      if no neighbor (because you ran off board), continue;
+      if neighbor is not your color, continue;
+      if neighbor is the same direction you just came from, continue;
+      if neighbor was already visited, continue;
+      if neighbor is in start_goal, continue;
+      if neighbor is in end_goal {
+      if (len >= 5) return true;
+      }
+      else
+      if (explore(color, neighbor, len+1, curr_direction)) return true;
+      }
+
+      mark chip as unvisited
+      return false;
+      }
+      }*/
 }
