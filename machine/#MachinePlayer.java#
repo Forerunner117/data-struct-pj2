@@ -89,10 +89,9 @@ public class MachinePlayer extends Player {
   	  if(LegalMoves.isLegal(bd, random, color)) 
         return random;
   	  else 
-        randomMove(color);
-  	  	
-  	  return null;  	  	  	    	    	    	    	
-  }
+        return randomMove(color);
+  }	  	
+  	
 
   public Move makeFirstMoves(){
     Move center1 = new Move(3, 3);
@@ -116,3 +115,4 @@ public class MachinePlayer extends Player {
   }
 
 }
+

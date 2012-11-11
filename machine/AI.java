@@ -11,4 +11,30 @@ import player.*;
 
 class AI{
 
+	
+	public int evaluate(Board bd, Move mv, int color)
+	{
+	int i = 0;
+	Board board = bd;
+        Move move = mv;	
+		
+		
+	bd.addChip(mv, color);	
+			
+	if(bd.hasNetwork(color)){
+		i= 20;
+		return i;
+	}
+		
+		
+		
+		
+		
+	return i;	
+		
+	}
+	
+	
+	
+	
 }
