@@ -154,11 +154,38 @@ public class LegalMoves{
 	}
 	
  	// A package protected static method that takes the color of the current player
- 	// and returns a Board object consisting of null pointers (invalid moves) and
- 	// Chip objects (valid moves). Calls the isLegal method.	
-	Board possibleMoves(int col){
-		Board possibleMoves = new Board();
-		
+ 	// and returns an array of valid Move objects. Calls the isLegal method.	
+	Move[] possibleMoves(Board bd, int col){
+		Move[] possibleMoves = new Move[48]; 
+		Chip[] currentChips = new Chip[10];
+		int counter = 0;
+		Move currMove;
+
+		//ADD moves
+		if(bd.getPieces(col) < 10){
+			for(int i = 0; i < 8; i++){
+				for(int j = 0; j < 8; j++){
+					currMove = new Move(i, j);
+					if(isLegal(bd, currMove, col)){
+						possibleMoves[counter] = currMove;
+						++counter;
+					}
+				}
+			}
+		}
+
+		//STEP moves
+		else{
+			for(int i = 0; i < 8; i++){
+				for(int j = 0; j < 8; j++){
+					currMove = new Move(i, j);
+					if(isLegal(bd, currMove, col)){
+						possibleMoves[counter] = currMove;
+						++counter;
+					}
+				}
+			}
+		}
 		return possibleMoves;
 	}
 	

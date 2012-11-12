@@ -80,6 +80,8 @@ public class MachinePlayer extends Player {
     return false;
   }
   
+  private Move smartMove(int color, int searchDepth)
+
   private Move randomMove(){
     int x;
     int y;
