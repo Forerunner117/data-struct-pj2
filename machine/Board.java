@@ -78,6 +78,23 @@ public class Board{
       return 0;
   }
 
+  public Chip[] getCurrChips(int col){
+    Chip[] currChips = new Chip[10];
+    int counter = 0;
+
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 8; j++){
+        if(board[i][j].color == col){
+          currChips[counter] = board[i][j];
+          ++counter;
+        }
+      }
+    }
+
+    return currChips;
+  }
+  
+
   /*public int numPieces(int col){
     int pieces = 0;
     for (int i=0; i<7; i++) {
