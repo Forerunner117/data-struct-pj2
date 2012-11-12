@@ -122,7 +122,7 @@ public class MachinePlayer extends Player {
     bd.setLastMove(random, myColor);
     
     //Network Testing
-    bd.testNetwork(myColor);
+    System.out.print("MachinePlayer has " + bd.howManyConnections(myColor) + " connections. ");
     
     return random; 	  	  	    	    	    	    	
   }

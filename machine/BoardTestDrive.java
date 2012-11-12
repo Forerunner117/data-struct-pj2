@@ -35,7 +35,8 @@ public class BoardTestDrive{
 			bd.addChip(black[i], Chip.BLACK);
 		}
 		// if (bd.hasNetwork(Chip.BLACK)) {
-			System.out.println(bd.hasNetwork(Chip.BLACK));
+			// System.out.println(bd.hasNetwork(Chip.BLACK));
+		System.out.println("This board has " + bd.howManyConnections(Chip.BLACK) + " connections.");			
 		//}
 	}
 }

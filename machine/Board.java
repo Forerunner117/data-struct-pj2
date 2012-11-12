@@ -268,32 +268,38 @@ public class Board{
         }                                                                     
       }
 
-  public boolean hasNetwork(int col){
+
+// This is potentially a huge performance hit. Should use sparingly.
+  public int howManyConnections(int col){
     //exp is the result of the exploration. Used to check more than one chip in start goal.
+    connections = 1;
     boolean exp = false;
     if(col == Chip.WHITE){
-      for (int i=1; i<7 && !exp; i++) {//Check the first goal on the left.
-        if(board[0][i].returnColor() == col && !endGoalEmpty(col)){
+      for (int i=0; i<7; i++) {//Check the first goal on the left.
+        for(int j=1; j<7 && !exp; j++){
+        if(board[i][j].returnColor() == col){
           unflagAllChipsOfColor(col);
-          exp = explore(col, board[0][i].getX(), board[0][i].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
+          exp = connectionExplore(col, board[i][j].getX(), board[i][j].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
+        }
         }
       }
     }
     if(col == Chip.BLACK){//Check the goal on the top.
-    for (int i=1; i<7 && !exp; i++) {
-      // System.out.println("color at board (" + i + ", 0) is " + board[i][0].returnColor() + " looking for color: " + Chip.BLACK );
-      if(board[i][0].returnColor() == col && !endGoalEmpty(col)){       
+    for (int j=0; j<7; j++) {
+      for(int i=1; i<7 && !exp; i++){
+      if(board[i][0].returnColor() == col){       
         unflagAllChipsOfColor(col);
-        exp = explore(col, board[i][0].getX(), board[i][0].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
-      }
+        exp = connectionExplore(col, board[i][j].getX(), board[i][j].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
       }
     }
-    return exp;
+      }
+    }
+    return connections;
   }
     
 
     boolean connectionExplore(int col, int x, int y, int len, Direction dir){
-       System.out.println("\n\n\n####ENTERING connectionExplore###");
+       // System.out.println("\n\n\n####ENTERING connectionExplore###");
        board[x][y].flag();
         
         Direction curr_dir = Direction.N; // N is arbitrary. There is not current direction yet.
@@ -339,7 +345,7 @@ public class Board{
                 
                 //same direction
                 if(curr_dir == dir){ 
-                   System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
+                   // System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
                     continue;
                  }
 
@@ -357,12 +363,13 @@ public class Board{
 
                   // Neighbor is in the end goal
                 if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
-                  System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
+                  // System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
                     if (len >= 5) return true;
 
                 // Found a good neighbor and recurssing.
                 }else{
-                  System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
+                  // System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
+                    //pause(800);
                     maxConnections(len+1);
                     if(connectionExplore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                         return true;
@@ -372,8 +379,8 @@ public class Board{
 }//end first for
         
         board[x][y].unflag();//chip has no neighbors...how sad.
-        System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
-        System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
+        // System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
+        // System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
         return false;
     }
 
@@ -384,7 +391,13 @@ private void maxConnections(int len){
   else
     return;
 }
-  
+
+private void pause(int milli){
+  try{
+    Thread.sleep(milli);
+  }
+  catch (InterruptedException e) {}
+}
 //------------------------PRINT LINES------------------------------------------
 
                    // if(neighbor.getX() == 2 && neighbor.getY() == 7)
