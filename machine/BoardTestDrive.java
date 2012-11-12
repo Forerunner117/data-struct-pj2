@@ -38,5 +38,18 @@ public class BoardTestDrive{
 			// System.out.println(bd.hasNetwork(Chip.BLACK));
 		System.out.println("This board has " + bd.howManyConnections(Chip.BLACK) + " connections.");			
 		//}
+
+
+
+
+
+		//TESTING getCurrChips METHOD*****Austin*****
+		Chip[] blarg = bd.getCurrChips(Chip.WHITE);
+		int i = 0;
+		
+		while(blarg[i] != null){
+			System.out.println(blarg[i]);
+			++i;
+		}
 	}
 }
