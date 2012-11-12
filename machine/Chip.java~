@@ -4,11 +4,11 @@ package machine;
 
 import player.*;
 
-class Chip{
-	static final int BLACK = 0;
-	static final int WHITE = 1;
-	static final int GREY = 2;
-	static final int EMPTY = 3;
+public class Chip{
+	public static final int BLACK = 0;
+	public static final int WHITE = 1;
+	public static final int GREY = 2;
+	public static final int EMPTY = 3;
 
 	int color;
 	boolean visited = false;
@@ -31,8 +31,6 @@ class Chip{
 	}
 
 	void unflag(){
-		if(visited == false)
-			// System.out.println("Chip at (" + x + " " + y + ") isn't visited");
 		visited = false;	
 	}
 	
@@ -53,5 +51,17 @@ class Chip{
 	}
 	void changeColor( int color){
 		this.color = color;			
+	}
+	public String toString()
+	{
+		if(color== BLACK)
+			return "BK";
+		else if(color == WHITE)
+			return "WH";
+		else if(color == GREY)
+			return "--";
+		else
+			return "__";
+		
 	}
 }

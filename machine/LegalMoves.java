@@ -155,7 +155,7 @@ public class LegalMoves{
 	
  	// A package protected static method that takes the color of the current player
  	// and returns an array of valid Move objects. Calls the isLegal method.	
-	Move[] possibleMoves(Board bd, int col){
+	static Move[] possibleMoves(Board bd, int col){
 		Move[] possibleMoves = new Move[48]; 
 		Chip[] currentChips = bd.getCurrChips(col);
 		int counter = 0;

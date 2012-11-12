@@ -12,8 +12,6 @@ public class Board{
   private Chip neighbor;
   private int whitePieces;
   private int blackPieces;
-  private int connections = 1;
-
 
 
   public Board(){
@@ -32,6 +30,13 @@ public class Board{
 
   public Chip returnChip(int x, int y){
     return board[x][y];
+  }
+  public int ChipColor(int x, int y)
+  {
+  	  Chip chip = returnChip(x,y);
+  	  int color =  chip.returnColor();
+  	  return color;
+	  
   }
     
   public void testNetwork(int color){
@@ -73,22 +78,6 @@ public class Board{
       return 0;
   }
 
-  public Chip[] getCurrChips(int col){
-    Chip[] currChips = new Chip[10];
-    int counter = 0;
-
-    for(int i = 0; i < 8; i++){
-      for(int j = 0; j < 8; j++){
-        if(board[i][j].color == col){
-          currChips[counter] = board[i][j];
-          ++counter;
-        }
-      }
-    }      
-
-    return currChips;
-  }
-
   /*public int numPieces(int col){
     int pieces = 0;
     for (int i=0; i<7; i++) {
@@ -109,7 +98,6 @@ public class Board{
     }
   }
   public boolean hasNetwork(int col){
-    //exp is the result of the exploration. Used to check more than one chip in start goal.
     boolean exp = false;
     if(col == Chip.WHITE){
       for (int i=1; i<7 && !exp; i++) {//Check the first goal on the left.
@@ -131,12 +119,16 @@ public class Board{
     return exp;
   }
     
+// replace chip with board[i][j], when you unflag, you're unflagging a local variable which is getting lost.
+  //just refer to the instance variable board[][]. 
 
     boolean explore(int col, int x, int y, int len, Direction dir){
        System.out.println("\n\n\n####ENTERING EXPLORE###");
        board[x][y].flag();
+      
         
-        Direction curr_dir = Direction.N; // N is arbitrary. There is not current direction yet.
+        
+        Direction curr_dir = Direction.N; // N is arbirary. There is not current direction yet.
         
         for (int i=-1; i<=1; i++) {
             for (int j=-1; j<=1; j++) {
@@ -172,45 +164,40 @@ public class Board{
 
                     }//end third for
                 
-                //wrong color          
-                if( neighbor.returnColor() != col ){
+                
+                if( neighbor.returnColor() != col ){//wrong color
+                   
                     continue;
                 }
                 
-                //same direction
-                if(curr_dir == dir){ 
+
+                if(curr_dir == dir){ //same direction
                    System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
                     continue;
                  }
 
-                 //already visited
-                if(board[neighbor.getX()][neighbor.getY()].isFlagged()){
+
+                if(board[neighbor.getX()][neighbor.getY()].isFlagged()){//already visited
                     //System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
-
-                  // Neighbor is in the start goal 
                 if( (col == Chip.WHITE && neighbor.getX() == 0) || //NOTE: I'm assuming white start_goal is left column
                     (col == Chip.BLACK && neighbor.getY() == 0)) {  //NOTE: I'm assuming black start_goal is top row
+
                     continue; 
                   }
-
-                  // Neighbor is in the end goal
                 if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
                   System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
                     if (len >= 5) return true;
-
-                // Found a good neighbor and recurssing.
+                
                 }else{
                   System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
-                    connections++;
                     if(explore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                         return true;
                     }
             
         }//end second for
 }//end first for
-        
         board[x][y].unflag();//chip has no neighbors...how sad.
         System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
         System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
@@ -255,149 +242,11 @@ public class Board{
           for(int i = 0; i < 8; i++){
             System.out.print("| " + board[i][j].toString() + " | ");
 
-            /*if(board[i][j].color == Chip.BLACK)
-              System.out.print( "B | ");
-            else if(board[i][j].color == Chip.WHITE)
-              System.out.print( "W | ");
-            else if(board[i][j].color == Chip.EMPTY)
-              System.out.print( "_ | ");
-            else
-              System.out.print( "* | ");*/
+          
           }
           System.out.println();
         }                                                                     
       }
-
-
-// This is potentially a huge performance hit. Should use sparingly.
-  public int howManyConnections(int col){
-    //exp is the result of the exploration. Used to check more than one chip in start goal.
-    connections = 1;
-    boolean exp = false;
-    if(col == Chip.WHITE){
-      for (int i=0; i<7; i++) {//Check the first goal on the left.
-        for(int j=1; j<7 && !exp; j++){
-        if(board[i][j].returnColor() == col){
-          unflagAllChipsOfColor(col);
-          exp = connectionExplore(col, board[i][j].getX(), board[i][j].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
-        }
-        }
-      }
-    }
-    if(col == Chip.BLACK){//Check the goal on the top.
-    for (int j=0; j<7; j++) {
-      for(int i=1; i<7 && !exp; i++){
-      if(board[i][0].returnColor() == col){       
-        unflagAllChipsOfColor(col);
-        exp = connectionExplore(col, board[i][j].getX(), board[i][j].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
-      }
-    }
-      }
-    }
-    return connections;
-  }
-    
-
-    boolean connectionExplore(int col, int x, int y, int len, Direction dir){
-       // System.out.println("\n\n\n####ENTERING connectionExplore###");
-       board[x][y].flag();
-        
-        Direction curr_dir = Direction.N; // N is arbitrary. There is not current direction yet.
-        
-        for (int i=-1; i<=1; i++) {
-            for (int j=-1; j<=1; j++) {
-               
-               // Current Point
-                if( (i == 0) && (j==0)) 
-                  continue;
-
-                //Running off board.
-                if( ((x + i) < 0)  ||  ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
-                    continue;
-
-                //Eliminating Corners.
-                if( (x + i == 0 && y + j == 0)  ||  (x + i == 7 && y + j == 0)   ||
-                    (x + i == 7 && y + j == 7)  ||  (x + i == 0 && y + j == 7) )
-                    continue;
-
-                //Loop to explore board
-                for(int k=1; k<8; k++){
-
-                    //Ran off the board
-                    if(((x + i*k) < 0)  ||  ((y + j*k) < 0) || ((x + i*k) > 7) || ((y + j*k) > 7))
-                        break;
-                  
-                    neighbor = board[x + i*k][y + j*k];
-                    curr_dir = Direction.getCurrDir(i, j);
-
-                     if(neighbor.returnColor() == Chip.EMPTY )
-                      continue;
-                    else{
-                      break;
-                      }
-
-                    }//end third for
-                
-                //wrong color          
-                if( neighbor.returnColor() != col ){
-                    continue;
-                }
-                
-                //same direction
-                if(curr_dir == dir){ 
-                   // System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
-                    continue;
-                 }
-
-                 //already visited
-                if(board[neighbor.getX()][neighbor.getY()].isFlagged()){
-                    //System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
-                    continue;
-                  }
-
-                  // Neighbor is in the start goal 
-                if( (col == Chip.WHITE && neighbor.getX() == 0 ) || //NOTE: I don't consider a neighbor as a 
-                    (col == Chip.BLACK && neighbor.getY() == 0)) {  //NOTE: I'm assuming black start_goal is top row
-                    continue; 
-                  }
-
-                  // Neighbor is in the end goal
-                if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
-                  // System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
-                    if (len >= 5) return true;
-
-                // Found a good neighbor and recurssing.
-                }else{
-                  // System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
-                    //pause(800);
-                    maxConnections(len+1);
-                    if(connectionExplore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
-                        return true;
-                    }
-            
-        }//end second for
-}//end first for
-        
-        board[x][y].unflag();//chip has no neighbors...how sad.
-        // System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
-        // System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
-        return false;
-    }
-
-//A private method maintains the maximum amount of connections that a player has.
-private void maxConnections(int len){
-  if (len > connections)
-    connections = len;
-  else
-    return;
-}
-
-private void pause(int milli){
-  try{
-    Thread.sleep(milli);
-  }
-  catch (InterruptedException e) {}
-}
 //------------------------PRINT LINES------------------------------------------
 
                    // if(neighbor.getX() == 2 && neighbor.getY() == 7)
