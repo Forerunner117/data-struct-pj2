@@ -32,7 +32,9 @@ public class BoardTestDrive{
 
 		for (int i=0; i<10; i++) {
 			bd.addChip(white[i], Chip.WHITE);
+			bd.setPieces(Chip.WHITE);
 			bd.addChip(black[i], Chip.BLACK);
+			bd.setPieces(Chip.BLACK);
 		}
 		// if (bd.hasNetwork(Chip.BLACK)) {
 			// System.out.println(bd.hasNetwork(Chip.BLACK));
@@ -40,16 +42,39 @@ public class BoardTestDrive{
 		//}
 
 
+		//*****************************************************************************************
+		//*****************************************************************************************
+		//                        Austin's Board testing starts here
+		//*****************************************************************************************
+		//*****************************************************************************************
 
 
-
-		//TESTING getCurrChips METHOD*****Austin*****
+		//TESTING getCurrChips METHOD
 		Chip[] blarg = bd.getCurrChips(Chip.WHITE);
 		int i = 0;
-		
-		while(blarg[i] != null){
-			System.out.println(blarg[i]);
+
+		System.out.println("Getting the current chip placements:");	
+		while(blarg[i] != null){			
+			System.out.println(blarg[i].x + ", " + blarg[i].y);
 			++i;
 		}
+		//It works... Woot!
+
+		//TESTING possibleMoves METHOD
+
+		//construct an array of possible moves
+		Move[] possibleMoves = LegalMoves.possibleMoves(bd, Chip.BLACK);
+
+		//possibleMoves()
+		System.out.println("Printing possibleMoves for BLACK:");
+		int k = 0;
+		while(possibleMoves[k] != null){
+			System.out.println(possibleMoves[k].x1 + ", " + possibleMoves[k].y1
+			 + " from " + possibleMoves[k].x2 + ", " + possibleMoves[k].y2);
+			++k;
+		}
+		//Also works
+
+		bd.dumpBoard();
 	}
 }

@@ -156,7 +156,7 @@ public class LegalMoves{
  	// A package protected static method that takes the color of the current player
  	// and returns an array of valid Move objects. Calls the isLegal method.	
 	static Move[] possibleMoves(Board bd, int col){
-		Move[] possibleMoves = new Move[48]; 
+		Move[] possibleMoves = new Move[500]; 
 		Chip[] currentChips = bd.getCurrChips(col);
 		int counter = 0;
 		int x = 0;
@@ -164,6 +164,7 @@ public class LegalMoves{
 
 		//ADD moves
 		if(bd.getPieces(col) < 10){
+			System.out.println("Generating possible ADD moves:");
 			for(int i = 0; i < 8; i++){
 				for(int j = 0; j < 8; j++){
 					currMove = new Move(i, j);
@@ -177,6 +178,7 @@ public class LegalMoves{
 
 		//STEP moves
 		else{
+			System.out.println("Generating possible STEP moves:");
 			while(currentChips[x] != null){
 				for(int i = 0; i < 8; i++){
 					for(int j = 0; j < 8; j++){

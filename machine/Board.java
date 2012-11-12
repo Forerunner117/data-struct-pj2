@@ -79,8 +79,12 @@ public class Board{
       return 0;
   }
 
+  //public method getCurrChips() finds all of the currents chips that have been
+  //placed on the board by the given color, col. Once found, they are stored in
+  //the 1D array currChips and then returned. Implemented so that we may make 
+  //smart STEP moves by analyzing all legal STEP moves for all pieces in play.
   public Chip[] getCurrChips(int col){
-    Chip[] currChips = new Chip[10];
+    Chip[] currChips = new Chip[11];
     int counter = 0;
 
     for(int i = 0; i < 8; i++){

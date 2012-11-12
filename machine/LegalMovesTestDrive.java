@@ -5,6 +5,7 @@ public class LegalMovesTestDrive{
 
 	public static void main(String[] args){
 		MachinePlayer whitePlayer = new MachinePlayer(Chip.WHITE);
+		Board bd = whitePlayer.getBoard();
 
 		// constructs perfectly legal center moves
 		Move center1 = new Move(3, 3);
@@ -61,6 +62,8 @@ public class LegalMovesTestDrive{
 
 		//constructs STEP moves
 		Move step1 = new Move(3, 2, 3, 2);
+
+
 
 
 
@@ -154,6 +157,18 @@ public class LegalMovesTestDrive{
 
 		System.out.println("x: " + random.x1 + "y: " + random.y1);
 		whitePlayer.getBoard().dumpBoard();
+
+
+		//construct an array of possible moves
+		Move[] possibleMoves = LegalMoves.possibleMoves(bd, Chip.WHITE);
+
+		//possibleMoves()
+		System.out.println("Printing possibleMoves for WHITE:");
+		int i = 0;
+		while(possibleMoves[i] != null){
+			System.out.println(possibleMoves[i].x1 + ", " + possibleMoves[i].y1);
+			++i;
+		}
 
 
 	}
