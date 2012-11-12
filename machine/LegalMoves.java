@@ -157,8 +157,9 @@ public class LegalMoves{
  	// and returns an array of valid Move objects. Calls the isLegal method.	
 	Move[] possibleMoves(Board bd, int col){
 		Move[] possibleMoves = new Move[48]; 
-		Chip[] currentChips = new Chip[10];
+		Chip[] currentChips = bd.getCurrChips(col);
 		int counter = 0;
+		int x = 0;
 		Move currMove;
 
 		//ADD moves
@@ -176,14 +177,17 @@ public class LegalMoves{
 
 		//STEP moves
 		else{
-			for(int i = 0; i < 8; i++){
-				for(int j = 0; j < 8; j++){
-					currMove = new Move(i, j);
-					if(isLegal(bd, currMove, col)){
-						possibleMoves[counter] = currMove;
-						++counter;
+			while(currentChips[x] != null){
+				for(int i = 0; i < 8; i++){
+					for(int j = 0; j < 8; j++){
+						currMove = new Move(i, j, currentChips[x].x, currentChips[x].y);
+						if(isLegal(bd, currMove, col)){
+							possibleMoves[counter] = currMove;
+							++counter;
+						}
 					}
 				}
+				++x;
 			}
 		}
 		return possibleMoves;
