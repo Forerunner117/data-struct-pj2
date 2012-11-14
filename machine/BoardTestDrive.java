@@ -49,7 +49,7 @@ public class BoardTestDrive{
 		//*****************************************************************************************
 
 
-		//TESTING getCurrChips METHOD
+		/*//TESTING getCurrChips METHOD
 		Chip[] blarg = bd.getCurrChips(Chip.WHITE);
 		int i = 0;
 
@@ -75,6 +75,8 @@ public class BoardTestDrive{
 		}
 		//Also works
 
-		bd.dumpBoard();
+		bd.dumpBoard();*/
 	}
 }
+
+
