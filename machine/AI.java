@@ -75,7 +75,7 @@ class AI{
 		bd.addChip(mv, color);	
 				
 		if(bd.hasNetwork(color)){
-			i= 20;
+			i= 1000;
 			return i;
 		}
 
