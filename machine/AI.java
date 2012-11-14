@@ -80,5 +80,53 @@ class AI{
 		}
 
 		return i;			
-	}			
+	}
+	boolean CriticalThreat(Board bd, Move mv, int color)
+	{
+		
+		Board board = bd;
+		Move move = mv;	
+		board.addChip(mv, color);	
+		int enemyColor;
+		boolean enemyHasNetwork;
+		
+		if(color==Chip.BLACK)
+		{
+			
+			enemyColor = Chip.WHITE;
+			
+			
+		}
+		else
+			enemyColor=Chip.BLACK;	
+		
+		
+		int score = 0;
+		int tempScore = 0;
+		Move[] possibleMoves = LegalMoves.possibleMoves( board, enemyColor);
+		
+		
+		for(int i = 0; i < possibleMoves.length; i++)
+		{
+			
+			tempScore = evaluate(board, possibleMoves[i], enemyColor);
+			if(tempScore > score||i==0)
+			{
+				score=tempScore;
+				
+			}
+			
+		}
+		
+		if(score == 1000)
+			return true;
+		else
+			return false;
+		
+		
+		
+		
+	}
+	
+	
 }
