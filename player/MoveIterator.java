@@ -14,5 +14,20 @@ import machine.*;
  */
 
 public class MoveIterator extends Move{
+	private Move[] possibleMoves = new Move[500];
+	private int color;
+	private int pointer = 0;
+
+	public MoveIterator(Board bd, int col){
+		possibleMoves = LegalMoves.possibleMoves(bd, col);
+		color = col;
+	}
+
+	public Move getNext(){
+		if(possibleMoves[pointer] != null){
+			return possibleMoves[pointer];
+			++pointer;
+		}
+	}
 
 }

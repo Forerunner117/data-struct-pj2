@@ -79,10 +79,6 @@ public class MachinePlayer extends Player {
   public boolean forceMove(Move m) {
     return false;
   }
-  
-  private Move smartMove(int color, int searchDepth){
-    return null;
-  }
 
   private Move randomMove(){
     int x;
