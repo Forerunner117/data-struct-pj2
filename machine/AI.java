@@ -11,16 +11,16 @@ import player.*;
 
 class AI{
 
-	public Move smartMove(Board bd, int myColor, int oppColor int searchDepth){
+	public Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
 	    int maxScore = -1000;
 	    int currScore;
 	    Move maxMove = null;
 	    Move currMove = null;
 
-	    it = new MoveIterator(bd, color);
+	    MoveIterator it = new MoveIterator(bd, myColor);
 
 	    while((currMove = it.getNext()) != null){
-	      currScore = scoreMove(bd, currMove, color, 1, searchDepth, maxScore);
+	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
 	      if (currScore > maxScore){
 	        maxScore = currScore;
 	        maxMove = currMove;
@@ -35,24 +35,24 @@ class AI{
 	    bd.addChip(m, myColor);
 
 	    if (currDepth >= maxDepth) {
-	      retVal = evaluate(myColor);   // eval is higher if pos is good for this color
-	      bd.removeChip(m, myColor);
-	      return retval;
+	      retVal = evaluate(bd, m, myColor);   // eval is higher if pos is good for this color
+	      bd.removeChip(m.x1, m.y1);
+	      return retVal;
 	    }
 
 	    if (bd.hasNetwork(myColor)  &&  !bd.hasNetwork(oppColor)) {
-	      bd.removeChip(m, player);
+	      bd.removeChip(m.x1, m.y1);
 	      return 1000;
 	    }
 
 	    retVal = -tryAll(bd, m, myColor, oppColor, currDepth, maxDepth, cutoff);
-	    bd.removeChip(m, myColor);
+	    bd.removeChip(m.x1, m.y1);
 	    return retVal;
   	}
 
 	private int tryAll(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 	    int currVal, maxVal = -1000;
-	    it = new moveIterator(bd, oppColor);
+	    MoveIterator it = new MoveIterator(bd, oppColor);
 	    Move currMove;
 
 	    while((currMove = it.getNext()) != null) {
