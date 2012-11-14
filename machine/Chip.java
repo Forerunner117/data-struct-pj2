@@ -48,6 +48,7 @@ public class Chip{
 			return true;
 		
 		else return false;
+		
 	}
 	boolean isFlagged(){
 		if(visited == true)
