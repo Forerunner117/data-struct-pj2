@@ -12,6 +12,7 @@ public class Chip{
 
 	int color;
 	boolean visited = false;
+	boolean touched = true;
 	int x;
 	int y;
 	                                                      
@@ -32,6 +33,14 @@ public class Chip{
 
 	void unflag(){
 		visited = false;	
+	}
+	void touch()
+	{
+		touched = true;
+	}
+
+	void untouch(){
+		touched = false;
 	}
 	
 	boolean isFlagged(){
