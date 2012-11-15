@@ -270,27 +270,35 @@ public class Board{
         }                                                                     
       }
 
+private void unTouchAllChipsOfColor(int col){
+  for (int i=0; i<8; i++) {
+      for (int j=0; j<8; j++) {
+        if(board[i][j].returnColor() == col)
+          board[i][j].untouch();
+      }
+    }
+}
+
 // This is potentially a huge performance hit. Should use sparingly.
   public int howManyConnections(int col){
     //exp is the result of the exploration. Used to check more than one chip in start goal.
-    connections = 1;
-    boolean exp = false;
+    connections = 0;
     if(col == Chip.WHITE){
-      for (int i=0; i<7; i++) {//Check the first goal on the left.
-        for(int j=1; j<7 && !exp; j++){
+      for (int i=0; i<8; i++) {//Check the first goal on the left.
+        for(int j=1; j<7; j++){
         if(board[i][j].returnColor() == col){
-          unflagAllChipsOfColor(col);
-          exp = connectionExplore(col, board[i][j].getX(), board[i][j].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
+          unTouchAllChipsOfColor(col);
+          connectionExplore(col, board[i][j].getX(), board[i][j].getY());
         }
         }
       }
     }
     if(col == Chip.BLACK){//Check the goal on the top.
-    for (int j=0; j<7; j++) {
-      for(int i=1; i<7 && !exp; i++){
+    for (int j=0; j<8; j++) {
+      for(int i=1; i<7; i++){
       if(board[i][0].returnColor() == col){
         unflagAllChipsOfColor(col);
-        exp = connectionExplore(col, board[i][j].getX(), board[i][j].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
+        connectionExplore(col, board[i][j].getX(), board[i][j].getY());
       }
     }
       }
@@ -299,11 +307,10 @@ public class Board{
   }
     
 
-    boolean connectionExplore(int col, int x, int y, int len, Direction dir){
+    private void connectionExplore(int col, int x, int y){
        // System.out.println("\n\n\n####ENTERING connectionExplore###");
-       board[x][y].flag();
+       board[x][y].touch();
         
-        Direction curr_dir = Direction.N; // N is arbitrary. There is not current direction yet.
         
         for (int i=-1; i<=1; i++) {
             for (int j=-1; j<=1; j++) {
@@ -329,7 +336,7 @@ public class Board{
                         break;
                   
                     neighbor = board[x + i*k][y + j*k];
-                    curr_dir = Direction.getCurrDir(i, j);
+                    
 
                      if(neighbor.returnColor() == Chip.EMPTY )
                       continue;
@@ -343,15 +350,10 @@ public class Board{
                 if( neighbor.returnColor() != col ){
                     continue;
                 }
-                
-                //same direction
-                if(curr_dir == dir){
-                   // System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
-                    continue;
-                 }
+                          
 
                  //already visited
-                if(board[neighbor.getX()][neighbor.getY()].isFlagged()){
+                if(board[neighbor.getX()][neighbor.getY()].isTouched()){
                     //System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
@@ -360,38 +362,16 @@ public class Board{
                 if( (col == Chip.WHITE && neighbor.getX() == 0 ) || //NOTE: I don't consider a neighbor as a
                     (col == Chip.BLACK && neighbor.getY() == 0)) { //NOTE: I'm assuming black start_goal is top row
                     continue;
+                  
+                  }else{
+                  connections++;
                   }
-
-                  // Neighbor is in the end goal
-                if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
-                  // System.out.println("Found neighbor in end goal at (" + neighbor.getX() + ", " + neighbor.getY() + ") and length is " + len);
-                    if (len >= 5) return true;
-
-                // Found a good neighbor and recurssing.
-                }else{
-                  // System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
-                    //pause(800);
-                    maxConnections(len+1);
-                    if(connectionExplore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
-                        return true;
-                    }
             
-        }//end second for
-}//end first for
+          }//end second for
+    }//end first for
         
-        board[x][y].unflag();//chip has no neighbors...how sad.
-        // System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
-        // System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
-        return false;
-    }
-
-//A private method maintains the maximum amount of connections that a player has.
-private void maxConnections(int len){
-  if (len > connections)
-    connections = len;
-  else
-    return;
 }
+
 
 private void pause(int milli){
   try{
@@ -503,6 +483,6 @@ private void pause(int milli){
 
       mark chip as unvisited
       return false;
-      }
       }*/
+      //}
 }

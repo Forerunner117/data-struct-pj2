@@ -77,9 +77,11 @@ public class MachinePlayer extends Player {
   // player.  This method is used to help set up "Network problems" for your
   // player to solve.
   public boolean forceMove(Move m){
-    System.out.println("forceMove called.")
-    if(LegalMoves.isLegal(bd, m, myColor))
+    System.out.println("forceMove called.");
+    if(LegalMoves.isLegal(bd, m, myColor)){
       bd.addChip(m, myColor);
+      return true;
+    }
     else
       return false;
   }

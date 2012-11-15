@@ -43,6 +43,12 @@ public class Chip{
 		touched = false;
 	}
 	
+	boolean isTouched(){
+		if (visited == true) 
+			return true;
+		
+		else return false;
+	}
 	boolean isFlagged(){
 		if(visited == true)
 			return true;
