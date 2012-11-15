@@ -37,7 +37,6 @@ public class Chip{
 	void touch()
 	{
 		touched = true;
-		System.out.println("I touched myself!");
 	}
 
 	void untouch(){

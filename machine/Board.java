@@ -12,7 +12,7 @@ public class Board{
   private Chip neighbor;
   private int whitePieces;
   private int blackPieces;
-  private int connections = 1;
+  private int connections = 0;
 
 
   public Board(){
@@ -284,25 +284,25 @@ private void unTouchAllChipsOfColor(int col){
     //exp is the result of the exploration. Used to check more than one chip in start goal.
     connections = 0;
     if(col == Chip.WHITE){
+      unTouchAllChipsOfColor(col);
       for (int i=0; i<8; i++) {//Check the first goal on the left.
         for(int j=1; j<7; j++){
         if(board[i][j].returnColor() == col){
-          unTouchAllChipsOfColor(col);
           connectionExplore(col, board[i][j].getX(), board[i][j].getY());
-        }
-        }
-      }
-    }
+          }//correct color if
+        }//inner for
+      }//outer for
+    }// White if
     if(col == Chip.BLACK){//Check the goal on the top.
-    for (int j=0; j<8; j++) {
-      for(int i=1; i<7; i++){
-      if(board[i][j].returnColor() == col){
-        unflagAllChipsOfColor(col);
-        connectionExplore(col, board[i][j].getX(), board[i][j].getY());
-      }
-    }
-      }
-    }
+      unTouchAllChipsOfColor(col);
+      for (int j=0; j<8; j++) {
+        for(int i=1; i<7; i++){
+        if(board[i][j].returnColor() == col){
+          connectionExplore(col, board[i][j].getX(), board[i][j].getY());
+          }//correct color if
+        }//inner for
+      }//outer for
+    }// White if
     return connections;
   }
     
@@ -312,7 +312,7 @@ private void unTouchAllChipsOfColor(int col){
        
        board[x][y].touch();
 
-       System.out.println("board at (" + x + ", " + y + ") isTouched = " + board[x][y].isTouched());
+       // System.out.println("board at (" + x + ", " + y + ") isTouched = " + board[x][y].isTouched());
         
       System.out.println("Looking from (" + x + ", " + y + ") ");
         
@@ -365,9 +365,17 @@ private void unTouchAllChipsOfColor(int col){
                   // Neighbor is in the start goal
                 if( (col == Chip.WHITE && neighbor.getX() == 0 ) || //NOTE: I don't consider a neighbor as a
                     (col == Chip.BLACK && neighbor.getY() == 0)) { //NOTE: I'm assuming black start_goal is top row
+                    System.out.println("Skipping the start goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
-                  
-                  }else{
+                  }
+                  // Ignoring end goal neighbors from end goal chips
+                if ((col == Chip.WHITE && x == 7 && neighbor.getX() == 7 ) || 
+                    (col == Chip.BLACK && y == 7 && neighbor.getY() == 7)) { 
+                  System.out.println("Skipping the end goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + 
+                    ") from chip at  (" + x + ", " + y + ")");
+                  continue;
+                }
+                  else{
                     System.out.println("found good neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") ");
                   connections++;
                   System.out.println("From connectionExplore, I count " + connections + " connections.");
