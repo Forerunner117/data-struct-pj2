@@ -226,7 +226,7 @@ public class Board{
         return false;
     }
 
-    private boolean endGoalEmpty(int col){
+     boolean endGoalEmpty(int col){
       if (col == Chip.WHITE) {
         for (int i = 1; i<7; i++) {
           if(board[7][i].returnColor() == Chip.WHITE)

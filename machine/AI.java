@@ -73,23 +73,56 @@ class AI{
 		int i = 0;
 		Board board = bd;
 	        Move move = mv;	
+		int pieces= bd.getPieces(color);
+		Board temp = bd;
+		board.addChip(mv,color);
+		if(pieces >=4 && bd.endGoalEmpty(color))
+		{
 			
 			
-		bd.addChip(mv, color);	
+			
+			if(!board.endGoalEmpty(color)) 
+				i = i+100;
+			
+			
+		}
+		if(CriticalThreat(bd, color))
+		{
+			temp.addChip(mv,color);
+			if(!CriticalThreat(temp, color))
+				{	
+					i = i+500;
+					if(i>=1000)
+						i = 999;
+				}
 				
-		if(bd.hasNetwork(color)){
+				temp = bd;
+		}
+		
+		if(CriticalThreat(board, color))
+			{
+				
+				i = -1000;
+				
+			}
+		
+		
+		
+		
+			
+				
+		if(board.hasNetwork(color)){
 			i= 1000;
 			return i;
 		}
 
 		return i;			
 	}
-	boolean CriticalThreat(Board bd, Move mv, int color)
+	boolean CriticalThreat(Board bd, int color)
 	{
 		
 		Board board = bd;
-		Move move = mv;	
-		board.addChip(mv, color);	
+			
 		int enemyColor;
 		boolean enemyHasNetwork;
 		
