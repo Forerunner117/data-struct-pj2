@@ -161,6 +161,7 @@ public class LegalMovesTestDrive{
 
 		//construct an array of possible moves
 		Move[] possibleMoves = LegalMoves.possibleMoves(bd, Chip.WHITE);
+		MoveIterator it = new MoveIterator(bd, Chip.WHITE);
 
 		//possibleMoves()
 		System.out.println("Printing possibleMoves for WHITE:");
@@ -168,6 +169,13 @@ public class LegalMovesTestDrive{
 		while(possibleMoves[i] != null){
 			System.out.println(possibleMoves[i].x1 + ", " + possibleMoves[i].y1);
 			++i;
+		}
+
+		Move currMove;
+
+		System.out.println("\ngetNext Moves");
+		while((currMove = it.getNext()) != null){
+			System.out.println(currMove.x1 + ", " + currMove.y1);
 		}
 
 
