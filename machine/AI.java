@@ -35,7 +35,7 @@ class AI{
 	    bd.addChip(m, myColor);
 
 	    if (currDepth >= maxDepth) {
-	      	if(currDepth % 2 == 0)
+	      	if(currDepth % 2 == 0) //this means we are at a depth where we must eval for an opponent Move
 	      		retVal = evaluate(bd, m, oppColor);   // eval is higher if pos is good for this color
 	      	else
 	      		retVal = evaluate(bd, m, myColor);
@@ -72,7 +72,7 @@ class AI{
 	public int evaluate(Board bd, Move mv, int color){
 		int i = 0;
 		Board board = bd;
-	        Move move = mv;	
+	    Move move = mv;	
 		int pieces= bd.getPieces(color);
 		Board temp = bd;
 		board.addChip(mv,color);
@@ -86,10 +86,10 @@ class AI{
 			
 			
 		}
-		if(CriticalThreat(bd, color))
+		if(criticalThreat(bd, color))
 		{
 			temp.addChip(mv,color);
-			if(!CriticalThreat(temp, color))
+			if(!criticalThreat(temp, color))
 				{	
 					i = i+500;
 					if(i>=1000)
@@ -99,7 +99,7 @@ class AI{
 				temp = bd;
 		}
 		
-		if(CriticalThreat(board, color))
+		if(criticalThreat(board, color))
 			{
 				
 				i = -1000;
@@ -118,21 +118,15 @@ class AI{
 
 		return i;			
 	}
-	boolean CriticalThreat(Board bd, int color)
-	{
-		
+	boolean criticalThreat(Board bd, int color)
+	{	
 		Board board = bd;
 			
 		int enemyColor;
 		boolean enemyHasNetwork;
 		
-		if(color==Chip.BLACK)
-		{
-			
+		if(color==Chip.BLACK)			
 			enemyColor = Chip.WHITE;
-			
-			
-		}
 		else
 			enemyColor=Chip.BLACK;	
 		
@@ -142,27 +136,17 @@ class AI{
 		Move[] possibleMoves = LegalMoves.possibleMoves( board, enemyColor);
 		
 		
-		for(int i = 0; i < possibleMoves.length; i++)
-		{
-			
+		for(int i = 0; i < possibleMoves.length; i++){			
 			tempScore = evaluate(board, possibleMoves[i], enemyColor);
-			if(tempScore > score||i==0)
-			{
-				score=tempScore;
-				
-			}
-			
+			if(tempScore > score||i==0){
+				score=tempScore;				
+			}			
 		}
 		
 		if(score == 1000)
 			return true;
 		else
-			return false;
-		
-		
-		
-		
+			return false;								
 	}
-	
-	
+		
 }
