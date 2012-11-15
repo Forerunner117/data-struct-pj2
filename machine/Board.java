@@ -296,7 +296,7 @@ private void unTouchAllChipsOfColor(int col){
     if(col == Chip.BLACK){//Check the goal on the top.
     for (int j=0; j<8; j++) {
       for(int i=1; i<7; i++){
-      if(board[i][0].returnColor() == col){
+      if(board[i][j].returnColor() == col){
         unflagAllChipsOfColor(col);
         connectionExplore(col, board[i][j].getX(), board[i][j].getY());
       }
@@ -308,9 +308,13 @@ private void unTouchAllChipsOfColor(int col){
     
 
     private void connectionExplore(int col, int x, int y){
-       // System.out.println("\n\n\n####ENTERING connectionExplore###");
+       System.out.println("\n\n\n####ENTERING connectionExplore###");
+       
        board[x][y].touch();
+
+       System.out.println("board at (" + x + ", " + y + ") isTouched = " + board[x][y].isTouched());
         
+      System.out.println("Looking from (" + x + ", " + y + ") ");
         
         for (int i=-1; i<=1; i++) {
             for (int j=-1; j<=1; j++) {
@@ -354,7 +358,7 @@ private void unTouchAllChipsOfColor(int col){
 
                  //already visited
                 if(board[neighbor.getX()][neighbor.getY()].isTouched()){
-                    //System.out.println("The neighbor already visited at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
+                    System.out.println("The neighbor already touhed at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
 
@@ -364,7 +368,9 @@ private void unTouchAllChipsOfColor(int col){
                     continue;
                   
                   }else{
+                    System.out.println("found good neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") ");
                   connections++;
+                  System.out.println("From connectionExplore, I count " + connections + " connections.");
                   }
             
           }//end second for

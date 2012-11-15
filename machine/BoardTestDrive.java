@@ -40,6 +40,7 @@ public class BoardTestDrive{
 			// System.out.println(bd.hasNetwork(Chip.BLACK));
 		System.out.println("This board has " + bd.howManyConnections(Chip.BLACK) + " connections.");			
 		//}
+		bd.dumpBoard();
 
 
 		//*****************************************************************************************

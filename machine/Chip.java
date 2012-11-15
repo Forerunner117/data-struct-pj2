@@ -12,7 +12,7 @@ public class Chip{
 
 	int color;
 	boolean visited = false;
-	boolean touched = true;
+	boolean touched = false;
 	int x;
 	int y;
 	                                                      
@@ -37,6 +37,7 @@ public class Chip{
 	void touch()
 	{
 		touched = true;
+		System.out.println("I touched myself!");
 	}
 
 	void untouch(){
@@ -44,11 +45,11 @@ public class Chip{
 	}
 	
 	boolean isTouched(){
-		if (visited == true) 
+		if (touched == true) 
 			return true;
 		
 		else return false;
-		
+
 	}
 	boolean isFlagged(){
 		if(visited == true)
@@ -81,3 +82,4 @@ public class Chip{
 		
 	}
 }
+	
