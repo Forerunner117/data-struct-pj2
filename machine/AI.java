@@ -35,9 +35,12 @@ class AI{
 	    bd.addChip(m, myColor);
 
 	    if (currDepth >= maxDepth) {
-	      retVal = evaluate(bd, m, myColor);   // eval is higher if pos is good for this color
-	      bd.removeChip(m.x1, m.y1);
-	      return retVal;
+	      	if(currDepth % 2 == 0)
+	      		retVal = evaluate(bd, m, oppColor);   // eval is higher if pos is good for this color
+	      	else
+	      		retVal = evaluate(bd, m, myColor);
+	      	bd.removeChip(m.x1, m.y1);
+	      	return retVal;
 	    }
 
 	    if (bd.hasNetwork(myColor)  &&  !bd.hasNetwork(oppColor)) {
