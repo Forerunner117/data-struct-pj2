@@ -94,7 +94,22 @@ public class Board{
     else
       return;  
   }
-
+  public void undoMove(Move m, int color)
+  {
+  	  if(m.moveKind == m.ADD){
+  	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY);  
+  	  }
+  	  else if(m.moveKind == m.STEP){
+  	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY); 
+  	  	  board[m.x2][m.y2] = new Chip(m.x2, m.y2, color);   
+  	  }  
+    else
+      return;    
+  	  
+  
+	  
+  }
+  
   public void removeChip(int x, int y){
     board[x][y].color = Chip.EMPTY;
   }
