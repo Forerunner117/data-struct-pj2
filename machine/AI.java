@@ -77,6 +77,7 @@ class AI{
 		Board oldBoard = bd;
 		
 		//some useful values to have
+		int exploreLength;
 		int enemyColor = getEnemyColor(color);
 		int prevConnections = oldBoard.howManyConnections(color);
 		int preMoveEnemyConnections = oldBoard.howManyConnections(enemyColor);
@@ -88,9 +89,10 @@ class AI{
 			score = 1000;
 			return score;
 		}
+		exploreLength = bd.getMaxExploreLength(); // must be after a network test.
 
 		// Take the center in the beginning.
-		if (pieces < 3){
+		if (pieces <3){ //love pieces.
 			if(mv.x1 > 2 && mv.x1 < 5 && mv.y1 > 2 && mv.y1 < 5)
 				score += 250;
 		}
@@ -98,9 +100,10 @@ class AI{
 		//If we are into the game and still don't have a chip in the endgoal. 
 		if(pieces >= 4 && oldBoard.endGoalEmpty(color))
 		{				
-			if(!board.endGoalEmpty(color)) 
-				score += 100; //Fixed it,						
+			if(!board.endGoalEmpty(color) || !board.startGoalEmpty(color)) 
+				score += 125; //Fixed it,						
 		}
+
 
 		//Difference in enemy connections
 		int diffConnections = board.howManyConnections(color) - prevConnections;

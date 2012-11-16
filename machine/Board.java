@@ -13,6 +13,7 @@ public class Board{
   private int whitePieces;
   private int blackPieces;
   private int connections = 0;
+  private int maxExploreLength = 1;
 
 
   public Board(){
@@ -155,6 +156,7 @@ public class Board{
     }
   }
   public boolean hasNetwork(int col){
+    maxExploreLength = 1;
     boolean exp = false;
     if(col == Chip.WHITE){
       for (int i=1; i<7 && !exp; i++) {//Check the first goal on the left.
@@ -249,6 +251,7 @@ public class Board{
                 
                 }else{
                   // System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
+                    setMaxExpLength(len+1);
                     if(explore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                         return true;
                     }
@@ -259,6 +262,15 @@ public class Board{
         // System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
         // System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
         return false;
+    }
+    private void setMaxExpLength(int len){
+      if (len > maxExploreLength) {
+        maxExploreLength = len;
+      }
+    }
+    public int getMaxExploreLength(){
+      return maxExploreLength;
+
     }
 
      boolean endGoalEmpty(int col){
@@ -280,6 +292,27 @@ public class Board{
       }
       return true;
     }
+    
+    boolean startGoalEmpty(int col){
+      if (col == Chip.WHITE) {
+        for (int i = 1; i<7; i++) {
+          if(board[0][i].returnColor() == Chip.WHITE)
+            return false;
+          else
+            return true;
+        }
+      }
+      if (col == Chip.BLACK) {
+        for (int i = 1; i<7; i++) {
+          if(board[i][0].returnColor() == Chip.BLACK)
+            return false;
+          else
+            return true;
+        }
+      }
+      return true;
+    }
+    
 
       public void setLastMove(Move m, int color){
         if(color == Chip.BLACK)
