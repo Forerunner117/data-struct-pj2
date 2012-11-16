@@ -74,19 +74,32 @@ class AI{
 		Board board = bd.copyBoard();
 	        Move move = mv;	
 		int pieces = bd.getPieces(color);
-		Board OldBoard = bd;
+		Board oldBoard = bd;
 		
 		//some useful values to have
 		int enemyColor = getEnemyColor(color);
-		int prevConnections = OldBoard.howManyConnections(color);
-		int preMoveEnemyConnections = OldBoard.howManyConnections(enemyColor);
+		int prevConnections = oldBoard.howManyConnections(color);
+		int preMoveEnemyConnections = oldBoard.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
 		
-		// If proposed move gives us a network.					
+		// If proposed move gives us a network...without giving the enemy a network.					
 		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
 			score = 1000;
 			return score;
+		}
+
+		// Take the center in the beginning.
+		if (pieces < 3){
+			if(mv.x1 > 2 && mv.x1 < 5 && mv.y1 > 2 && mv.y1 < 5)
+				score += 250;
+		}
+
+		//If we are into the game and still don't have a chip in the endgoal. 
+		if(pieces >= 4 && oldBoard.endGoalEmpty(color))
+		{				
+			if(!board.endGoalEmpty(color)) 
+				score += 100; //Fixed it,						
 		}
 
 		//Difference in enemy connections
@@ -103,15 +116,8 @@ class AI{
 		if (diffEnemyConnections > 0 )
 			score -= (int) Math.pow(5, diffEnemyConnections);
 
-		//If we are into the game and still don't have a chip in the endgoal. 
-		if(pieces >=4 && OldBoard.endGoalEmpty(color))
-		{				
-			if(!board.endGoalEmpty(color)) 
-				score += 100; //Fixed it,						
-		}
-
 		// If proposed move neutralizes a critical threat
-		/*if(criticalThreat(OldBoard, color))
+		/*if(criticalThreat(oldBoard, color))
 		{
 			
 			if(!criticalThreat(board, color))
