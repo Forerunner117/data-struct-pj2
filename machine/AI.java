@@ -89,7 +89,13 @@ class AI{
 			score = 1000;
 			return score;
 		}
+		//Replacement for critical threat.
+		if(board.hasNetwork(enemyColor))
+			score = -1000;
+
 		exploreLength = bd.getMaxExploreLength(); // must be after a network test.
+		System.out.println("exploreLength is " + exploreLength);
+		
 
 		// Take the center in the beginning.
 		if (pieces <3){ //love pieces.
@@ -124,9 +130,8 @@ class AI{
 			score += 50;
 
 		// If proposed move neutralizes a critical threat
-		if(criticalThreat(oldBoard, color))
+		/*if(criticalThreat(oldBoard, color))
 		{
-			
 			
 			if(!criticalThreat(board, color))
 				{	
@@ -141,7 +146,7 @@ class AI{
 		if(criticalThreat(board, color))
 			{
 				score = -1000;				
-			}						
+			}*/						
 
 		return score; 		
 	}
@@ -159,32 +164,36 @@ class AI{
 
 
 
-	// Determines whether a nework move is possible, for enemy, no longer calls evaluate.
-	static boolean criticalThreat(Board bd, int color)
+	// I don't really get what this is.
+	/*static boolean criticalThreat(Board bd, int color)
 	{	
-		Board Newboard = bd.copyBoard();
+		Board board = bd;
 			
-		int enemyColor= getEnemyColor(color);
+		int enemyColor;
 		boolean enemyHasNetwork;
 		
+		if(color == Chip.BLACK)			
+			enemyColor = Chip.WHITE;
+		else
+			enemyColor = Chip.BLACK;	
 		
 		
-		boolean threat = false;
-		
-		Move[] possibleMoves = LegalMoves.possibleMoves( Newboard, enemyColor);
+		int score = 0;
+		int tempScore = 0;
+		Move[] possibleMoves = LegalMoves.possibleMoves( board, enemyColor);
 		
 		
 		for(int i = 0; i < possibleMoves.length; i++){			
-			
-		Newboard.addChip(possibleMoves[i], enemyColor);
-		if(Newboard.hasNetwork(enemyColor))
-			return true;
-		
-		Newboard = bd.copyBoard();
-		
+			tempScore = evaluate(board, possibleMoves[i], enemyColor); // This calls evaluate, which calls critical threat, which calls evaluate, which...STACKOVERFLOWEXCEPTION
+			if(tempScore > score || i == 0){
+				score = tempScore;				
+			}			
 		}
 		
-		return threat;								
-	}
+		if(score == 1000)
+			return true;
+		else
+			return false;								
+	}*/
 		
 }

@@ -313,7 +313,7 @@ public class Board{
       return true;
     }
     
-
+    
       public void setLastMove(Move m, int color){
         if(color == Chip.BLACK)
           blackLastMove = new Move(m.x1, m.y1);
