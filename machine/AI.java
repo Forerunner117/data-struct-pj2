@@ -72,7 +72,7 @@ class AI{
 	public static int evaluate(Board bd, Move mv, int color){
 		int score = 0;
 		Board board = bd.copyBoard();
-	        Move move = mv;	
+	    Move move = mv;	
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
 		
@@ -94,7 +94,7 @@ class AI{
 			score = -1000;
 
 		exploreLength = bd.getMaxExploreLength(); // must be after a network test.
-		System.out.println("exploreLength is " + exploreLength);
+		// System.out.println("exploreLength is " + exploreLength);
 		
 
 		// Take the center in the beginning.
