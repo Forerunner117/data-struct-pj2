@@ -180,7 +180,7 @@ public class Board{
   //just refer to the instance variable board[][]. 
 
     boolean explore(int col, int x, int y, int len, Direction dir){
-       System.out.println("\n\n\n####ENTERING EXPLORE###");
+       // System.out.println("\n\n\n####ENTERING EXPLORE###");
        board[x][y].flag();
       
         
@@ -229,7 +229,7 @@ public class Board{
                 
 
                 if(curr_dir == dir){ //same direction
-                   System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
+                   // System.out.println("The directions are the same: curr_dir is " + curr_dir + " dir is " + dir);
                     continue;
                  }
 
@@ -244,11 +244,11 @@ public class Board{
                     continue; 
                   }
                 if( (col == Chip.BLACK && neighbor.getY() == 7) || (col == Chip.WHITE && neighbor.getX() == 7)){
-                  System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
+                  // System.out.println("Found neighbor in end goal at  (" + neighbor.getX() + ", "  + neighbor.getY() + ") and length is " + len);
                     if (len >= 5) return true;
                 
                 }else{
-                  System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
+                  // System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
                     if(explore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                         return true;
                     }
@@ -256,8 +256,8 @@ public class Board{
         }//end second for
 }//end first for
         board[x][y].unflag();//chip has no neighbors...how sad.
-        System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
-        System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
+        // System.out.println("Returning false. At (" + board[x][y].getX() + ", " + board[x][y].getY() + ") \n");
+        // System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
         return false;
     }
 
@@ -343,13 +343,13 @@ private void unTouchAllChipsOfColor(int col){
     
 
     private void connectionExplore(int col, int x, int y){
-       System.out.println("\n\n\n####ENTERING connectionExplore###");
+       // System.out.println("\n\n\n####ENTERING connectionExplore###");
        
        board[x][y].touch();
 
        // System.out.println("board at (" + x + ", " + y + ") isTouched = " + board[x][y].isTouched());
         
-      System.out.println("Looking from (" + x + ", " + y + ") ");
+      // System.out.println("Looking from (" + x + ", " + y + ") ");
         
         for (int i=-1; i<=1; i++) {
             for (int j=-1; j<=1; j++) {
@@ -393,27 +393,27 @@ private void unTouchAllChipsOfColor(int col){
 
                  //already visited
                 if(board[neighbor.getX()][neighbor.getY()].isTouched()){
-                    System.out.println("The neighbor already touhed at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
+                    // System.out.println("The neighbor already touhed at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
 
                   // Neighbor is in the start goal
                 if( (col == Chip.WHITE && neighbor.getX() == 0 ) || //NOTE: I don't consider a neighbor as a
                     (col == Chip.BLACK && neighbor.getY() == 0)) { //NOTE: I'm assuming black start_goal is top row
-                    System.out.println("Skipping the start goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
+                    // System.out.println("Skipping the start goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
                     continue;
                   }
                   // Ignoring end goal neighbors from end goal chips
                 if ((col == Chip.WHITE && x == 7 && neighbor.getX() == 7 ) || 
                     (col == Chip.BLACK && y == 7 && neighbor.getY() == 7)) { 
-                  System.out.println("Skipping the end goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + 
-                    ") from chip at  (" + x + ", " + y + ")");
+                  // System.out.println("Skipping the end goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + 
+                    // ") from chip at  (" + x + ", " + y + ")");
                   continue;
                 }
                   else{
-                    System.out.println("found good neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") ");
+                    // System.out.println("found good neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") ");
                   connections++;
-                  System.out.println("From connectionExplore, I count " + connections + " connections.");
+                  // System.out.println("From connectionExplore, I count " + connections + " connections.");
                   }
             
           }//end second for

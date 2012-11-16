@@ -69,7 +69,7 @@ class AI{
 	    return maxVal;
   	}
 	
-	public int evaluate(Board bd, Move mv, int color){
+	public static int evaluate(Board bd, Move mv, int color){
 		int score = 0;
 		Board board = bd.copyBoard();
 	        Move move = mv;	
@@ -84,7 +84,7 @@ class AI{
 		board.addChip(mv,color);
 		
 		// If proposed move gives us a network.					
-		if(board.hasNetwork(color) && board.hasNetwork(enemyColor)){
+		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
 			score = 1000;
 			return score;
 		}
@@ -111,7 +111,7 @@ class AI{
 		}
 
 		// If proposed move neutralizes a critical threat
-		if(criticalThreat(OldBoard, color))
+		/*if(criticalThreat(OldBoard, color))
 		{
 			
 			if(!criticalThreat(board, color))
@@ -127,12 +127,12 @@ class AI{
 		if(criticalThreat(board, color))
 			{
 				score = -1000;				
-			}						
+			}*/						
 
-		return 117; //THIS IS A TEST VALUE... also the coolest number ever			
+		return score; //THIS IS A TEST VALUE... also the coolest number ever			
 	}
 
-	private int getEnemyColor(int myColor){
+	private static int getEnemyColor(int myColor){
 		int enemyColor; 
 
 		if(myColor==Chip.BLACK)			
@@ -146,7 +146,7 @@ class AI{
 
 
 	// I don't really get what this is.
-	boolean criticalThreat(Board bd, int color)
+	/*static boolean criticalThreat(Board bd, int color)
 	{	
 		Board board = bd;
 			
@@ -165,7 +165,7 @@ class AI{
 		
 		
 		for(int i = 0; i < possibleMoves.length; i++){			
-			tempScore = evaluate(board, possibleMoves[i], enemyColor);
+			tempScore = evaluate(board, possibleMoves[i], enemyColor); // This calls evaluate, which calls critical threat, which calls evaluate, which...STACKOVERFLOWEXCEPTION
 			if(tempScore > score || i == 0){
 				score = tempScore;				
 			}			
@@ -175,6 +175,6 @@ class AI{
 			return true;
 		else
 			return false;								
-	}
+	}*/
 		
 }
