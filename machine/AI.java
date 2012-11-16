@@ -130,7 +130,7 @@ class AI{
 			score += 50;
 
 		// If proposed move neutralizes a critical threat
-		if(criticalThreat(oldBoard, color))
+		/*if(criticalThreat(oldBoard, color))
 		{
 			
 			if(!criticalThreat(board, color))
@@ -146,10 +146,12 @@ class AI{
 		if(criticalThreat(board, color))
 			{
 				score = -1000;				
-			}						
+			}
+			*/
 
 		return score; 		
-	}
+		}
+		
 
 	private static int getEnemyColor(int myColor){
 		int enemyColor; 
@@ -165,7 +167,7 @@ class AI{
 
 
 	// Returns true if the enemy can place a wining move, but doesnt have a network YET
-		static boolean criticalThreat(Board bd, int color)
+	/*	static boolean criticalThreat(Board bd, int color)
 	{	
 		Board Newboard = bd.copyBoard();
 			
@@ -191,7 +193,7 @@ class AI{
 		
 		return threat;								
 	}
-;								
+*/								
 	
 		
 }
