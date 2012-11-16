@@ -11,7 +11,7 @@ import player.*;
 
 class AI{
 
-	public Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
+	public static Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
 	    int maxScore = -1000;
 	    int currScore;
 	    Move maxMove = null;
@@ -30,7 +30,7 @@ class AI{
     	return maxMove;
   	}
 
-	private int scoreMove(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
+	private static int scoreMove(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 		int retVal;
 	    bd.addChip(m, myColor);
 
@@ -53,7 +53,7 @@ class AI{
 	    return retVal;
   	}
 
-	private int tryAll(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
+	private static int tryAll(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 	    int currVal, maxVal = -1000;
 	    MoveIterator it = new MoveIterator(bd, oppColor);
 	    Move currMove;
@@ -135,7 +135,7 @@ class AI{
 				score = -1000;				
 			}*/						
 
-		return score; //THIS IS A TEST VALUE... also the coolest number ever			
+		return score; 		
 	}
 
 	private static int getEnemyColor(int myColor){

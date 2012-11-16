@@ -158,4 +158,12 @@ public class MachinePlayer extends Player {
     return bd;
   }
 
+  public int getMyColor(){
+    return myColor;
+  }
+
+  public int getOppColor(){
+    return oppColor;
+  }
+
 }

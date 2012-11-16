@@ -7,6 +7,9 @@ import player.*;
 public class AITestDrive{
 	public static void main(String[] args){
 		MachinePlayer mp = new MachinePlayer(Chip.WHITE);
+		int myColor = mp.getMyColor();
+		int oppColor = mp.getOppColor();
+		Board bd = mp.getBoard();
 
 		//WHITE moves
 		Move wm1 = new Move(0,4);
@@ -14,6 +17,7 @@ public class AITestDrive{
 		Move wm3 = new Move(3,3);
 		Move wm4 = new Move(4,4);
 		Move wm5 = new Move(6,4);
+		//Move wm6 = new Move(7,3);
 
 		//BLACK moves
 		Move bm1 = new Move(2,2);
@@ -27,6 +31,20 @@ public class AITestDrive{
 		mp.forceMove(wm3);
 		mp.forceMove(wm4);
 		mp.forceMove(wm5);
+
+		mp.opponentMove(bm1);
+		mp.opponentMove(bm2);
+		mp.opponentMove(bm3);
+		mp.opponentMove(bm4);
+		mp.opponentMove(bm5);
+
+		mp.getBoard().dumpBoard();
+
+		Move smart = AI.smartMove(bd, myColor, oppColor, 1);
+
+		System.out.println("The smart move returned was:" + smart.x1 + ", " + smart.y1);
+		//mp.forceMove(smartMove();
+
 
 	}
 }
