@@ -48,10 +48,14 @@ Board bd = new Board();
 		bPoss = LegalMoves.possibleMoves(bd, Chip.BLACK);
 
 		for (int i=0; wPoss[i]!=null; i++) {
-			System.out.println("Score of move at (" + wPoss[i].x1 + ", " + wPoss[i].y1 + ") is " 
+			System.out.println("For White: Score of move at (" + wPoss[i].x1 + ", " + wPoss[i].y1 + ") is " 
 				+ AI.evaluate(bd, wPoss[i], Chip.WHITE));
 		}
-
+		System.out.println("\n\n");
+		for (int i=0; bPoss[i]!=null; i++) {
+			System.out.println("For Black: Score of move at (" + bPoss[i].x1 + ", " + bPoss[i].y1 + ") is " 
+				+ AI.evaluate(bd, bPoss[i], Chip.BLACK));
+		}
 		// System.out.println("BLACK has " + bd.howManyConnections(Chip.BLACK) + " connections.");			
 		// System.out.println("WHITE has " + bd.howManyConnections(Chip.WHITE) + " connections.");
 

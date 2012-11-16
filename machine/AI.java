@@ -104,17 +104,21 @@ class AI{
 
 		//Difference in enemy connections
 		int diffConnections = board.howManyConnections(color) - prevConnections;
-		if (diffConnections <= 0)
-			score -= (int) Math.pow(5, -diffConnections);;
+		if (diffConnections < 0)
+			score -= diffConnections*100;
 		if (diffConnections > 0)
-			score += (int) Math.pow(5, diffConnections);//creating more connections is good. 
+			score += diffConnections*100; //creating more connections is good. 
+		if (diffConnections == 0)
+			score -= 50;
 		
-		// Difference in enemy connections
+		// Difference in enemy connections. I made offense more valuable then defense. This can change if needbe.
 		int diffEnemyConnections = board.howManyConnections(enemyColor) - preMoveEnemyConnections;
-		if (diffEnemyConnections <= 0)
-			score += (int) Math.pow(5, -diffEnemyConnections);
+		if (diffEnemyConnections < 0)
+			score += diffEnemyConnections*75;
 		if (diffEnemyConnections > 0 )
-			score -= (int) Math.pow(5, diffEnemyConnections);
+			score -= diffEnemyConnections*75;
+		if (diffEnemyConnections == 0)
+			score += 50;
 
 		// If proposed move neutralizes a critical threat
 		/*if(criticalThreat(oldBoard, color))

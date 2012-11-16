@@ -125,9 +125,9 @@ public class LegalMoves{
 		//if we found 1 neighbor, we need to see if it has a neighbor
 		if(numNeighbors == 1){		
 			x = neighbor.x;
-			System.out.println(neighbor.x);			
+			// System.out.println(neighbor.x);			
 			y = neighbor.y;	
-			System.out.println(neighbor.y);
+			// System.out.println(neighbor.y);
 			for(int i = -1; i <= 1; i++){
 				for(int j = -1; j <= 1; j++){
 					//skips the center position
