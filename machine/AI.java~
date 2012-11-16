@@ -11,7 +11,7 @@ import player.*;
 
 class AI{
 
-	public Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
+	public static Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
 	    int maxScore = -1000;
 	    int currScore;
 	    Move maxMove = null;
@@ -30,7 +30,7 @@ class AI{
     	return maxMove;
   	}
 
-	private int scoreMove(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
+	private static int scoreMove(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 		int retVal;
 	    bd.addChip(m, myColor);
 
@@ -53,7 +53,7 @@ class AI{
 	    return retVal;
   	}
 
-	private int tryAll(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
+	private static int tryAll(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 	    int currVal, maxVal = -1000;
 	    MoveIterator it = new MoveIterator(bd, oppColor);
 	    Move currMove;
@@ -69,70 +69,89 @@ class AI{
 	    return maxVal;
   	}
 	
-	public int evaluate(Board bd, Move mv, int color){
+	public static int evaluate(Board bd, Move mv, int color){
 		int score = 0;
-		Board board = bd;
-	    Move move = mv;	
+		Board board = bd.copyBoard();
+	        Move move = mv;	
 		int pieces = bd.getPieces(color);
-		Board temp = bd;
+		Board oldBoard = bd;
 		
-		//some useful values to have. 
+		//some useful values to have
+		int exploreLength;
 		int enemyColor = getEnemyColor(color);
-		int prevConnections = board.howManyConnections(color);
-		int preMoveEnemyConnections = board.howManyConnections(enemyColor);
+		int prevConnections = oldBoard.howManyConnections(color);
+		int preMoveEnemyConnections = oldBoard.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
 		
-		// If proposed move gives us a network.					
-		if(board.hasNetwork(color)){
+		// If proposed move gives us a network...without giving the enemy a network.					
+		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
 			score = 1000;
 			return score;
 		}
+		//Replacement for critical threat.
+		if(board.hasNetwork(enemyColor))
+			score = -1000;
 
-		//Difference in enemy connections
-		int diffConnections = bd.howManyConnections(color) - prevConnections;
-		if (diffConnections <= 0)
-			score -= (int) Math.pow(5, -diffConnections);;
-		if (diffConnections > 0)
-			score += (int) Math.pow(5, diffConnections);//creating more connections is good. 
+		exploreLength = bd.getMaxExploreLength(); // must be after a network test.
+		System.out.println("exploreLength is " + exploreLength);
 		
-		// Difference in enemy connections
-		int diffEnemyConnections = bd.howManyConnections(enemyColor) - preMoveEnemyConnections;
-		if (diffEnemyConnections <= 0)
-			score += (int) Math.pow(5, -diffEnemyConnections);
-		if (diffEnemyConnections > 0 )
-			score -= (int) Math.pow(5, diffEnemyConnections);
 
-		//If we are into the game and still don't have a chip in the endgoal. 
-		if(pieces >=4 && bd.endGoalEmpty(color))
-		{				
-			if(!board.endGoalEmpty(color)) 
-				score += 100; //Ian, this is an unreachable assignment						
+		// Take the center in the beginning.
+		if (pieces <3){ //love pieces.
+			if(mv.x1 > 2 && mv.x1 < 5 && mv.y1 > 2 && mv.y1 < 5)
+				score += 250;
 		}
 
+		//If we are into the game and still don't have a chip in the endgoal. 
+		if(pieces >= 4 && oldBoard.endGoalEmpty(color))
+		{				
+			if(!board.endGoalEmpty(color) || !board.startGoalEmpty(color)) 
+				score += 125; //Fixed it,						
+		}
+
+
+		//Difference in enemy connections
+		int diffConnections = board.howManyConnections(color) - prevConnections;
+		if (diffConnections < 0)
+			score -= diffConnections*100;
+		if (diffConnections > 0)
+			score += diffConnections*100; //creating more connections is good. 
+		if (diffConnections == 0)
+			score -= 50;
+		
+		// Difference in enemy connections. I made offense more valuable then defense. This can change if needbe.
+		int diffEnemyConnections = board.howManyConnections(enemyColor) - preMoveEnemyConnections;
+		if (diffEnemyConnections < 0)
+			score += diffEnemyConnections*75;
+		if (diffEnemyConnections > 0 )
+			score -= diffEnemyConnections*75;
+		if (diffEnemyConnections == 0)
+			score += 50;
+
 		// If proposed move neutralizes a critical threat
-		if(criticalThreat(bd, color))
+		/*if(criticalThreat(oldBoard, color))
 		{
-			temp.addChip(mv, color);
-			if(!criticalThreat(temp, color))
+			
+			if(!criticalThreat(board, color))
 				{	
 					score += 500;
 					if(score >= 1000)
 						score = 999;
 				}
 				
-				temp = bd;
+				
 		}
 		// If proposed move causes a critical threat.
 		if(criticalThreat(board, color))
 			{
 				score = -1000;				
-			}						
+			}*/						
 
-		return 117; //THIS IS A TEST VALUE... also the coolest number ever			
+		return score; 		
 	}
 
-	private int getEnemyColor(int myColor){
+	private static int getEnemyColor(int myColor){
 		int enemyColor; 
 
 		if(myColor==Chip.BLACK)			
@@ -146,7 +165,7 @@ class AI{
 
 
 	// I don't really get what this is.
-	boolean criticalThreat(Board bd, int color)
+	/*static boolean criticalThreat(Board bd, int color)
 	{	
 		Board board = bd;
 			
@@ -165,7 +184,7 @@ class AI{
 		
 		
 		for(int i = 0; i < possibleMoves.length; i++){			
-			tempScore = evaluate(board, possibleMoves[i], enemyColor);
+			tempScore = evaluate(board, possibleMoves[i], enemyColor); // This calls evaluate, which calls critical threat, which calls evaluate, which...STACKOVERFLOWEXCEPTION
 			if(tempScore > score || i == 0){
 				score = tempScore;				
 			}			
@@ -175,6 +194,6 @@ class AI{
 			return true;
 		else
 			return false;								
-	}
+	}*/
 		
 }

@@ -89,7 +89,7 @@ class AI{
 			score = 1000;
 			return score;
 		}
-		//Replacement for critical threat.
+		//Replacement for critical threat.This isn't what critical threat does...
 		if(board.hasNetwork(enemyColor))
 			score = -1000;
 
@@ -130,7 +130,7 @@ class AI{
 			score += 50;
 
 		// If proposed move neutralizes a critical threat
-		/*if(criticalThreat(oldBoard, color))
+		if(criticalThreat(oldBoard, color))
 		{
 			
 			if(!criticalThreat(board, color))
@@ -146,7 +146,7 @@ class AI{
 		if(criticalThreat(board, color))
 			{
 				score = -1000;				
-			}*/						
+			}						
 
 		return score; 		
 	}
@@ -164,36 +164,34 @@ class AI{
 
 
 
-	// I don't really get what this is.
-	/*static boolean criticalThreat(Board bd, int color)
+	// Returns true if the enemy can place a wining move, but doesnt have a network YET
+		static boolean criticalThreat(Board bd, int color)
 	{	
-		Board board = bd;
+		Board Newboard = bd.copyBoard();
 			
-		int enemyColor;
+		int enemyColor= getEnemyColor(color);
 		boolean enemyHasNetwork;
 		
-		if(color == Chip.BLACK)			
-			enemyColor = Chip.WHITE;
-		else
-			enemyColor = Chip.BLACK;	
 		
 		
-		int score = 0;
-		int tempScore = 0;
-		Move[] possibleMoves = LegalMoves.possibleMoves( board, enemyColor);
+		boolean threat = false;
+		
+		Move[] possibleMoves = LegalMoves.possibleMoves( Newboard, enemyColor);
 		
 		
 		for(int i = 0; i < possibleMoves.length; i++){			
-			tempScore = evaluate(board, possibleMoves[i], enemyColor); // This calls evaluate, which calls critical threat, which calls evaluate, which...STACKOVERFLOWEXCEPTION
-			if(tempScore > score || i == 0){
-				score = tempScore;				
-			}			
+			
+		Newboard.addChip(possibleMoves[i], enemyColor);
+		if(Newboard.hasNetwork(enemyColor))
+			return true;
+		
+		Newboard = bd.copyBoard();
+		
 		}
 		
-		if(score == 1000)
-			return true;
-		else
-			return false;								
-	}*/
+		return threat;								
+	}
+;								
+	
 		
 }
