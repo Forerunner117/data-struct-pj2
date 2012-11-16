@@ -73,29 +73,41 @@ class AI{
 		int score = 0;
 		Board board = bd;
 	    Move move = mv;	
-		int pieces= bd.getPieces(color);
+		int pieces = bd.getPieces(color);
 		Board temp = bd;
 		
 		//some useful values to have. 
 		int enemyColor = getEnemyColor(color);
 		int prevConnections = board.howManyConnections(color);
-		int preMoveEnemyConnections = board.getEnemyConnections(enemyColor);
+		int preMoveEnemyConnections = board.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
 		
-		//Difference in connections
+		// If proposed move gives us a network.					
+		if(board.hasNetwork(color)){
+			score = 1000;
+			return score;
+		}
+
+		//Difference in enemy connections
 		int diffConnections = bd.howManyConnections(color) - prevConnections;
-		if(diffConnections <= 0)
-			score -= 50;
-		else
-			score = (int) Math.pow(5, diffConnections);//creating more connections is good. 
+		if (diffConnections <= 0)
+			score -= (int) Math.pow(5, -diffConnections);;
+		if (diffConnections > 0)
+			score += (int) Math.pow(5, diffConnections);//creating more connections is good. 
 		
-		
+		// Difference in enemy connections
+		int diffEnemyConnections = bd.howManyConnections(enemyColor) - preMoveEnemyConnections;
+		if (diffEnemyConnections <= 0)
+			score += (int) Math.pow(5, -diffEnemyConnections);
+		if (diffEnemyConnections > 0 )
+			score -= (int) Math.pow(5, diffEnemyConnections);
+
 		//If we are into the game and still don't have a chip in the endgoal. 
 		if(pieces >=4 && bd.endGoalEmpty(color))
 		{				
 			if(!board.endGoalEmpty(color)) 
-				score = score+100; //Ian, this is an unreachable assignment						
+				score += 100; //Ian, this is an unreachable assignment						
 		}
 
 		// If proposed move neutralizes a critical threat
@@ -116,11 +128,6 @@ class AI{
 			{
 				score = -1000;				
 			}						
-		// If proposed move gives us a network.					
-		if(board.hasNetwork(color)){
-			score= 1000;
-			return score;
-		}
 
 		return 117; //THIS IS A TEST VALUE... also the coolest number ever			
 	}
@@ -136,17 +143,9 @@ class AI{
 		return  enemyColor;
 	}
 
-	private int getEnemyConnections(Board bd, int color){
-		int enemyColor;
 
-		if(color==Chip.BLACK)			
-			enemyColor = Chip.WHITE;
-		else
-			enemyColor=Chip.BLACK;	
 
-		return bd.howManyConnections(enemyColor);
-	}
-
+	// I don't really get what this is.
 	boolean criticalThreat(Board bd, int color)
 	{	
 		Board board = bd;
@@ -154,10 +153,10 @@ class AI{
 		int enemyColor;
 		boolean enemyHasNetwork;
 		
-		if(color==Chip.BLACK)			
+		if(color == Chip.BLACK)			
 			enemyColor = Chip.WHITE;
 		else
-			enemyColor=Chip.BLACK;	
+			enemyColor = Chip.BLACK;	
 		
 		
 		int score = 0;
@@ -165,10 +164,10 @@ class AI{
 		Move[] possibleMoves = LegalMoves.possibleMoves( board, enemyColor);
 		
 		
-		for(int score = 0; score < possibleMoves.length; score++){			
-			tempScore = evaluate(board, possibleMoves[score], enemyColor);
-			if(tempScore > score||score==0){
-				score=tempScore;				
+		for(int i = 0; i < possibleMoves.length; i++){			
+			tempScore = evaluate(board, possibleMoves[i], enemyColor);
+			if(tempScore > score || i == 0){
+				score = tempScore;				
 			}			
 		}
 		
