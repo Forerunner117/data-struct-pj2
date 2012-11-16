@@ -19,7 +19,8 @@ class AI{
 
 	    MoveIterator it = new MoveIterator(bd, myColor);
 
-	    while((currMove = it.getNext()) != null){	    	
+	    while((currMove = it.getNext()) != null){	
+	      System.out.println("scoring move at: " + currMove.x1 + ", " + currMove.y1);    	
 	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
 	      if (currScore > maxScore){
 	        maxScore = currScore;
