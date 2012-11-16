@@ -116,7 +116,7 @@ class AI{
 			return i;
 		}
 
-		return i;			
+		return 117; //THIS IS A TEST VALUE... also the coolest number ever			
 	}
 	boolean criticalThreat(Board bd, int color)
 	{	
