@@ -71,8 +71,8 @@ class AI{
 	
 	public int evaluate(Board bd, Move mv, int color){
 		int score = 0;
-		Board board = bd;
-	    Move move = mv;	
+		Board board = bd.copyBoard();
+	        Move move = mv;	
 		int pieces = bd.getPieces(color);
 		Board temp = bd;
 		
@@ -107,7 +107,7 @@ class AI{
 		if(pieces >=4 && bd.endGoalEmpty(color))
 		{				
 			if(!board.endGoalEmpty(color)) 
-				score += 100; //Ian, this is an unreachable assignment						
+				score += 100; //Ian, this is an unreachable assignment, no it isnt,						
 		}
 
 		// If proposed move neutralizes a critical threat
