@@ -70,54 +70,83 @@ class AI{
   	}
 	
 	public int evaluate(Board bd, Move mv, int color){
-		int i = 0;
+		int score = 0;
 		Board board = bd;
 	    Move move = mv;	
 		int pieces= bd.getPieces(color);
 		Board temp = bd;
+		
+		//some useful values to have. 
+		int enemyColor = getEnemyColor(color);
+		int prevConnections = board.howManyConnections(color);
+		int preMoveEnemyConnections = board.getEnemyConnections(enemyColor);
+
 		board.addChip(mv,color);
+		
+		//Difference in connections
+		int diffConnections = bd.howManyConnections(color) - prevConnections;
+		if(diffConnections <= 0)
+			score -= 50;
+		else
+			score = (int) Math.pow(5, diffConnections);//creating more connections is good. 
+		
+		
+		//If we are into the game and still don't have a chip in the endgoal. 
 		if(pieces >=4 && bd.endGoalEmpty(color))
-		{
-			
-			
-			
+		{				
 			if(!board.endGoalEmpty(color)) 
-				i = i+100;
-			
-			
+				score = score+100; //Ian, this is an unreachable assignment						
 		}
+
+		// If proposed move neutralizes a critical threat
 		if(criticalThreat(bd, color))
 		{
-			temp.addChip(mv,color);
+			temp.addChip(mv, color);
 			if(!criticalThreat(temp, color))
 				{	
-					i = i+500;
-					if(i>=1000)
-						i = 999;
+					score += 500;
+					if(score >= 1000)
+						score = 999;
 				}
 				
 				temp = bd;
 		}
-		
+		// If proposed move causes a critical threat.
 		if(criticalThreat(board, color))
 			{
-				
-				i = -1000;
-				
-			}
-		
-		
-		
-		
-			
-				
+				score = -1000;				
+			}						
+		// If proposed move gives us a network.					
 		if(board.hasNetwork(color)){
-			i= 1000;
-			return i;
+			score= 1000;
+			return score;
 		}
 
 		return 117; //THIS IS A TEST VALUE... also the coolest number ever			
 	}
+
+	private int getEnemyColor(int myColor){
+		int enemyColor; 
+
+		if(myColor==Chip.BLACK)			
+			enemyColor = Chip.WHITE;
+		else
+			enemyColor=Chip.BLACK;
+
+		return  enemyColor;
+	}
+
+	private int getEnemyConnections(Board bd, int color){
+		int enemyColor;
+
+		if(color==Chip.BLACK)			
+			enemyColor = Chip.WHITE;
+		else
+			enemyColor=Chip.BLACK;	
+
+		return bd.howManyConnections(enemyColor);
+	}
+
 	boolean criticalThreat(Board bd, int color)
 	{	
 		Board board = bd;
@@ -136,9 +165,9 @@ class AI{
 		Move[] possibleMoves = LegalMoves.possibleMoves( board, enemyColor);
 		
 		
-		for(int i = 0; i < possibleMoves.length; i++){			
-			tempScore = evaluate(board, possibleMoves[i], enemyColor);
-			if(tempScore > score||i==0){
+		for(int score = 0; score < possibleMoves.length; score++){			
+			tempScore = evaluate(board, possibleMoves[score], enemyColor);
+			if(tempScore > score||score==0){
 				score=tempScore;				
 			}			
 		}
