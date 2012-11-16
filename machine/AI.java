@@ -74,54 +74,54 @@ class AI{
 		Board board = bd.copyBoard();
 	        Move move = mv;	
 		int pieces = bd.getPieces(color);
-		Board temp = bd;
+		Board OldBoard = bd;
 		
-		//some useful values to have. 
+		//some useful values to have
 		int enemyColor = getEnemyColor(color);
-		int prevConnections = board.howManyConnections(color);
-		int preMoveEnemyConnections = board.howManyConnections(enemyColor);
+		int prevConnections = OldBoard.howManyConnections(color);
+		int preMoveEnemyConnections = OldBoard.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
 		
 		// If proposed move gives us a network.					
-		if(board.hasNetwork(color)){
+		if(board.hasNetwork(color) && board.hasNetwork(enemyColor)){
 			score = 1000;
 			return score;
 		}
 
 		//Difference in enemy connections
-		int diffConnections = bd.howManyConnections(color) - prevConnections;
+		int diffConnections = board.howManyConnections(color) - prevConnections;
 		if (diffConnections <= 0)
 			score -= (int) Math.pow(5, -diffConnections);;
 		if (diffConnections > 0)
 			score += (int) Math.pow(5, diffConnections);//creating more connections is good. 
 		
 		// Difference in enemy connections
-		int diffEnemyConnections = bd.howManyConnections(enemyColor) - preMoveEnemyConnections;
+		int diffEnemyConnections = board.howManyConnections(enemyColor) - preMoveEnemyConnections;
 		if (diffEnemyConnections <= 0)
 			score += (int) Math.pow(5, -diffEnemyConnections);
 		if (diffEnemyConnections > 0 )
 			score -= (int) Math.pow(5, diffEnemyConnections);
 
 		//If we are into the game and still don't have a chip in the endgoal. 
-		if(pieces >=4 && bd.endGoalEmpty(color))
+		if(pieces >=4 && OldBoard.endGoalEmpty(color))
 		{				
 			if(!board.endGoalEmpty(color)) 
-				score += 100; //Ian, this is an unreachable assignment, no it isnt,						
+				score += 100; //Fixed it,						
 		}
 
 		// If proposed move neutralizes a critical threat
-		if(criticalThreat(bd, color))
+		if(criticalThreat(OldBoard, color))
 		{
-			temp.addChip(mv, color);
-			if(!criticalThreat(temp, color))
+			
+			if(!criticalThreat(board, color))
 				{	
 					score += 500;
 					if(score >= 1000)
 						score = 999;
 				}
 				
-				temp = bd;
+				
 		}
 		// If proposed move causes a critical threat.
 		if(criticalThreat(board, color))
