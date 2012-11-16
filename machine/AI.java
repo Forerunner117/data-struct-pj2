@@ -89,7 +89,13 @@ class AI{
 			score = 1000;
 			return score;
 		}
+		//Replacement for critical threat.
+		if(board.hasNetwork(enemyColor))
+			score = -1000;
+
 		exploreLength = bd.getMaxExploreLength(); // must be after a network test.
+		System.out.println("exploreLength is " + exploreLength);
+		
 
 		// Take the center in the beginning.
 		if (pieces <3){ //love pieces.

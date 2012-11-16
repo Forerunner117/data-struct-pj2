@@ -1,15 +1,16 @@
 /* EvaluateTestDrive.java */
-
 package machine; 
 
 import player.*;
 
+import java.util.*;
 public class EvaluateTestDrive{
+
+static Board bd = new Board();
 
 public static void main(String[] args) {
 	
 
-Board bd = new Board();
 		Move black[] = new Move[10];
 		Move white[] = new Move[10];
 		Move[] wPoss;
@@ -37,16 +38,21 @@ Board bd = new Board();
 		 white[8] = new Move(6, 6);
 		 // white[9] = new Move(7, 6);
 
-		for (int i=0; i<9; i++) {
+		 for (int i=0; i<9; i++) {
+		 	black[i] = randomMove(Chip.BLACK);
+		 	
+		 	white[i] = randomMove(Chip.WHITE);
+		 }
+		/*for (int i=0; i<9; i++) {
 			bd.addChip(white[i], Chip.WHITE);
 			bd.setPieces(Chip.WHITE);
 			bd.addChip(black[i], Chip.BLACK);
 			bd.setPieces(Chip.BLACK);
-		}
+		}*/
 		
 		wPoss = LegalMoves.possibleMoves(bd, Chip.WHITE);
 		bPoss = LegalMoves.possibleMoves(bd, Chip.BLACK);
-
+		bd.dumpBoard();
 		for (int i=0; wPoss[i]!=null; i++) {
 			System.out.println("For White: Score of move at (" + wPoss[i].x1 + ", " + wPoss[i].y1 + ") is " 
 				+ AI.evaluate(bd, wPoss[i], Chip.WHITE));
@@ -61,7 +67,48 @@ Board bd = new Board();
 
 
 	}
+	private static Move randomMove(int myColor){
+    int x;
+    int y;
+    int prev_x, prev_y;
+    Random rn = new Random();
+    Move prev; 
 
+    x = rn.nextInt(8);
+    y = rn.nextInt(8);
+
+    
+    Move random = new Move(x,y);
+    
+
+    while(!LegalMoves.isLegal(bd, random, myColor)){
+      prev = bd.getLastMove(myColor);
+      //prev = new Move(random.x1, random.y1);
+      x = rn.nextInt(8);
+      y = rn.nextInt(8);
+
+      //System.out.println(x + "" + y);
+      //create STEP move if 10 pieces are down
+      if(bd.getPieces(myColor) >= 10){
+        random = new Move(x, y, prev.x1, prev.y1);
+        //System.out.println("Created a STEP move.");
+        continue;
+      }
+
+      random = new Move(x, y);
+    }
+
+    bd.addChip(random, myColor); 
+    prev_x = random.x1;
+    prev_y = random.y1;
+    bd.setPieces(myColor);
+    bd.setLastMove(random, myColor);
+    
+    //Network Testing
+    // System.out.print("MachinePlayer has " + bd.howManyConnections(myColor) + " connections. ");
+    
+    return random; 	  	  	    	    	    	    	
+  }
 }
 
 
