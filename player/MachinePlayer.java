@@ -25,6 +25,8 @@ public class MachinePlayer extends Player {
       oppColor = Chip.BLACK;
     else
       oppColor = Chip.WHITE;
+
+    int searchDepth = 3;
   }
 
 

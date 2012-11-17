@@ -23,7 +23,7 @@ public class AI{
 	      System.out.print("scoring move at: " + currMove.x1 + ", " + currMove.y1); 		         	
 	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
 	      System.out.println(" SCORE: " + currScore);
-	      if (currScore > maxScore){
+	      if (currScore >= maxScore){
 	        maxScore = currScore;
 	        maxMove = currMove;
 	      }
