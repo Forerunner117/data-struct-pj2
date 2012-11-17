@@ -150,12 +150,26 @@ public class AI{
 		if (diffEnemyConnections == 0)
 			score += 50;
 
+		if(Cluster(oldBoard,color) >= 0.5 && mv.x1 < 4)
+		{
+				score += 100;
+			
+			
+		}
+		if(Cluster(oldBoard,color) <= 0.5 && mv.x1 > 4)
+		{
+				score += 100;
+			
+			
+		}
 		// If proposed move neutralizes a critical threat
 		if(criticalThreat(oldBoard, color))
 		{
+			System.out.println("CRITICAL THREAT");
 			
 			if(!criticalThreat(board, color))
 				{	
+					System.out.println("BLOCKED");
 					score += 500;
 					if(score >= 1000)
 						score = 999;
@@ -166,6 +180,7 @@ public class AI{
 		// If proposed move causes a critical threat.
 		if(criticalThreat(board, color))
 			{
+				System.out.println("PULL OUT, SITUATION CRITICAL");
 				score = -1000;				
 			}
 			
@@ -214,6 +229,36 @@ public class AI{
 		}
 		
 		return threat;								
+	}
+	
+	static float Cluster(Board bd, int Mycolor)
+	{
+		int colorCounter = 0;
+		int totalColor = bd.getPieces(Mycolor);
+		float ratio = colorCounter/totalColor;
+		Chip temp;
+		Start:	for(int i = 4; i < 8; i++)
+		{
+			
+			for(int j = 0; j < 8; j++)
+			{
+				temp = bd.returnChip(i,j);
+				if(temp.returnColor() == Mycolor)
+					colorCounter ++;
+					
+				
+				
+				
+			}
+	
+		
+		}
+		
+		ratio = colorCounter/totalColor;
+		
+		return ratio;
+		
+		
 	}
 								
 	
