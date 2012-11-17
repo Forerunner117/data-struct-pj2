@@ -76,7 +76,7 @@ class AI{
 	public static int evaluate(Board bd, Move mv, int color){
 		int score = 0;
 		Board board = bd.copyBoard();
-	    Move move = mv;	
+		Move move = mv;	
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
 		
@@ -141,7 +141,7 @@ class AI{
 			score += 50;
 
 		// If proposed move neutralizes a critical threat
-		/*if(criticalThreat(oldBoard, color))
+		if(criticalThreat(oldBoard, color))
 		{
 			
 			if(!criticalThreat(board, color))
@@ -158,7 +158,7 @@ class AI{
 			{
 				score = -1000;				
 			}
-			*/
+			
 
 		return score; 		
 		}
@@ -178,7 +178,7 @@ class AI{
 
 
 	// Returns true if the enemy can place a wining move, but doesnt have a network YET
-	/*	static boolean criticalThreat(Board bd, int color)
+		static boolean criticalThreat(Board bd, int color)
 	{	
 		Board Newboard = bd.copyBoard();
 			
@@ -193,7 +193,8 @@ class AI{
 		
 		
 		for(int i = 0; i < possibleMoves.length; i++){			
-			
+			if(possibleMoves[i]==null)
+				return threat;
 		Newboard.addChip(possibleMoves[i], enemyColor);
 		if(Newboard.hasNetwork(enemyColor))
 			return true;
@@ -204,7 +205,7 @@ class AI{
 		
 		return threat;								
 	}
-*/								
+								
 	
 		
 }
