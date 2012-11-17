@@ -31,6 +31,7 @@ public class Board{
   }
   public Board copyBoard()
   {
+<<<<<<< HEAD
       Chip tempChip;
       Board newBoard = new Board();
       
@@ -56,6 +57,34 @@ public class Board{
       
      return newBoard; 
       
+=======
+  	  Chip tempChip;
+  	  Board newBoard = new Board();
+  	  
+  	  for(int i = 0; i < 8; i++)
+  	{
+  		for(int j = 0; j < 8; j++)
+  		{
+  			
+  			
+  			tempChip = returnChip(i,j);
+  			newBoard.insertChip(i,j,tempChip);
+  			
+  			
+  		}
+  		
+  		
+  		
+  		
+  	}
+  	newBoard.whitePieces = whitePieces;
+  	newBoard.blackPieces = blackPieces;
+  	newBoard.connections = connections;
+  	newBoard.neighbor = neighbor;
+  	  
+  	 return newBoard; 
+  	  
+>>>>>>> 7961ffbdaf2a1a0f8c5766ec959afdc2b12355e2
   }
 
   private void insertChip(int x, int y, Chip chip)
@@ -94,7 +123,22 @@ public class Board{
     else
       return;  
   }
-
+  public void undoMove(Move m, int color)
+  {
+  	  if(m.moveKind == m.ADD){
+  	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY);  
+  	  }
+  	  else if(m.moveKind == m.STEP){
+  	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY); 
+  	  	  board[m.x2][m.y2] = new Chip(m.x2, m.y2, color);   
+  	  }  
+    else
+      return;    
+  	  
+  
+	  
+  }
+  
   public void removeChip(int x, int y){
     board[x][y].color = Chip.EMPTY;
   }

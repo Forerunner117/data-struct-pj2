@@ -17,7 +17,7 @@ public class AITestDrive{
 		Move wm3 = new Move(3,3);
 		Move wm4 = new Move(4,4);
 		Move wm5 = new Move(6,4);
-		//Move wm6 = new Move(7,3);
+		Move wm6 = new Move(7,3);
 
 		//BLACK moves
 		Move bm1 = new Move(2,2);
@@ -40,9 +40,10 @@ public class AITestDrive{
 
 		mp.getBoard().dumpBoard();
 
-		Move smart = AI.smartMove(bd, myColor, oppColor, 1);
+		//Move smart = AI.smartMove(bd, myColor, oppColor, 1);
 
-		System.out.println("The smart move returned was:" + smart.x1 + ", " + smart.y1);
+		System.out.println("Evaluate for: " + wm6.x1 + ", " + wm6.y1 + ": " + AI.evaluate(bd, wm6, myColor));
+		//System.out.println("The smart move returned was:" + smart.x1 + ", " + smart.y1);
 		//mp.forceMove(smartMove();
 
 
