@@ -29,62 +29,22 @@ public class Board{
     board[7][7] = new Chip (7, 7, Chip.GREY);
     neighbor = board[0][0];//arbitrary to satisfy compiler.
   }
-  public Board copyBoard()
-  {
-<<<<<<< HEAD
-      Chip tempChip;
-      Board newBoard = new Board();
+  
+  public Board copyBoard(){
+    Chip tempChip;
+    Board newBoard = new Board();
       
-      for(int i = 0; i < 8; i++)
-    {
-      for(int j = 0; j < 8; j++)
-      {
-        
-        
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 8; j++){              
         tempChip = returnChip(i,j);
-        newBoard.insertChip(i,j,tempChip);
-        
-        
-      }
-      
-      
-      
-      
+        newBoard.insertChip(i,j,tempChip);      
+      }            
     }
     newBoard.whitePieces = whitePieces;
     newBoard.blackPieces = blackPieces;
     newBoard.connections = connections;
       
-     return newBoard; 
-      
-=======
-  	  Chip tempChip;
-  	  Board newBoard = new Board();
-  	  
-  	  for(int i = 0; i < 8; i++)
-  	{
-  		for(int j = 0; j < 8; j++)
-  		{
-  			
-  			
-  			tempChip = returnChip(i,j);
-  			newBoard.insertChip(i,j,tempChip);
-  			
-  			
-  		}
-  		
-  		
-  		
-  		
-  	}
-  	newBoard.whitePieces = whitePieces;
-  	newBoard.blackPieces = blackPieces;
-  	newBoard.connections = connections;
-  	newBoard.neighbor = neighbor;
-  	  
-  	 return newBoard; 
-  	  
->>>>>>> 7961ffbdaf2a1a0f8c5766ec959afdc2b12355e2
+     return newBoard;         	  
   }
 
   private void insertChip(int x, int y, Chip chip)

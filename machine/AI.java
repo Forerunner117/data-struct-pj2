@@ -28,7 +28,11 @@ public class AI{
 	        maxMove = currMove;
 	      }
     	}
-    
+    	
+    	System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1);
+    	bd.addChip(maxMove, myColor);
+        bd.setPieces(myColor);
+        bd.setLastMove(maxMove, myColor);
     	return maxMove;
   	}
 
@@ -91,8 +95,6 @@ public class AI{
 		int preMoveEnemyConnections = oldBoard.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
-		System.out.println("\nNEW BOARD:");
-		board.dumpBoard();
 
 		if(board.hasNetwork(color)){
 			System.out.println("This makes a Network!");
