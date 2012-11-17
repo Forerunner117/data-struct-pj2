@@ -53,6 +53,7 @@ public class Board{
   	newBoard.whitePieces = whitePieces;
   	newBoard.blackPieces = blackPieces;
   	newBoard.connections = connections;
+  	newBoard.neighbor = neighbor;
   	  
   	 return newBoard; 
   	  
