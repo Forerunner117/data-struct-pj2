@@ -124,7 +124,7 @@ public class Board{
   //the 1D array currChips and then returned. Implemented so that we may make 
   //smart STEP moves by analyzing all legal STEP moves for all pieces in play.
   public Chip[] getCurrChips(int col){
-    Chip[] currChips = new Chip[11];
+    Chip[] currChips = new Chip[500];
     int counter = 0;
 
     for(int i = 0; i < 8; i++){
