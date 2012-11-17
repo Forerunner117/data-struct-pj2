@@ -31,38 +31,38 @@ public class Board{
   }
   public Board copyBoard()
   {
-  	  Chip tempChip;
-  	  Board newBoard = new Board();
-  	  
-  	  for(int i = 0; i < 8; i++)
-  	{
-  		for(int j = 0; j < 8; j++)
-  		{
-  			
-  			
-  			tempChip = returnChip(i,j);
-  			newBoard.insertChip(i,j,tempChip);
-  			
-  			
-  		}
-  		
-  		
-  		
-  		
-  	}
-  	newBoard.whitePieces = whitePieces;
-  	newBoard.blackPieces = blackPieces;
-  	newBoard.connections = connections;
-  	  
-  	 return newBoard; 
-  	  
+      Chip tempChip;
+      Board newBoard = new Board();
+      
+      for(int i = 0; i < 8; i++)
+    {
+      for(int j = 0; j < 8; j++)
+      {
+        
+        
+        tempChip = returnChip(i,j);
+        newBoard.insertChip(i,j,tempChip);
+        
+        
+      }
+      
+      
+      
+      
+    }
+    newBoard.whitePieces = whitePieces;
+    newBoard.blackPieces = blackPieces;
+    newBoard.connections = connections;
+      
+     return newBoard; 
+      
   }
 
   private void insertChip(int x, int y, Chip chip)
   {
-  	  
+      
      board[x][y] = chip;  
-  	  
+      
   }
   
   public Chip returnChip(int x, int y){
@@ -70,10 +70,10 @@ public class Board{
   }
   public int ChipColor(int x, int y)
   {
-  	  Chip chip = returnChip(x,y);
-  	  int color =  chip.returnColor();
-  	  return color;
-	  
+      Chip chip = returnChip(x,y);
+      int color =  chip.returnColor();
+      return color;
+    
   }
     
   public void testNetwork(int color){
@@ -251,7 +251,7 @@ public class Board{
                 
                 }else{
                   // System.out.println("Found neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") and Recurssing" + "\nlen is " + len);
-                    setMaxExpLength(len+1);
+                    //setMaxExpLength(len+1);
                     if(explore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                         return true;
                     }
@@ -278,16 +278,12 @@ public class Board{
         for (int i = 1; i<7; i++) {
           if(board[7][i].returnColor() == Chip.WHITE)
             return false;
-          else
-            return true;
         }
       }
       if (col == Chip.BLACK) {
         for (int i = 1; i<7; i++) {
           if(board[i][7].returnColor() == Chip.BLACK)
             return false;
-          else
-            return true;
         }
       }
       return true;
@@ -298,16 +294,12 @@ public class Board{
         for (int i = 1; i<7; i++) {
           if(board[0][i].returnColor() == Chip.WHITE)
             return false;
-          else
-            return true;
         }
       }
       if (col == Chip.BLACK) {
         for (int i = 1; i<7; i++) {
           if(board[i][0].returnColor() == Chip.BLACK)
             return false;
-          else
-            return true;
         }
       }
       return true;
