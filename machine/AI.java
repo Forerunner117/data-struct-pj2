@@ -105,6 +105,11 @@ public class AI{
 			score = 1000;
 			return score;
 		}
+
+		if(board.startGoalCount(color) > 2)
+			score -= 300;
+
+
 		//Replacement for critical threat.This isn't what critical threat does...
 		if(board.hasNetwork(enemyColor))
 			score = -1000;
