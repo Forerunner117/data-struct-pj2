@@ -9,7 +9,7 @@ import player.*;
  *  given board and return the best possible moves.
  */
 
-class AI{
+public class AI{
 
 	public static Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
 	    int maxScore = -1000;
@@ -37,23 +37,26 @@ class AI{
 	    bd.addChip(m, myColor);
 
 	    if (currDepth >= maxDepth) {
-	      	if(currDepth % 2 == 0) //this means we are at a depth where we must eval for an opponent Move
+	      	if(currDepth % 2 == 0){ //this means we are at a depth where we must eval for an opponent Move
 	      		retVal = evaluate(bd, m, oppColor);   // eval is higher if pos is good for this color
+	      		bd.undoMove(m, oppColor);
+	      	}
 	      	else{
 	      		retVal = evaluate(bd, m, myColor);
 	      		System.out.println("retVal: " + retVal);
+	      		bd.undoMove(m, myColor);
 	      	}
-	      	bd.removeChip(m.x1, m.y1);
+	      	
 	      	return retVal;
 	    }
 
 	    if (bd.hasNetwork(myColor)  &&  !bd.hasNetwork(oppColor)) {
-	      bd.removeChip(m.x1, m.y1);
+	      bd.undoMove(m, myColor);
 	      return 1000;
 	    }
 
 	    retVal = -tryAll(bd, m, myColor, oppColor, currDepth, maxDepth, cutoff);
-	    bd.removeChip(m.x1, m.y1);
+	    bd.undoMove(m, myColor);
 	    return retVal;
   	}
 
