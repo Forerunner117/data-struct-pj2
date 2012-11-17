@@ -20,8 +20,9 @@ class AI{
 	    MoveIterator it = new MoveIterator(bd, myColor);
 
 	    while((currMove = it.getNext()) != null){
-	      System.out.println("scoring move at: " + currMove.x1 + ", " + currMove.y1); 		         	
+	      System.out.print("scoring move at: " + currMove.x1 + ", " + currMove.y1); 		         	
 	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
+	      System.out.println(" SCORE: " + currScore);
 	      if (currScore > maxScore){
 	        maxScore = currScore;
 	        maxMove = currMove;
@@ -38,8 +39,10 @@ class AI{
 	    if (currDepth >= maxDepth) {
 	      	if(currDepth % 2 == 0) //this means we are at a depth where we must eval for an opponent Move
 	      		retVal = evaluate(bd, m, oppColor);   // eval is higher if pos is good for this color
-	      	else
+	      	else{
 	      		retVal = evaluate(bd, m, myColor);
+	      		System.out.println("retVal: " + retVal);
+	      	}
 	      	bd.removeChip(m.x1, m.y1);
 	      	return retVal;
 	    }
@@ -77,6 +80,7 @@ class AI{
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
 		
+
 		//some useful values to have
 		int exploreLength;
 		int enemyColor = getEnemyColor(color);
@@ -84,9 +88,15 @@ class AI{
 		int preMoveEnemyConnections = oldBoard.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
-		
+		System.out.println("\nNEW BOARD:");
+		board.dumpBoard();
+
+		if(board.hasNetwork(color)){
+			System.out.println("This makes a Network!");
+		}
 		// If proposed move gives us a network...without giving the enemy a network.					
 		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
+			System.out.println("got into hasNetwork if.");
 			score = 1000;
 			return score;
 		}
