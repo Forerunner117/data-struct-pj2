@@ -23,7 +23,7 @@ public class BoardTestDrive{
 		 black[2] = new Move(2, 4);
 		 black[3] = new Move(6, 5);
 		 black[4] = new Move(3, 7);
-		 black[5] = new Move(1, 1);
+		 black[5] = new Move(0, 1);
 		 /*black[6] = new Move(6, 4);
 		 black[7] = new Move(1, 6);
 		 black[8] = new Move(4, 7);
