@@ -49,7 +49,7 @@ public class MachinePlayer extends Player {
     }
     //call to evaluation function should return a Move object that ranked highest    
 
-    return AI.smartMove(bd, myColor, oppColor, searchDepth);
+    return AI.smartMove(bd, myColor, oppColor, 1);
         
   } 
 
