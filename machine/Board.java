@@ -308,7 +308,39 @@ public class Board{
       }
       return true;
     }
+    int endGoalCount(int col){
+      int count = 0;
+      if (col == Chip.WHITE) {
+        for (int i = 1; i<7; i++) {
+          if(board[7][i].returnColor() == Chip.WHITE)
+            count++;
+        }
+      }
+      if (col == Chip.BLACK) {
+        for (int i = 1; i<7; i++) {
+          if(board[i][7].returnColor() == Chip.BLACK)
+            count++;
+        }
+      }
+      return count;
+    }
     
+    int startGoalCount(int col){
+      int count = 0;
+      if (col == Chip.WHITE) {
+        for (int i = 1; i<7; i++) {
+          if(board[0][i].returnColor() == Chip.WHITE)
+            count++;;
+        }
+      }
+      if (col == Chip.BLACK) {
+        for (int i = 1; i<7; i++) {
+          if(board[i][0].returnColor() == Chip.BLACK)
+            count++;
+        }
+      }
+      return count;
+    }
     
       public void setLastMove(Move m, int color){
         if(color == Chip.BLACK)
