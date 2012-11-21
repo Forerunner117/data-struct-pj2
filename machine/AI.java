@@ -152,12 +152,14 @@ public class AI{
 
 		if(Cluster(oldBoard,color) >= 0.5 && mv.x1 < 4)
 		{
-				score += 100;
+			System.out.println("ClusterFuck on right side----------------------------------");
+				score += 500;
 			
 			
 		}
 		if(Cluster(oldBoard,color) <= 0.5 && mv.x1 > 4)
 		{
+			System.out.println("ClusterFuck on left side");
 				score += 100;
 			
 			
@@ -170,7 +172,7 @@ public class AI{
 			if(!criticalThreat(board, color))
 				{	
 					System.out.println("BLOCKED");
-					score += 500;
+					score += 1500;
 					if(score >= 1000)
 						score = 999;
 				}
@@ -184,9 +186,11 @@ public class AI{
 				score = -1000;				
 			}
 			
-
+			
+			System.out.println("Evaluation score:" +score);
 		return score; 		
 		}
+		
 		
 
 	private static int getEnemyColor(int myColor){
@@ -234,28 +238,54 @@ public class AI{
 	static float Cluster(Board bd, int Mycolor)
 	{
 		int colorCounter = 0;
-		int totalColor = bd.getPieces(Mycolor);
-		float ratio = colorCounter/totalColor;
+		int totalColor = 0;
+		float ratio = 0;
 		Chip temp;
-		Start:	for(int i = 4; i < 8; i++)
+		Total:	for(int i = 0; i < 8; i++)
 		{
 			
 			for(int j = 0; j < 8; j++)
 			{
+				if(i == 0 && j == 0)
+					continue Total;
+				if(i == 0 && j == 7)
+					continue Total;
+				if(i == 7 && j == 0)
+					continue Total;
+				if(i == 7 && j == 7)
+					continue Total;
+					
 				temp = bd.returnChip(i,j);
 				if(temp.returnColor() == Mycolor)
-					colorCounter ++;
-					
-				
-				
+					totalColor ++;	
 				
 			}
 	
 		
 		}
+		Counter:	for(int i = 4; i < 8; i++)
+		{
+			
+			for(int j = 0; j < 8; j++)
+			{
+				if(i == 0 && j == 0)
+					continue Counter;
+				if(i == 0 && j == 7)
+					continue Counter;
+				if(i == 7 && j == 0)
+					continue Counter;
+				if(i == 7 && j == 7)
+					continue Counter;
+				temp = bd.returnChip(i,j);
+				if(temp.returnColor() == Mycolor)
+					colorCounter ++;	
+				
+			}
+	
 		
-		ratio = colorCounter/totalColor;
-		
+		}
+	
+		ratio = (float)colorCounter/(float)totalColor;
 		return ratio;
 		
 		

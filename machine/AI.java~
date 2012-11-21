@@ -9,7 +9,7 @@ import player.*;
  *  given board and return the best possible moves.
  */
 
-class AI{
+public class AI{
 
 	public static Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
 	    int maxScore = -1000;
@@ -20,13 +20,19 @@ class AI{
 	    MoveIterator it = new MoveIterator(bd, myColor);
 
 	    while((currMove = it.getNext()) != null){
+	      System.out.print("scoring move at: " + currMove.x1 + ", " + currMove.y1); 		         	
 	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
-	      if (currScore > maxScore){
+	      System.out.println(" SCORE: " + currScore);
+	      if (currScore >= maxScore){
 	        maxScore = currScore;
 	        maxMove = currMove;
 	      }
     	}
-    
+    	
+    	System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1);
+    	bd.addChip(maxMove, myColor);
+        bd.setPieces(myColor);
+        bd.setLastMove(maxMove, myColor);
     	return maxMove;
   	}
 
@@ -35,21 +41,26 @@ class AI{
 	    bd.addChip(m, myColor);
 
 	    if (currDepth >= maxDepth) {
-	      	if(currDepth % 2 == 0) //this means we are at a depth where we must eval for an opponent Move
+	      	if(currDepth % 2 == 0){ //this means we are at a depth where we must eval for an opponent Move
 	      		retVal = evaluate(bd, m, oppColor);   // eval is higher if pos is good for this color
-	      	else
+	      		bd.undoMove(m, oppColor);
+	      	}
+	      	else{
 	      		retVal = evaluate(bd, m, myColor);
-	      	bd.removeChip(m.x1, m.y1);
+	      		System.out.println("retVal: " + retVal);
+	      		bd.undoMove(m, myColor);
+	      	}
+	      	
 	      	return retVal;
 	    }
 
 	    if (bd.hasNetwork(myColor)  &&  !bd.hasNetwork(oppColor)) {
-	      bd.removeChip(m.x1, m.y1);
+	      bd.undoMove(m, myColor);
 	      return 1000;
 	    }
 
 	    retVal = -tryAll(bd, m, myColor, oppColor, currDepth, maxDepth, cutoff);
-	    bd.removeChip(m.x1, m.y1);
+	    bd.undoMove(m, myColor);
 	    return retVal;
   	}
 
@@ -72,10 +83,11 @@ class AI{
 	public static int evaluate(Board bd, Move mv, int color){
 		int score = 0;
 		Board board = bd.copyBoard();
-	        Move move = mv;	
+		Move move = mv;	
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
 		
+
 		//some useful values to have
 		int exploreLength;
 		int enemyColor = getEnemyColor(color);
@@ -83,18 +95,27 @@ class AI{
 		int preMoveEnemyConnections = oldBoard.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
-		
+
+		if(board.hasNetwork(color)){
+			System.out.println("This makes a Network!");
+		}
 		// If proposed move gives us a network...without giving the enemy a network.					
 		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
+			System.out.println("got into hasNetwork if.");
 			score = 1000;
 			return score;
 		}
-		//Replacement for critical threat.
+
+		if(board.startGoalCount(color) > 2)
+			score -= 300;
+
+
+		//Replacement for critical threat.This isn't what critical threat does...
 		if(board.hasNetwork(enemyColor))
 			score = -1000;
 
 		exploreLength = bd.getMaxExploreLength(); // must be after a network test.
-		System.out.println("exploreLength is " + exploreLength);
+		// System.out.println("exploreLength is " + exploreLength);
 		
 
 		// Take the center in the beginning.
@@ -129,12 +150,28 @@ class AI{
 		if (diffEnemyConnections == 0)
 			score += 50;
 
-		// If proposed move neutralizes a critical threat
-		/*if(criticalThreat(oldBoard, color))
+		if(Cluster(oldBoard,color) >= 0.5 && mv.x1 < 4)
 		{
+			System.out.println("ClusterFuck");
+				score += 300;
+			
+			
+		}
+		if(Cluster(oldBoard,color) <= 0.5 && mv.x1 > 4)
+		{
+			System.out.println("ClusterFuck");
+				score += 100;
+			
+			
+		}
+		// If proposed move neutralizes a critical threat
+		if(criticalThreat(oldBoard, color))
+		{
+			System.out.println("CRITICAL THREAT");
 			
 			if(!criticalThreat(board, color))
 				{	
+					System.out.println("BLOCKED");
 					score += 500;
 					if(score >= 1000)
 						score = 999;
@@ -145,11 +182,14 @@ class AI{
 		// If proposed move causes a critical threat.
 		if(criticalThreat(board, color))
 			{
+				System.out.println("PULL OUT, SITUATION CRITICAL");
 				score = -1000;				
-			}*/						
-
+			}
+			
+			System.out.println("Evaluation score:" +score);
 		return score; 		
-	}
+		}
+		
 
 	private static int getEnemyColor(int myColor){
 		int enemyColor; 
@@ -164,36 +204,62 @@ class AI{
 
 
 
-	// I don't really get what this is.
-	/*static boolean criticalThreat(Board bd, int color)
+	// Returns true if the enemy can place a wining move, but doesnt have a network YET
+		static boolean criticalThreat(Board bd, int color)
 	{	
-		Board board = bd;
+		Board Newboard = bd.copyBoard();
 			
-		int enemyColor;
+		int enemyColor= getEnemyColor(color);
 		boolean enemyHasNetwork;
 		
-		if(color == Chip.BLACK)			
-			enemyColor = Chip.WHITE;
-		else
-			enemyColor = Chip.BLACK;	
 		
 		
-		int score = 0;
-		int tempScore = 0;
-		Move[] possibleMoves = LegalMoves.possibleMoves( board, enemyColor);
+		boolean threat = false;
+		
+		Move[] possibleMoves = LegalMoves.possibleMoves( Newboard, enemyColor);
 		
 		
 		for(int i = 0; i < possibleMoves.length; i++){			
-			tempScore = evaluate(board, possibleMoves[i], enemyColor); // This calls evaluate, which calls critical threat, which calls evaluate, which...STACKOVERFLOWEXCEPTION
-			if(tempScore > score || i == 0){
-				score = tempScore;				
-			}			
+			if(possibleMoves[i]==null)
+				return threat;
+		Newboard.addChip(possibleMoves[i], enemyColor);
+		if(Newboard.hasNetwork(enemyColor))
+			return true;
+		
+		Newboard = bd.copyBoard();
+		
 		}
 		
-		if(score == 1000)
-			return true;
-		else
-			return false;								
-	}*/
+		return threat;								
+	}
+	
+	static float Cluster(Board bd, int Mycolor)
+	{
+		int colorCounter = 0;
+		int totalColor = bd.getPieces(Mycolor);
+		float ratio = colorCounter/totalColor;
+		Chip temp;
+		Start:	for(int i = 4; i < 8; i++)
+		{
+			
+			for(int j = 0; j < 8; j++)
+			{
+				temp = bd.returnChip(i,j);
+				if(temp.returnColor() == Mycolor)
+					colorCounter ++;	
+				
+			}
+	
+		
+		}
+	
+		ratio = (float)colorCounter/(float)totalColor;
+		
+		return ratio;
+		
+		
+	}
+								
+	
 		
 }

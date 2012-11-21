@@ -49,7 +49,7 @@ public class Board{
 
   private void insertChip(int x, int y, Chip chip)
   {
-      
+     
      board[x][y] = chip;  
       
   }
@@ -73,9 +73,12 @@ public class Board{
   }
 
   public void addChip(Move m, int color){
-    if(m.moveKind == m.ADD){
+    
+  	  
+  if(m.moveKind == m.ADD){
       board[m.x1][m.y1] = new Chip(m.x1, m.y1, color);  
-    }
+    
+  }
     else if(m.moveKind == m.STEP){
       board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
       removeChip(m.x2, m.y2);   
@@ -87,6 +90,7 @@ public class Board{
   {
   	  if(m.moveKind == m.ADD){
   	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY);  
+  	  	 
   	  }
   	  else if(m.moveKind == m.STEP){
   	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY); 
@@ -100,7 +104,8 @@ public class Board{
   }
   
   public void removeChip(int x, int y){
-    board[x][y].color = Chip.EMPTY;
+   
+  	  board[x][y].color = Chip.EMPTY;
   }
 
   public void setPieces(int col){
@@ -108,6 +113,7 @@ public class Board{
       ++blackPieces;
     if(col == Chip.WHITE)
       ++whitePieces;
+      
   }
 
   public int getPieces(int col){
