@@ -186,7 +186,7 @@ public class LegalMovesTestDrive{
 			"\nWhite piece on copy = " + copy.getPieces(Chip.WHITE));
 		System.out.println("Black pieces on orig = " + bd.getPieces(Chip.BLACK) + 
 			"\nBlack piece on copy = " + copy.getPieces(Chip.BLACK));
-		System.out.println("maxExploreLength on orig = " + bd.)
+		// System.out.println("maxExploreLength on orig = " + bd.)
 
 
 

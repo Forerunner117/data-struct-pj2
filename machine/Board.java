@@ -500,8 +500,30 @@ public class Board{
     }//end first for
         
 }
+int getSurroundingEmpties(int x, int y){
+  int e = 0;
+  for(int i = -1; i <= 1; i++){
+    for(int j = -1; j <= 1; j++){
+      
+      if( (i == 0) && (j==0))
+        continue;
 
+        //Running off board.
+        if( ((x + i) < 0) || ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
+          continue;
 
+        //Eliminating Corners.
+        if( (x + i == 0 && y + j == 0) || (x + i == 7 && y + j == 0) ||
+            (x + i == 7 && y + j == 7) || (x + i == 0 && y + j == 7) )
+          continue;
+
+        // Count empties
+        if(board[i+x][j+y].returnColor() == Chip.EMPTY)
+          e++;
+    }
+  }
+  return e;
+}
 private void pause(int milli){
   try{
     Thread.sleep(milli);

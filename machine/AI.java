@@ -104,12 +104,18 @@ public class AI{
 			score = 1000;
 			return score;
 		}
-
+		// So we don't crowd the goals.
 		if(board.startGoalCount(color) > 2)
+			score -= 550;
+		
+		// So we don't crowd the goals
+		if(board.endGoalCount(color) > 2)
 			score -= 300;
 
-
-		//Replacement for critical threat.This isn't what critical threat does...
+		// To spread out the chips a little more
+		if(board.getSurroundingEmpties(mv.x1, mv.y1) > 0)
+			score += board.getSurroundingEmpties(mv.x1, mv.y1) * 3;
+		// If enemy has a network
 		if(board.hasNetwork(enemyColor))
 			score = -1000;
 
@@ -127,16 +133,16 @@ public class AI{
 		if(pieces >= 4 && oldBoard.endGoalEmpty(color))
 		{				
 			if(!board.endGoalEmpty(color) || !board.startGoalEmpty(color)) 
-				score += 125; //Fixed it,						
+				score += 325; //Fixed it,						
 		}
 
 
 		//Difference in enemy connections
 		int diffConnections = board.howManyConnections(color) - prevConnections;
 		if (diffConnections < 0)
-			score -= diffConnections*100;
+			score -= diffConnections*115;
 		if (diffConnections > 0)
-			score += diffConnections*100; //creating more connections is good. 
+			score += diffConnections*115; //creating more connections is good. 
 		if (diffConnections == 0)
 			score -= 50;
 		
