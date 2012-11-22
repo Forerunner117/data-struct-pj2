@@ -96,9 +96,9 @@ public class LegalMovesTestDrive{
 		whitePlayer.getBoard().addChip(center1, Chip.WHITE);
 		whitePlayer.getBoard().addChip(center2, Chip.BLACK);
 
-		if(LegalMoves.isLegal(whitePlayer.getBoard(), m2, Chip.WHITE)){
-			whitePlayer.getBoard().addChip(m2, Chip.BLACK);
-		}
+		//if(LegalMoves.isLegal(whitePlayer.getBoard(), m2, Chip.WHITE)){
+		//	whitePlayer.getBoard().addChip(m2, Chip.BLACK);
+		//}
 
 		System.out.println("\nCHECKING CENTER MOVES");
 		System.out.println("*****************************************************************");
@@ -155,21 +155,52 @@ public class LegalMovesTestDrive{
 		System.out.println("*****************************************************************");
 		System.out.println("STEP move to same position should be false: " + LegalMoves.isLegal(whitePlayer.getBoard(), step1, Chip.WHITE));
 
-		Move random = whitePlayer.chooseMove();
+		//Move random = whitePlayer.chooseMove();
 
-		System.out.println("x: " + random.x1 + "y: " + random.y1);
-		whitePlayer.getBoard().dumpBoard();
+		//System.out.println("x: " + random.x1 + "y: " + random.y1);
+
+		Move testSTEP1 = new Move(1, 1);
+		Move testSTEP2 = new Move(1, 2);
+		Move testSTEP3 = new Move(1, 4);
+		Move testSTEP4 = new Move(1, 5);
+		Move testSTEP5 = new Move(5, 1);
+		Move testSTEP6 = new Move(5, 2);
+		Move testSTEP7 = new Move(6, 4);
+		Move testSTEP8 = new Move(5, 5);
+
+		bd.addChip(testSTEP1, Chip.WHITE);
+		bd.addChip(testSTEP2, Chip.WHITE);
+		bd.addChip(testSTEP3, Chip.WHITE);
+		bd.addChip(testSTEP4, Chip.WHITE);
+		bd.addChip(testSTEP5, Chip.WHITE);
+		bd.addChip(testSTEP6, Chip.WHITE);
+		bd.addChip(testSTEP7, Chip.WHITE);
+		//bd.addChip(testSTEP8, Chip.WHITE);
+
+
+		bd.dumpBoard();
+		System.out.println("\nCopied Board: ");
+		Board copy = bd.copyBoard();
+		copy.dumpBoard();
+		System.out.println("White pieces on orig = " + bd.getPieces(Chip.WHITE) + 
+			"\nWhite piece on copy = " + copy.getPieces(Chip.WHITE));
+		System.out.println("Black pieces on orig = " + bd.getPieces(Chip.BLACK) + 
+			"\nBlack piece on copy = " + copy.getPieces(Chip.BLACK));
+		System.out.println("maxExploreLength on orig = " + bd.)
+
+
 
 
 		//construct an array of possible moves
 		Move[] possibleMoves = LegalMoves.possibleMoves(bd, Chip.WHITE);
-		MoveIterator it = new MoveIterator(bd, Chip.WHITE);
+		MoveIterator it = new MoveIterator(bd, Chip.WHITE);		
 
 		//possibleMoves()
 		System.out.println("Printing possibleMoves for WHITE:");
 		int i = 0;
 		while(possibleMoves[i] != null){
-			System.out.println(possibleMoves[i].x1 + ", " + possibleMoves[i].y1);
+			System.out.println(possibleMoves[i].x1 + ", " + possibleMoves[i].y1 + 
+				"\n     From: " + possibleMoves[i].x2 + ", " + possibleMoves[i].y2);
 			++i;
 		}
 
@@ -177,7 +208,8 @@ public class LegalMovesTestDrive{
 
 		System.out.println("\ngetNext Moves");
 		while((currMove = it.getNext()) != null){
-			System.out.println(currMove.x1 + ", " + currMove.y1);
+			System.out.println(currMove.x1 + ", " + currMove.y1 + 
+			"\n     From: " + currMove.x2 + ", " + currMove.y2);
 		}
 
 

@@ -26,6 +26,7 @@ public class Chip{
 		this.x = x;
 		this.y = y;
 	}
+	
 	void flag(){
 		visited = true;
 		// System.out.println("Chip at (" + x + " " + y + ") is visited");
@@ -34,8 +35,8 @@ public class Chip{
 	void unflag(){
 		visited = false;	
 	}
-	void touch()
-	{
+
+	void touch(){
 		touched = true;
 	}
 
@@ -48,8 +49,8 @@ public class Chip{
 			return true;
 		
 		else return false;
-
 	}
+
 	boolean isFlagged(){
 		if(visited == true)
 			return true;
@@ -59,17 +60,20 @@ public class Chip{
 	int returnColor(){
 		return color;	
 	}
+
 	int getX(){
 		return x;
 	}
+
 	int getY(){
 		return y;
 	}
+
 	void changeColor( int color){
 		this.color = color;			
 	}
-	public String toString()
-	{
+
+	public String toString(){
 		if(color== BLACK)
 			return "BK";
 		else if(color == WHITE)
@@ -77,8 +81,7 @@ public class Chip{
 		else if(color == GREY)
 			return "--";
 		else
-			return "__";
-		
+			return "__";	
 	}
 }
 	

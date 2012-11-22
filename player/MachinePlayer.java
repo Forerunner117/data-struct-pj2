@@ -13,7 +13,7 @@ public class MachinePlayer extends Player {
   private Board bd; 
   private int myColor;
   private int oppColor;
-  private int searchDepth; //package protected
+  private int searchDepth;
 
   // Creates a machine player with the given color.  Color is either 0 (black)
   // or 1 (white).  (White has the first move.)
@@ -40,19 +40,18 @@ public class MachinePlayer extends Player {
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {    
-    System.out.println("chooseMove called. And it got passed " + myColor + " for a color");
+    //System.out.println("chooseMove called. And it got passed " + myColor + " for a color");
 
     if(makeFirstMoves() != null){
       Move firstMove = makeFirstMoves();
       bd.addChip(firstMove, myColor);
-      bd.setPieces(myColor);
-      bd.setLastMove(firstMove, myColor);
       return firstMove;
     }
-    //call to evaluation function should return a Move object that ranked highest    
 
-    return AI.smartMove(bd, myColor, oppColor, 1);
-        
+    //System.out.println("whitePieces: " + bd.getPieces(Chip.WHITE));
+    //System.out.println("blackPieces: " + bd.getPieces(Chip.BLACK));
+
+    return AI.smartMove(bd, myColor, oppColor, 1);   
   } 
 
   // If the Move m is legal, records the move as a move by the opponent
@@ -60,15 +59,14 @@ public class MachinePlayer extends Player {
   // illegal, returns false without modifying the internal state of "this"
   // player.  This method allows your opponents to inform you of their moves.
   public boolean opponentMove(Move m) {
-    System.out.println("oppMove called.");
+    //System.out.println("oppMove called.");
     if(LegalMoves.isLegal(bd, m, oppColor)){
       bd.addChip(m, oppColor);
-      bd.setPieces(oppColor);
       bd.setLastMove(m, oppColor);
       return true;
     } 
     else{
-        System.out.println("Cheater!");
+        //System.out.println("Cheater!");
         return false;      
     }     
   }
@@ -88,6 +86,7 @@ public class MachinePlayer extends Player {
       return false;
   }
 
+  /*
   private Move randomMove(){
     int x;
     int y;
@@ -130,6 +129,7 @@ public class MachinePlayer extends Player {
     
     return random; 	  	  	    	    	    	    	
   }
+  */
 
   private Move makeFirstMoves(){
     Move center1 = new Move(3, 3);
@@ -168,4 +168,7 @@ public class MachinePlayer extends Player {
     return oppColor;
   }
 
+  public int getSearchDepth(){
+    return searchDepth;
+  }
 }

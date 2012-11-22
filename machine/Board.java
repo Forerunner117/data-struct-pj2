@@ -23,10 +23,10 @@ public class Board{
       }
     }
 
-    board[0][0] = new Chip (0, 0, Chip.GREY);
-    board[0][7] = new Chip (0, 7, Chip.GREY);
-    board[7][0] = new Chip (7 ,0, Chip.GREY);
-    board[7][7] = new Chip (7, 7, Chip.GREY);
+    board[0][0] = new Chip(0, 0, Chip.GREY);
+    board[0][7] = new Chip(0, 7, Chip.GREY);
+    board[7][0] = new Chip(7 ,0, Chip.GREY);
+    board[7][7] = new Chip(7, 7, Chip.GREY);
     neighbor = board[0][0];//arbitrary to satisfy compiler.
   }
   
@@ -40,45 +40,44 @@ public class Board{
         newBoard.insertChip(i,j,tempChip);      
       }            
     }
+
     newBoard.whitePieces = whitePieces;
     newBoard.blackPieces = blackPieces;
     newBoard.connections = connections;
+    newBoard.maxExploreLength = maxExploreLength;
       
-     return newBoard;         	  
+    return newBoard;         	  
   }
 
-  private void insertChip(int x, int y, Chip chip)
-  {
-     
+  private void insertChip(int x, int y, Chip chip){
      board[x][y] = chip;  
-      
   }
   
   public Chip returnChip(int x, int y){
     return board[x][y];
   }
-  public int ChipColor(int x, int y)
-  {
-      Chip chip = returnChip(x,y);
-      int color =  chip.returnColor();
-      return color;
-    
+
+  public int chipColor(int x, int y){
+    Chip chip = returnChip(x,y);
+    int color =  chip.returnColor();
+    return color;
   }
     
   public void testNetwork(int color){
     if(hasNetwork(color))
       System.out.println("Found Network");
-  else
-    System.out.println("Not found Network");
+    else
+      System.out.println("Not found Network");
   }
 
+  // addChip takes a move and a color and reflects that move on 'this' board, 
+  // and also increments the piece count. STEP moves have their original 
+  // locations removes.
   public void addChip(Move m, int color){
-    
-  	  
-  if(m.moveKind == m.ADD){
-      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color);  
-    
-  }
+    if(m.moveKind == m.ADD){
+      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
+      this.setPieces(color);     
+    }
     else if(m.moveKind == m.STEP){
       board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
       removeChip(m.x2, m.y2);   
@@ -86,36 +85,46 @@ public class Board{
     else
       return;  
   }
-  public void undoMove(Move m, int color)
-  {
+
+  public void removeChip(int x, int y){ 
+      board[x][y].color = Chip.EMPTY;
+  }
+
+  // undoMove sets the slot from move m to EMPTY and decreases the piece count 
+  // for ADD moves. Reverts a STEP move.
+  public void undoMove(Move m, int color){
   	  if(m.moveKind == m.ADD){
-  	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY);  
-  	  	 
+  	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY);    	  
+          this.decPieces(color);  	 
   	  }
   	  else if(m.moveKind == m.STEP){
   	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY); 
   	  	  board[m.x2][m.y2] = new Chip(m.x2, m.y2, color);   
   	  }  
-    else
-      return;    
-  	  
-  
-	  
+      else
+        return;   
   }
   
-  public void removeChip(int x, int y){
-   
-  	  board[x][y].color = Chip.EMPTY;
-  }
-
+  //setPieces increments the count of white and black pieces every time addChip 
+  //is called.
   public void setPieces(int col){
     if(col == Chip.BLACK)
       ++blackPieces;
     if(col == Chip.WHITE)
-      ++whitePieces;
-      
+      ++whitePieces; 
   }
 
+  //decPieces decrements the count of white or black pieces every time undoMove
+  //is called.
+  public void decPieces(int col){
+    if(col == Chip.BLACK)
+      --blackPieces;
+    if(col == Chip.WHITE)
+      --whitePieces; 
+  }
+
+  //getPieces returns the count of white or black pieces. This method is called
+  //when we want to determine if we should make an ADD or STEP move.
   public int getPieces(int col){
     if(col == Chip.BLACK)
       return blackPieces;
@@ -125,10 +134,10 @@ public class Board{
       return 0;
   }
 
-  //public method getCurrChips() finds all of the currents chips that have been
-  //placed on the board by the given color, col. Once found, they are stored in
-  //the 1D array currChips and then returned. Implemented so that we may make 
-  //smart STEP moves by analyzing all legal STEP moves for all pieces in play.
+  // public method getCurrChips() finds all of the current chips that have been
+  // placed on the board by the given color, col. Once found, they are stored in
+  // the 1D array currChips and then returned. Implemented so that we may make 
+  // smart STEP moves by analyzing all legal STEP moves for all pieces in play.
   public Chip[] getCurrChips(int col){
     Chip[] currChips = new Chip[500];
     int counter = 0;
@@ -165,6 +174,7 @@ public class Board{
       }
     }
   }
+
   public boolean hasNetwork(int col){
     maxExploreLength = 1;
     boolean exp = false;
@@ -177,21 +187,22 @@ public class Board{
       }
     }
     if(col == Chip.BLACK){//Check the goal on the top.
-    for (int i=1; i<7 && !exp; i++) {
-      // System.out.println("color at board (" + i + ", 0) is " + board[i][0].returnColor() + " looking for color: " + Chip.BLACK );
-      if(board[i][0].returnColor() == col && !endGoalEmpty(col)){       
-        unflagAllChipsOfColor(col);
-        exp = explore(col, board[i][0].getX(), board[i][0].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
-      }
+      for (int i=1; i<7 && !exp; i++) {
+        // System.out.println("color at board (" + i + ", 0) is " + board[i][0].returnColor() + " looking for color: " + Chip.BLACK );
+        if(board[i][0].returnColor() == col && !endGoalEmpty(col)){       
+          unflagAllChipsOfColor(col);
+          exp = explore(col, board[i][0].getX(), board[i][0].getY(), 1, Direction.X);//Direction.x is to avoid direction bugz
+        }
       }
     }
+
     return exp;
   }
     
 // replace chip with board[i][j], when you unflag, you're unflagging a local variable which is getting lost.
   //just refer to the instance variable board[][]. 
 
-    boolean explore(int col, int x, int y, int len, Direction dir){
+  boolean explore(int col, int x, int y, int len, Direction dir){
        // System.out.println("\n\n\n####ENTERING EXPLORE###");
        board[x][y].flag();
       
@@ -273,115 +284,117 @@ public class Board{
         // System.out.println("Unflagged a chip at (" + board[x][y].getX() + ", " + board[x][y].getY() + ") ");
         return false;
     }
-    private void setMaxExpLength(int len){
-      if (len > maxExploreLength) {
-        maxExploreLength = len;
-      }
-    }
-    public int getMaxExploreLength(){
-      return maxExploreLength;
-
-    }
-
-     boolean endGoalEmpty(int col){
-      if (col == Chip.WHITE) {
-        for (int i = 1; i<7; i++) {
-          if(board[7][i].returnColor() == Chip.WHITE)
-            return false;
-        }
-      }
-      if (col == Chip.BLACK) {
-        for (int i = 1; i<7; i++) {
-          if(board[i][7].returnColor() == Chip.BLACK)
-            return false;
-        }
-      }
-      return true;
-    }
     
-    boolean startGoalEmpty(int col){
-      if (col == Chip.WHITE) {
-        for (int i = 1; i<7; i++) {
-          if(board[0][i].returnColor() == Chip.WHITE)
-            return false;
-        }
-      }
-      if (col == Chip.BLACK) {
-        for (int i = 1; i<7; i++) {
-          if(board[i][0].returnColor() == Chip.BLACK)
-            return false;
-        }
-      }
-      return true;
+  private void setMaxExpLength(int len){
+    if (len > maxExploreLength) {
+      maxExploreLength = len;
     }
-    int endGoalCount(int col){
-      int count = 0;
-      if (col == Chip.WHITE) {
-        for (int i = 1; i<7; i++) {
-          if(board[7][i].returnColor() == Chip.WHITE)
-            count++;
-        }
-      }
-      if (col == Chip.BLACK) {
-        for (int i = 1; i<7; i++) {
-          if(board[i][7].returnColor() == Chip.BLACK)
-            count++;
-        }
-      }
-      return count;
-    }
-    
-    int startGoalCount(int col){
-      int count = 0;
-      if (col == Chip.WHITE) {
-        for (int i = 1; i<7; i++) {
-          if(board[0][i].returnColor() == Chip.WHITE)
-            count++;;
-        }
-      }
-      if (col == Chip.BLACK) {
-        for (int i = 1; i<7; i++) {
-          if(board[i][0].returnColor() == Chip.BLACK)
-            count++;
-        }
-      }
-      return count;
-    }
-    
-      public void setLastMove(Move m, int color){
-        if(color == Chip.BLACK)
-          blackLastMove = new Move(m.x1, m.y1);
-        else
-          whiteLastMove = new Move(m.x1, m.y1);
-      }
+  }
 
-      public Move getLastMove(int color){
-        if(color == Chip.BLACK)
-          return blackLastMove;
-        else
-          return whiteLastMove;
-      }
-      public void dumpBoard(){
-        for( int j = 0; j < 8; j++){                                
-          for(int i = 0; i < 8; i++){
-            System.out.print("| " + board[i][j].toString() + " | ");
+  public int getMaxExploreLength(){
+    return maxExploreLength;
+  }
 
-          
-          }
-          System.out.println();
-        }                                                                     
-      }
-
-private void unTouchAllChipsOfColor(int col){
-  for (int i=0; i<8; i++) {
-      for (int j=0; j<8; j++) {
-        if(board[i][j].returnColor() == col)
-          board[i][j].untouch();
+  boolean endGoalEmpty(int col){
+    if (col == Chip.WHITE) {
+      for (int i = 1; i<7; i++) {
+        if(board[7][i].returnColor() == Chip.WHITE)
+          return false;
       }
     }
-}
+    if (col == Chip.BLACK) {
+      for (int i = 1; i<7; i++) {
+        if(board[i][7].returnColor() == Chip.BLACK)
+          return false;
+      }
+    }
+    return true;
+  }
+  
+  boolean startGoalEmpty(int col){
+    if (col == Chip.WHITE) {
+      for (int i = 1; i<7; i++) {
+        if(board[0][i].returnColor() == Chip.WHITE)
+          return false;
+      }
+    }
+    if (col == Chip.BLACK) {
+      for (int i = 1; i<7; i++) {
+        if(board[i][0].returnColor() == Chip.BLACK)
+          return false;
+      }
+    }
+    return true;
+  }
 
-// This is potentially a huge performance hit. Should use sparingly.
+  int endGoalCount(int col){
+    int count = 0;
+    if (col == Chip.WHITE) {
+      for (int i = 1; i<7; i++) {
+        if(board[7][i].returnColor() == Chip.WHITE)
+          count++;
+      }
+    }
+    if (col == Chip.BLACK) {
+      for (int i = 1; i<7; i++) {
+        if(board[i][7].returnColor() == Chip.BLACK)
+          count++;
+      }
+    }
+    return count;
+  }
+  
+  int startGoalCount(int col){
+    int count = 0;
+    if (col == Chip.WHITE) {
+      for (int i = 1; i<7; i++) {
+        if(board[0][i].returnColor() == Chip.WHITE)
+          count++;;
+      }
+    }
+    if (col == Chip.BLACK) {
+      for (int i = 1; i<7; i++) {
+        if(board[i][0].returnColor() == Chip.BLACK)
+          count++;
+      }
+    }
+    return count;
+  }
+  
+  public void setLastMove(Move m, int color){
+      if(color == Chip.BLACK)
+        blackLastMove = new Move(m.x1, m.y1);
+      else
+        whiteLastMove = new Move(m.x1, m.y1);
+    }
+
+    public Move getLastMove(int color){
+      if(color == Chip.BLACK)
+        return blackLastMove;
+      else
+        return whiteLastMove;
+    }
+    public void dumpBoard(){
+      for( int j = 0; j < 8; j++){                                
+        for(int i = 0; i < 8; i++){
+          System.out.print("| " + board[i][j].toString() + " | ");
+
+        
+        }
+        System.out.println();
+      }                                                                     
+    }
+
+  private void unTouchAllChipsOfColor(int col){
+    for (int i=0; i<8; i++) {
+        for (int j=0; j<8; j++) {
+          if(board[i][j].returnColor() == col)
+            board[i][j].untouch();
+        }
+      }
+  }
+
+  // This is potentially a huge performance hit. Should use sparingly.
   public int howManyConnections(int col){
     //exp is the result of the exploration. Used to check more than one chip in start goal.
     connections = 0;

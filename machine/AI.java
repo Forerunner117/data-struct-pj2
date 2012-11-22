@@ -6,7 +6,7 @@ import player.*;
 
 /**
  *	A package protected class that contains static methods that can evaluate a 
- *  given board and return the best possible moves.
+ *  given board and return the best possible move.
  */
 
 public class AI{
@@ -31,7 +31,6 @@ public class AI{
     	
     	System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1);
     	bd.addChip(maxMove, myColor);
-        bd.setPieces(myColor);
         bd.setLastMove(maxMove, myColor);
     	return maxMove;
   	}
@@ -82,7 +81,7 @@ public class AI{
 	
 	public static int evaluate(Board bd, Move mv, int color){
 		int score = 0;
-		Board board = bd.copyBoard();
+		Board board = bd.copyBoard();		
 		Move move = mv;	
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
@@ -150,49 +149,39 @@ public class AI{
 		if (diffEnemyConnections == 0)
 			score += 50;
 
-		if(Cluster(oldBoard,color) >= 0.5 && mv.x1 < 4)
-		{
-			System.out.println("ClusterFuck on right side----------------------------------");
-				score += 500;
-			
-			
+		if(cluster(oldBoard,color) >= 0.5 && mv.x1 < 4){
+			//System.out.println("clusterFuck on right side----------------------------------");
+			score += 500;
 		}
-		if(Cluster(oldBoard,color) <= 0.5 && mv.x1 > 4)
-		{
-			System.out.println("ClusterFuck on left side");
-				score += 100;
-			
-			
+
+		if(cluster(oldBoard,color) <= 0.5 && mv.x1 > 4){
+			//System.out.println("clusterFuck on left side");
+			score += 100;
 		}
+
 		// If proposed move neutralizes a critical threat
-		if(criticalThreat(oldBoard, color))
-		{
-			System.out.println("CRITICAL THREAT");
+		if(criticalThreat(oldBoard, color)){
+			//System.out.println("CRITICAL THREAT");
 			
-			if(!criticalThreat(board, color))
-				{	
-					System.out.println("BLOCKED");
-					score += 1500;
-					if(score >= 1000)
-						score = 999;
-				}
+			if(!criticalThreat(board, color)){	
+				//System.out.println("BLOCKED");
+				score += 1500;
+				if(score >= 1000)
+				score = 999;
+			}
 				
 				
 		}
 		// If proposed move causes a critical threat.
-		if(criticalThreat(board, color))
-			{
-				System.out.println("PULL OUT, SITUATION CRITICAL");
-				score = -1000;				
-			}
-			
-			
-			System.out.println("Evaluation score:" +score);
-		return score; 		
+		if(criticalThreat(board, color)){
+			//System.out.println("PULL OUT, SITUATION CRITICAL");
+			score = -1000;				
 		}
+				
+		System.out.println("\nEvaluation score:" +score);
+		return score; 		
+	}
 		
-		
-
 	private static int getEnemyColor(int myColor){
 		int enemyColor; 
 
@@ -207,15 +196,10 @@ public class AI{
 
 
 	// Returns true if the enemy can place a wining move, but doesnt have a network YET
-		static boolean criticalThreat(Board bd, int color)
-	{	
-		Board Newboard = bd.copyBoard();
-			
-		int enemyColor= getEnemyColor(color);
+	static boolean criticalThreat(Board bd, int color){	
+		Board Newboard = bd.copyBoard();		
+		int enemyColor = getEnemyColor(color);
 		boolean enemyHasNetwork;
-		
-		
-		
 		boolean threat = false;
 		
 		Move[] possibleMoves = LegalMoves.possibleMoves( Newboard, enemyColor);
@@ -235,8 +219,7 @@ public class AI{
 		return threat;								
 	}
 	
-	static float Cluster(Board bd, int Mycolor)
-	{
+	static float cluster(Board bd, int Mycolor){
 		int colorCounter = 0;
 		int totalColor = 0;
 		float ratio = 0;
