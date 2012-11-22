@@ -100,7 +100,6 @@ public class AI{
 		}
 		// If proposed move gives us a network...without giving the enemy a network.					
 		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
-			System.out.println("got into hasNetwork if.");
 			score = 1000;
 			return score;
 		}
