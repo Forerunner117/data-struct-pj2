@@ -69,7 +69,7 @@ public class Chip{
 		return y;
 	}
 
-	void changeColor( int color){
+	void changeColor(int color){
 		this.color = color;			
 	}
 

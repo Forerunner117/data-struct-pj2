@@ -29,13 +29,34 @@ Did you successfully implement game tree search?  Did you successfully
 implement alpha-beta pruning?  Are there any limitations on it?  What is the
 default number of search levels set by the one-parameter MachinePlayer
 constructor?
+  Game tree search: Yes.
+  Alpha-beta pruning: Yes.
+  Limitations: None identified.
+  Default searchDepth: 3.
 
 
 Describe your board evaluation function in some detail.
+  Our evaluation function immedietly creates a copy of the board and then places
+  the potential move onto this copy. By doing so, we can evaluate the state of
+  the board before and after the potential move is made. The maximum amount of 
+  points are given for a move that would grant a network for 'this' player while
+  also not granting one to the opponent. Conversely, the maximum amount of points
+  is deducted for a move that would grant the opponent a network. Points are 
+  docked if any more than 2 pieces are placed in either goal. To promote an even
+  spread of pieces, points are added for each empty space around a potential move.
+  Additionally, points are added for moves that would result in less clustering on
+  either the right or the left side of the board. After 4 pieces are already in
+  play, and if there are still no pieces in either goal, points are added for 
+  moves that would place a chip in one of the goals. The meat of our evaluation
+  lies in determining the number of unique connections there are on the board:
+  If a move would create more connections for 'this' player, its score is
+  increased; while decresing the amount of connections the opponent has also 
+  adds to the move's score. 
 
 
 Does your MachinePlayer use any special method of choosing the first few moves?
-
+  Yes. The first two moves are placed in two of the four center positions. This
+  method is called without having to enter the evaluation methods to save time.
 
 Is there anything else the graders should know to help them read your project?
 
@@ -67,7 +88,9 @@ Project 2 grade.
 Modules:
 
 /**
-*Board/Chip Module (Ian McLaughlin):
+*Board/Chip Data Structure Module (Ian McLaughlin / Austin Longo):
+* -The following descirbe only the methods related to the data structures used
+*  to store the game pieces/states.
 * 
 *  Chip is a package protected class. The chip constructor takes in an int 
 *  parameter called color, which can be either BLACK or WHITE, both final ints,
@@ -75,17 +98,24 @@ Modules:
 *  variable called visited that is initially false, but can be set to true by
 *  the method flag().
 *	
-*   // returnColor() returns the int value corresponding to the color. 
-*	  // changeColor(int color) is a method that changes the color of a chip.
-*	  // unflag() is a method that sets visited to false.
-*	  // isFlagged() is a boolean method that returns true if visited is true.
+*    // returnColor() returns the int value corresponding to the color. 
+*	   // changeColor(int color) is a method that changes the color of a chip.
+*	   // unflag() is a method that sets visited to false.
+*    // touch() is a method that sets the touched flag to true.
+*    // untouch() sets the touched flad to false.
+*	   // isFlagged() is a boolean method that returns true if visited is true.
+*    // returnColor() returns the color of the chip.
+*    // getX() returns the x-coord of the chip.
+*    // getY() returns the y-coord of the chip.
+*    // changeColor(int color) changes the color of 'this' chip.
+*    // toString() converts the chip color value into a string.
 *
 *	 The Board class is also package protected. A board object is simply an array
 *  of Chips. The Board object has a zero parameter constructer, that allocates 
 *  an 8 by 8 size chip array--all null.
 *	
 *    // addChip() is a method that adds a chip of a certain color at specific 
-*    // point in the array of chips.
+*       // point in the array of chips.
 *	   // addChip(int x, int y, int color) 
 *	   // returnChip(in x, int y) returns a chip object at a given point in the chip array.
 *	   // removeChip(int x, int y) is a method that sets a given point of the chip array as null.

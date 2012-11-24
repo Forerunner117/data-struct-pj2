@@ -17,23 +17,23 @@ public class AI{
 	    Move maxMove = null;
 	    Move currMove = null;
 
-	    System.out.println("Dumping Original bd!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-	    bd.dumpBoard();
+	    //System.out.println("Dumping Original bd!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	    //bd.dumpBoard();
 
 	    MoveIterator it = new MoveIterator(bd, myColor);
 
 	    while((currMove = it.getNext()) != null){
-	      System.out.println("scoring move at: " + currMove.x1 + ", " + currMove.y1); 	         	
+	      //System.out.println("scoring move at: " + currMove.x1 + ", " + currMove.y1); 	         	
 	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
-	      System.out.println(" SCORE: " + currScore);
+	      //System.out.println(" SCORE: " + currScore);
 	      if (currScore >= maxScore){
 	        maxScore = currScore;
 	        maxMove = currMove;
 	      }
     	}
     	
-    	System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1 +
-    	 " FROM: " + maxMove.x2 + ", " + maxMove.y2);
+    	//System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1 +
+    	// " FROM: " + maxMove.x2 + ", " + maxMove.y2);
     	bd.addChip(maxMove, myColor);
         bd.setLastMove(maxMove, myColor);
     	return maxMove;
@@ -50,7 +50,7 @@ public class AI{
 	      	}
 	      	else{
 	      		retVal = evaluate(bd, m, myColor);
-	      		System.out.println("retVal: " + retVal);
+	      		//System.out.println("retVal: " + retVal);
 	      		bd.undoMove(m, myColor);
 	      	}
 	      	
@@ -90,10 +90,9 @@ public class AI{
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
 
-		System.out.println("Dumping oldBoard****************************************");
-		oldBoard.dumpBoard();
+		//System.out.println("Dumping oldBoard****************************************");
+		//oldBoard.dumpBoard();
 		
-
 		//some useful values to have
 		int exploreLength;
 		int enemyColor = getEnemyColor(color);
@@ -103,7 +102,7 @@ public class AI{
 		board.addChip(mv,color);
 
 		if(board.hasNetwork(color)){
-			System.out.println("This makes a Network!");
+			//System.out.println("This makes a Network!");
 		}
 		// If proposed move gives us a network...without giving the enemy a network.					
 		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
@@ -162,21 +161,22 @@ public class AI{
 			score += 50;
 
 		if(cluster(oldBoard,color) >= 0.5 && mv.x1 < 4){
-			//System.out.println("clusterFuck on right side----------------------------------");
+			//System.out.println("clustering on right side----------------------------------");
 			score += 500;
 		}
 
 		if(cluster(oldBoard,color) <= 0.5 && mv.x1 > 4){
-			//System.out.println("clusterFuck on left side");
+			//System.out.println("clustering on left side");
 			score += 100;
 		}
 
+		/*
 		// If proposed move neutralizes a critical threat
-		/*if(criticalThreat(oldBoard, color)){
-			//System.out.println("CRITICAL THREAT");
+		if(criticalThreat(oldBoard, color)){
+			System.out.println("CRITICAL THREAT");
 			
 			if(!criticalThreat(board, color)){	
-				//System.out.println("BLOCKED");
+				System.out.println("BLOCKED");
 				score += 1500;
 				if(score >= 1000)
 				score = 999;
@@ -187,11 +187,11 @@ public class AI{
 
 		// If proposed move causes a critical threat.
 		if(criticalThreat(board, color)){
-			//System.out.println("PULL OUT, SITUATION CRITICAL");
+			System.out.println("PULL OUT, SITUATION CRITICAL");
 			score = -1000;				
-		}*/
-				
-		System.out.println("\nEvaluation score:" +score);
+		}
+		*/		
+		//System.out.println("\nEvaluation score:" +score);
 		return score; 		
 	}
 		
@@ -207,31 +207,28 @@ public class AI{
 	}
 
 
-
+/*
 	// Returns true if the enemy can place a wining move, but doesnt have a network YET
 	static boolean criticalThreat(Board bd, int color){	
 		Board critBoard = bd.copyBoard();		
 		int enemyColor = getEnemyColor(color);
-		boolean enemyHasNetwork;
 		boolean threat = false;
+		MoveIterator it3 = new MoveIterator(bd, enemyColor);
+		Move currMove;
 		
-		//Move[] possibleMoves = LegalMoves.possibleMoves(critBoard, enemyColor);
-		
-		
-		//for(int i = 0; i < possibleMoves.length; i++){			
-			//if(possibleMoves[i]==null)
-			//	return threat;
-
-			//critBoard.addChip(possibleMoves[i], enemyColor);
+		while((currMove = it3.getNext()) != null){
+			critBoard.addChip(currMove, enemyColor);
 			
 			if(critBoard.hasNetwork(enemyColor))
-				return true;		
-			//critBoard = bd.copyBoard();		
-		//}
+				threat = true;
+
+			critBoard = bd.copyBoard();		
+		}
 		
 		return threat;								
 	}
-	
+	*/
+
 	static float cluster(Board bd, int Mycolor){
 		int colorCounter = 0;
 		int totalColor = 0;

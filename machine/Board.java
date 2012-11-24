@@ -46,8 +46,8 @@ public class Board{
     newBoard.connections = connections;
     newBoard.maxExploreLength = maxExploreLength;
       
-    System.out.println("Dumping newBoard******************************************");
-    newBoard.dumpBoard();
+    //System.out.println("Dumping newBoard******************************************");
+    //newBoard.dumpBoard();
     return newBoard;         	  
   }
 
@@ -64,13 +64,15 @@ public class Board{
     int color =  chip.returnColor();
     return color;
   }
-    
+  
+  /*  
   public void testNetwork(int color){
     if(hasNetwork(color))
       System.out.println("Found Network");
     else
       System.out.println("Not found Network");
   }
+  */
 
   // addChip takes a move and a color and reflects that move on 'this' board, 
   // and also increments the piece count. STEP moves have their original 
