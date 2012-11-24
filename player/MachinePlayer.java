@@ -26,7 +26,7 @@ public class MachinePlayer extends Player {
     else
       oppColor = Chip.WHITE;
 
-    int searchDepth = 3;
+    int searchDepth = 10;
   }
 
 
@@ -48,10 +48,12 @@ public class MachinePlayer extends Player {
       return firstMove;
     }
 
+    bd.dumpBoard();
+
     //System.out.println("whitePieces: " + bd.getPieces(Chip.WHITE));
     //System.out.println("blackPieces: " + bd.getPieces(Chip.BLACK));
 
-    return AI.smartMove(bd, myColor, oppColor, 1);   
+    return AI.smartMove(bd, myColor, oppColor, searchDepth);   
   } 
 
   // If the Move m is legal, records the move as a move by the opponent

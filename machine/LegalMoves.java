@@ -20,55 +20,56 @@ public class LegalMoves{
 
 		//checks if the move is on the board
 		if(!isOnBoard(m.x1, m.y1)){
-			 //System.out.println("Not Legal: not on board!");
+			 System.out.println("Not Legal: not on board!");
 			return false;
 		}
 
 		//checks for the corners and excludes them
 		if((m.x1 == 0 && m.y1 == 0) || (m.x1 == 0 && m.y1 == 7) || (m.x1 == 7 && 
 		   m.y1 == 0) || (m.x1 == 7 && m.y1 == 7)){
-		   	 //System.out.println("Not Legal: corner move!");
+		   	 System.out.println("Not Legal: corner move!");
 			return false;
 		}
 
 		//checks if a color is in the opponent's goal
 		if((m.x1 == 0 || m.x1 == 7) && col == Chip.BLACK){
-			//System.out.println("Not Legal: opponent's goal!");
+			System.out.println("Not Legal: opponent's goal!");
 			return false;
 		}
 		if((m.y1 == 0 || m.y1 == 7) && col == Chip.WHITE){
-			//System.out.println("Not Legal: opponent's goal!");
+			System.out.println("Not Legal: opponent's goal!");
 			return false;
 		}
 
 		//checks if the slot is filled
-		if(bd.returnChip(m.x1, m.y1).color != Chip.EMPTY){
-			 //System.out.println("Not Legal: slot is filled at " + m.x1 + ", " + m.y1 +
-				// " with color: " + bd.returnChip(m.x1, m.y1).toString());
+		if(bd.chipColor(m.x1, m.y1) != Chip.EMPTY){
+			 System.out.println("Not Legal: slot is filled at " + m.x1 + ", " + m.y1 +
+				 " with color: " + bd.chipColor(m.x1, m.y1));
 			return false;
 		}
 
 		//checks if there are 10 BLACK or WHITE pieces and determines if the
 		//moveKind is accurate
+		System.out.println("Pieces in play by " + col + ": " + bd.getPieces(col));
 		if(bd.getPieces(col) > 9 && m.moveKind == m.ADD){
-			//System.out.println("Not Legal: Must make a STEP move!");
+			System.out.println("Not Legal: Must make a STEP move!");
 			return false;
 		}
 		if(bd.getPieces(col) < 10 && m.moveKind == m.STEP){
-			//System.out.println("Not Legal: Must make an ADD move!");
-			//System.out.println("You only have " + bd.getPieces(col) + " pieces down.");
+			System.out.println("Not Legal: Must make an ADD move!");
+			System.out.println("You only have " + bd.getPieces(col) + " pieces down.");
 			return false;
 		}
 
 		//checks if the move would make a cluster
 		if(makesCluster(bd, m, col)){
-			//System.out.println("Not Legal: this makes a cluster!");		
+			System.out.println("Not Legal: this makes a cluster!");		
 			return false;
 		}
 		
 		if(m.moveKind == Move.STEP){
 			if(m.x1 == m.x2 && m.y1 == m.y2){
-				//System.out.println("Not Lega: STEP move must move piece!");
+				System.out.println("Not Lega: STEP move must move piece!");
 				return false;
 			}
 
@@ -158,6 +159,11 @@ public class LegalMoves{
 	public static Move[] possibleMoves(Board bd, int col){
 		Move[] possibleMoves = new Move[500]; 
 		Chip[] currentChips = bd.getCurrChips(col);
+		int poop = 0;
+		while(currentChips[poop] != null){
+			System.out.println(currentChips[poop].x + ", " + currentChips[poop].y);
+			++poop;
+		}
 		int counter = 0;
 		int x = 0;
 		Move currMove;
@@ -190,6 +196,14 @@ public class LegalMoves{
 					}
 				}
 				++x;
+			}
+			System.out.println("PRINTING STEP MOVE possibleMoves.*****************************");
+			
+			int s = 0;
+			while(possibleMoves[s] != null){
+				System.out.println(possibleMoves[s].x1 + ", " + possibleMoves[s].y1
+				 + " FROM: " + possibleMoves[s].x2 + ", " + possibleMoves[s].y2);
+				++s;
 			}
 		}
 		return possibleMoves;

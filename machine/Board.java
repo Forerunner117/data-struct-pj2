@@ -46,6 +46,8 @@ public class Board{
     newBoard.connections = connections;
     newBoard.maxExploreLength = maxExploreLength;
       
+    System.out.println("Dumping newBoard******************************************");
+    newBoard.dumpBoard();
     return newBoard;         	  
   }
 
@@ -75,12 +77,12 @@ public class Board{
   // locations removes.
   public void addChip(Move m, int color){
     if(m.moveKind == m.ADD){
-      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
+      board[m.x1][m.y1].color = color; 
       this.setPieces(color);     
     }
     else if(m.moveKind == m.STEP){
-      board[m.x1][m.y1] = new Chip(m.x1, m.y1, color); 
-      removeChip(m.x2, m.y2);   
+      removeChip(m.x2, m.y2);
+      board[m.x1][m.y1].color = color; 
     }  
     else
       return;  
@@ -95,7 +97,7 @@ public class Board{
   public void undoMove(Move m, int color){
   	  if(m.moveKind == m.ADD){
   	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY);    	  
-          this.decPieces(color);  	 
+          //this.decPieces(color);  	 
   	  }
   	  else if(m.moveKind == m.STEP){
   	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY); 

@@ -17,10 +17,13 @@ public class AI{
 	    Move maxMove = null;
 	    Move currMove = null;
 
+	    System.out.println("Dumping Original bd!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	    bd.dumpBoard();
+
 	    MoveIterator it = new MoveIterator(bd, myColor);
 
 	    while((currMove = it.getNext()) != null){
-	      System.out.print("scoring move at: " + currMove.x1 + ", " + currMove.y1); 		         	
+	      System.out.println("scoring move at: " + currMove.x1 + ", " + currMove.y1); 	         	
 	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
 	      System.out.println(" SCORE: " + currScore);
 	      if (currScore >= maxScore){
@@ -29,7 +32,8 @@ public class AI{
 	      }
     	}
     	
-    	System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1);
+    	System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1 +
+    	 " FROM: " + maxMove.x2 + ", " + maxMove.y2);
     	bd.addChip(maxMove, myColor);
         bd.setLastMove(maxMove, myColor);
     	return maxMove;
@@ -37,7 +41,7 @@ public class AI{
 
 	private static int scoreMove(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 		int retVal;
-	    bd.addChip(m, myColor);
+	    //bd.addChip(m, myColor);
 
 	    if (currDepth >= maxDepth) {
 	      	if(currDepth % 2 == 0){ //this means we are at a depth where we must eval for an opponent Move
@@ -65,10 +69,10 @@ public class AI{
 
 	private static int tryAll(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 	    int currVal, maxVal = -1000;
-	    MoveIterator it = new MoveIterator(bd, oppColor);
+	    MoveIterator it2 = new MoveIterator(bd, oppColor);
 	    Move currMove;
 
-	    while((currMove = it.getNext()) != null) {
+	    while((currMove = it2.getNext()) != null) {
 	      currVal = scoreMove(bd, currMove, myColor, oppColor, currDepth+1, maxDepth, maxVal);
 	      if (currVal > maxVal) {
 			maxVal = currVal;
@@ -85,6 +89,9 @@ public class AI{
 		Move move = mv;	
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
+
+		System.out.println("Dumping oldBoard****************************************");
+		oldBoard.dumpBoard();
 		
 
 		//some useful values to have
@@ -165,7 +172,7 @@ public class AI{
 		}
 
 		// If proposed move neutralizes a critical threat
-		if(criticalThreat(oldBoard, color)){
+		/*if(criticalThreat(oldBoard, color)){
 			//System.out.println("CRITICAL THREAT");
 			
 			if(!criticalThreat(board, color)){	
@@ -177,11 +184,12 @@ public class AI{
 				
 				
 		}
+
 		// If proposed move causes a critical threat.
 		if(criticalThreat(board, color)){
 			//System.out.println("PULL OUT, SITUATION CRITICAL");
 			score = -1000;				
-		}
+		}*/
 				
 		System.out.println("\nEvaluation score:" +score);
 		return score; 		
@@ -202,24 +210,24 @@ public class AI{
 
 	// Returns true if the enemy can place a wining move, but doesnt have a network YET
 	static boolean criticalThreat(Board bd, int color){	
-		Board Newboard = bd.copyBoard();		
+		Board critBoard = bd.copyBoard();		
 		int enemyColor = getEnemyColor(color);
 		boolean enemyHasNetwork;
 		boolean threat = false;
 		
-		Move[] possibleMoves = LegalMoves.possibleMoves( Newboard, enemyColor);
+		//Move[] possibleMoves = LegalMoves.possibleMoves(critBoard, enemyColor);
 		
 		
-		for(int i = 0; i < possibleMoves.length; i++){			
-			if(possibleMoves[i]==null)
-				return threat;
-		Newboard.addChip(possibleMoves[i], enemyColor);
-		if(Newboard.hasNetwork(enemyColor))
-			return true;
-		
-		Newboard = bd.copyBoard();
-		
-		}
+		//for(int i = 0; i < possibleMoves.length; i++){			
+			//if(possibleMoves[i]==null)
+			//	return threat;
+
+			//critBoard.addChip(possibleMoves[i], enemyColor);
+			
+			if(critBoard.hasNetwork(enemyColor))
+				return true;		
+			//critBoard = bd.copyBoard();		
+		//}
 		
 		return threat;								
 	}
