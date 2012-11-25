@@ -52,7 +52,6 @@ public class Board{
     newBoard.whitePieces = whitePieces;
     newBoard.blackPieces = blackPieces;
     newBoard.connections = connections;
-    newBoard.maxExploreLength = maxExploreLength;
       
     return newBoard;         	  
   }
@@ -211,7 +210,7 @@ public class Board{
    * @return true to indicate a network was found, or false if not
    **/
   boolean hasNetwork(int col){
-    maxExploreLength = 1;
+  
     boolean exp = false;
 
     if(col == Chip.WHITE){
@@ -414,6 +413,7 @@ public class Board{
       else
         whiteLastMove = new Move(m.x1, m.y1);
     }
+
  /**
   * getLastMove() returns the last move made by the team of color col.
   * @param color the color of the team.
@@ -454,122 +454,50 @@ public class Board{
   }
 
  /**
-  * howManyConnections() is a public method that counts how many unique conncetions
-  * exist between all the chips on the board.
-  *
+  * howManyConnections() is a public method that counts how many unique connctions
+  * exist between all the chips on the board. A unique connection is one chip that can
+  * see another chip of the same color excluding those in the start goal. This method 
+  * avoids counting the same connection twice, hence, counts unique conncections.
+  * @param col the color of chip to consider.
+  * @return the number of connections on the board.
   **/  
   public int howManyConnections(int col){
-    //exp is the result of the exploration. Used to check more than one chip in start goal.
     connections = 0;
+
     if(col == Chip.WHITE){
       unTouchAllChipsOfColor(col);
       for (int i=0; i<8; i++) {//Check the first goal on the left.
         for(int j=1; j<7; j++){
         if(board[i][j].returnColor() == col){
           connectionExplore(col, board[i][j].getX(), board[i][j].getY());
-          }//correct color if
-        }//inner for
-      }//outer for
-    }// White if
-    if(col == Chip.BLACK){//Check the goal on the top.
+          }
+        }
+      }
+    }
+    if(col == Chip.BLACK){
       unTouchAllChipsOfColor(col);
-      for (int j=0; j<8; j++) {
+      for (int j=0; j<8; j++) {//Check the goal on the top.
         for(int i=1; i<7; i++){
         if(board[i][j].returnColor() == col){
           connectionExplore(col, board[i][j].getX(), board[i][j].getY());
-          }//correct color if
-        }//inner for
-      }//outer for
-    }// White if
+          }
+        }
+      }
+    }
     return connections;
   }
     
 
-    private void connectionExplore(int col, int x, int y){
-       // System.out.println("\n\n\n####ENTERING connectionExplore###");
-       
-       board[x][y].touch();
-
-       // System.out.println("board at (" + x + ", " + y + ") isTouched = " + board[x][y].isTouched());
-        
-      // System.out.println("Looking from (" + x + ", " + y + ") ");
-        
-        for (int i=-1; i<=1; i++) {
-            for (int j=-1; j<=1; j++) {
-               
-               // Current Point
-                if( (i == 0) && (j==0))
-                  continue;
-
-                //Running off board.
-                if( ((x + i) < 0) || ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
-                    continue;
-
-                //Eliminating Corners.
-                if( (x + i == 0 && y + j == 0) || (x + i == 7 && y + j == 0) ||
-                    (x + i == 7 && y + j == 7) || (x + i == 0 && y + j == 7) )
-                    continue;
-
-                //Loop to explore board
-                for(int k=1; k<8; k++){
-
-                    //Ran off the board
-                    if(((x + i*k) < 0) || ((y + j*k) < 0) || ((x + i*k) > 7) || ((y + j*k) > 7))
-                        break;
-                  
-                    neighbor = board[x + i*k][y + j*k];
-                    
-
-                     if(neighbor.returnColor() == Chip.EMPTY )
-                      continue;
-                    else{
-                      break;
-                      }
-
-                    }//end third for
-                
-                //wrong color
-                if( neighbor.returnColor() != col ){
-                    continue;
-                }
-                          
-
-                 //already visited
-                if(board[neighbor.getX()][neighbor.getY()].isTouched()){
-                    // System.out.println("The neighbor already touhed at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
-                    continue;
-                  }
-
-                  // Neighbor is in the start goal
-                if( (col == Chip.WHITE && neighbor.getX() == 0 ) || //NOTE: I don't consider a neighbor as a
-                    (col == Chip.BLACK && neighbor.getY() == 0)) { //NOTE: I'm assuming black start_goal is top row
-                    // System.out.println("Skipping the start goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + ") ");
-                    continue;
-                  }
-                  // Ignoring end goal neighbors from end goal chips
-                if ((col == Chip.WHITE && x == 7 && neighbor.getX() == 7 ) || 
-                    (col == Chip.BLACK && y == 7 && neighbor.getY() == 7)) { 
-                  // System.out.println("Skipping the end goal neighbor at (" + neighbor.getX() +", " + neighbor.getY() + 
-                    // ") from chip at  (" + x + ", " + y + ")");
-                  continue;
-                }
-                  else{
-                    // System.out.println("found good neighbor at (" + neighbor.getX() + ", " + neighbor.getY() + ") ");
-                  connections++;
-                  // System.out.println("From connectionExplore, I count " + connections + " connections.");
-                  }
-            
-          }//end second for
-    }//end first for
-        
-}
-int getSurroundingEmpties(int x, int y){
-  int e = 0;
-  for(int i = -1; i <= 1; i++){
-    for(int j = -1; j <= 1; j++){
+  private void connectionExplore(int col, int x, int y){
+     
+    board[x][y].touch();
       
-      if( (i == 0) && (j==0))
-        continue;
+    for (int i=-1; i<=1; i++) {
+      for (int j=-1; j<=1; j++) {
+       
+        // Current Point
+        if( (i == 0) && (j==0))
+          continue;
 
         //Running off board.
         if( ((x + i) < 0) || ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
@@ -580,18 +508,76 @@ int getSurroundingEmpties(int x, int y){
             (x + i == 7 && y + j == 7) || (x + i == 0 && y + j == 7) )
           continue;
 
-        // Count empties
-        if(board[i+x][j+y].returnColor() == Chip.EMPTY)
-          e++;
-    }
-  }
-  return e;
-}
-private void pause(int milli){
-  try{
-    Thread.sleep(milli);
-  }
-  catch (InterruptedException e) {}
-}
+        //Loop to explore board
+        for(int k=1; k<8; k++){
 
+          //Ran off the board
+          if(((x + i*k) < 0) || ((y + j*k) < 0) || ((x + i*k) > 7) || ((y + j*k) > 7))
+            break;
+        
+          neighbor = board[x + i*k][y + j*k];
+          
+
+           if(neighbor.returnColor() == Chip.EMPTY )
+            continue;
+          else
+            break;
+          }//end third for
+          
+        //wrong color
+        if( neighbor.returnColor() != col )
+            continue;
+
+         //already visited
+        if(board[neighbor.getX()][neighbor.getY()].isTouched())
+          continue;
+
+          // Neighbor is in the start goal
+        if( (col == Chip.WHITE && neighbor.getX() == 0 ) || //NOTE: I don't consider a neighbor as a
+            (col == Chip.BLACK && neighbor.getY() == 0)) //NOTE: I'm assuming black start_goal is top row
+            continue;
+          
+          // Ignoring end goal neighbors from end goal chips
+        if ((col == Chip.WHITE && x == 7 && neighbor.getX() == 7 ) || 
+            (col == Chip.BLACK && y == 7 && neighbor.getY() == 7)) 
+          continue;
+        
+        else
+          connections++;
+      
+      }//end second for
+    }//end first for  
+  }
+
+ /**
+  * getSurroundingEmpties() is a package protected method that counts
+  * the amount of empty cells (Chip with Empty color) surrounding a particular chip.
+  * @param x is the x coordinate to look from.
+  * @param y is the y coordinate to look from.
+  * @return the number of empty cells around the chip.
+  **/
+  int getSurroundingEmpties(int x, int y){
+    int e = 0;
+    for(int i = -1; i <= 1; i++){
+      for(int j = -1; j <= 1; j++){
+        
+        if( (i == 0) && (j==0))
+          continue;
+
+          //Running off board.
+          if( ((x + i) < 0) || ((y + j) < 0) || ((x + i) > 7) || ((y + j) > 7) )
+            continue;
+
+          //Eliminating Corners.
+          if( (x + i == 0 && y + j == 0) || (x + i == 7 && y + j == 0) ||
+              (x + i == 7 && y + j == 7) || (x + i == 0 && y + j == 7) )
+            continue;
+
+          // Count empties
+          if(board[i+x][j+y].returnColor() == Chip.EMPTY)
+            e++;
+      }
+    }
+    return e;
+  }
 }
