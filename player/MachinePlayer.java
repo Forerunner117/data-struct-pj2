@@ -40,16 +40,11 @@ public class MachinePlayer extends Player {
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {    
-    //System.out.println("chooseMove called. And it got passed " + myColor + " for a color");
-
     if(makeFirstMoves() != null){
       Move firstMove = makeFirstMoves();
       bd.addChip(firstMove, myColor);
       return firstMove;
     }
-
-    //System.out.println("whitePieces: " + bd.getPieces(Chip.WHITE));
-    //System.out.println("blackPieces: " + bd.getPieces(Chip.BLACK));
 
     return AI.smartMove(bd, myColor, oppColor, searchDepth);   
   } 
@@ -59,15 +54,12 @@ public class MachinePlayer extends Player {
   // illegal, returns false without modifying the internal state of "this"
   // player.  This method allows your opponents to inform you of their moves.
   public boolean opponentMove(Move m) {
-    //System.out.println("oppMove called.");
     if(LegalMoves.isLegal(bd, m, oppColor)){
       bd.addChip(m, oppColor);
       bd.setLastMove(m, oppColor);
-      //System.out.println("opponentMove was called and now has this many pieces: " + bd.getPieces(oppColor));
       return true;
     } 
     else{
-        //System.out.println("Cheater!");
         return false;      
     }     
   }
@@ -78,7 +70,6 @@ public class MachinePlayer extends Player {
   // player.  This method is used to help set up "Network problems" for your
   // player to solve.
   public boolean forceMove(Move m){
-    //System.out.println("forceMove called.");
     if(LegalMoves.isLegal(bd, m, myColor)){
       bd.addChip(m, myColor);
       return true;

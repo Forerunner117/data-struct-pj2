@@ -170,7 +170,7 @@ public class Board{
     return pieces;
   }*/
  
-  public void unflagAllChipsOfColor(int col){
+  void unflagAllChipsOfColor(int col){
     for (int i=0; i<8; i++) {
       for (int j=0; j<8; j++) {
         if(board[i][j].returnColor() == col)
@@ -179,7 +179,7 @@ public class Board{
     }
   }
 
-  public boolean hasNetwork(int col){
+  boolean hasNetwork(int col){
     maxExploreLength = 1;
     boolean exp = false;
     if(col == Chip.WHITE){

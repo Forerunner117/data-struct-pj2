@@ -23,7 +23,7 @@ Does your program compile without errors?
 
 
 Have you tested your program on the machines in the CSEL or VM?
-
+  Yes.
 
 Did you successfully implement game tree search?  Did you successfully
 implement alpha-beta pruning?  Are there any limitations on it?  What is the
@@ -50,13 +50,14 @@ Describe your board evaluation function in some detail.
   moves that would place a chip in one of the goals. The meat of our evaluation
   lies in determining the number of unique connections there are on the board:
   If a move would create more connections for 'this' player, its score is
-  increased; while decresing the amount of connections the opponent has also 
+  increased; decresing the amount of connections the opponent has also 
   adds to the move's score. 
 
 
 Does your MachinePlayer use any special method of choosing the first few moves?
-  Yes. The first two moves are placed in two of the four center positions. This
-  method is called without having to enter the evaluation methods to save time.
+  Yes. The private method makeFirstMoves() in the MachinePlayer class will place
+  the first two moves in two of the four center positions. This method is called
+  without having to enter the evaluation methods to save time.
 
 Is there anything else the graders should know to help them read your project?
 
@@ -85,11 +86,28 @@ project.  Your design of classes and interfaces with be worth about 10% of your
 Project 2 grade.
 
 
+Classes:
+
+  Student-Implemented:
+  MachinePlayer
+  Board
+  Chip
+  Direction
+  LegalMoves
+  MoveIterator
+  AI
+
+  Pre-Implemented:
+  Player
+  Move
+
+
+
 Modules:
 
 /**
 *Board/Chip Data Structure Module (Ian McLaughlin / Austin Longo):
-* -The following descirbe only the methods related to the data structures used
+* -The following describe only the methods related to the data structures used
 *  to store the game pieces/states.
 * 
 *  Chip is a package protected class. The chip constructor takes in an int 
@@ -98,27 +116,60 @@ Modules:
 *  variable called visited that is initially false, but can be set to true by
 *  the method flag().
 *	
-*    // returnColor() returns the int value corresponding to the color. 
-*	   // changeColor(int color) is a method that changes the color of a chip.
-*	   // unflag() is a method that sets visited to false.
-*    // touch() is a method that sets the touched flag to true.
-*    // untouch() sets the touched flad to false.
-*	   // isFlagged() is a boolean method that returns true if visited is true.
-*    // returnColor() returns the color of the chip.
-*    // getX() returns the x-coord of the chip.
-*    // getY() returns the y-coord of the chip.
-*    // changeColor(int color) changes the color of 'this' chip.
-*    // toString() converts the chip color value into a string.
+*    Chip(int x, int y, int color)
+*       // Constructs a Chip object with position (x, y) and color equal to color.
+*    int returnColor() 
+*       // Returns the int value corresponding to the color of 'this' Chip. 
+*	   void changeColor(int color)
+*       // Changes the color of 'this' Chip to color.
+*    void flag()
+*       // Sets the visited flag of 'this' Chip to true.
+*	   void unflag()
+*       // Sets the visited flag of 'this' Chip to false.
+*    void touch() 
+*       // Sets the touched flag of 'this' Chip to true.
+*    void untouch()
+*       // Sets the touched flag of 'this' Chip to false.
+*	   boolean isFlagged()
+*       // Returns true if visited is true, false otherwise.
+*    int returnColor()
+*       // Returns the color of 'this' Chip.
+*    int getX() 
+*       // Returns the x-coord of 'this' Chip.
+*    int getY() 
+*       // Returns the y-coord of 'this' Chip.
+*    public String toString() 
+*       // Returns a String representation of the color of 'this' Chip.
 *
 *	 The Board class is also package protected. A board object is simply an array
 *  of Chips. The Board object has a zero parameter constructer, that allocates 
-*  an 8 by 8 size chip array--all null.
+*  an 8 by 8 size chip array with all Chips having color equal to EMPTY and the
+*  corner Chips having color equal to GREY.
 *	
-*    // addChip() is a method that adds a chip of a certain color at specific 
-*       // point in the array of chips.
-*	   // addChip(int x, int y, int color) 
-*	   // returnChip(in x, int y) returns a chip object at a given point in the chip array.
-*	   // removeChip(int x, int y) is a method that sets a given point of the chip array as null.
+*    public Board()
+*       // Constructs a new Board as described above.
+*    public Board copyBoard()
+*       // Creates a copy of 'this' Board.
+*    public Chip returnChip(int x, int y) 
+*       // Returns the Chip at location (x, y).
+*    public int chipColor(int x, int y)
+*       // Returns the color of the Chip at location (x, y).
+*    public void addChip(Move m, int color)
+*       // Changes the color of the Chip given by Move m to color.
+*    public void removeChip(int x, int y)
+*       // Changes the color of the Chip at (x, y) to EMPTY.
+*    public void undoMove(Move m, int color)
+*       // Reverts the Move m made by a player with color equal to color.
+*    public void setPieces(int col)
+*       // Increments the piece counter for the given color col.
+*    public void decPieces(int col)
+*       // Decrements the piece counter for the given color col.
+*    public int getPieces(int col)
+*       // Returns the number of pieces in play by the given color col.
+*    public Chip[] getCurrChips(int col)
+*       // Returns an array of Chip objects containing all the pieces in play by the given color col.
+*	   returnChip(in x, int y) returns a chip object at a given point in the chip array.
+*	   removeChip(int x, int y) is a method that sets a given point of the chip array as null.
 **/
 
 /**
