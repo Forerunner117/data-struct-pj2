@@ -16,24 +16,16 @@ public class AI{
 	    int currScore;
 	    Move maxMove = null;
 	    Move currMove = null;
-
-	    //System.out.println("Dumping Original bd!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-	    //bd.dumpBoard();
-
 	    MoveIterator it = new MoveIterator(bd, myColor);
 
 	    while((currMove = it.getNext()) != null){
-	      //System.out.println("scoring move at: " + currMove.x1 + ", " + currMove.y1); 	         	
 	      currScore = scoreMove(bd, currMove, myColor, oppColor, 1, searchDepth, maxScore);
-	      //System.out.println(" SCORE: " + currScore);
 	      if (currScore >= maxScore){
 	        maxScore = currScore;
 	        maxMove = currMove;
 	      }
     	}
     	
-    	//System.out.println("maxMove at: " + maxMove.x1 + ", " + maxMove.y1 +
-    	// " FROM: " + maxMove.x2 + ", " + maxMove.y2);
     	bd.addChip(maxMove, myColor);
         bd.setLastMove(maxMove, myColor);
     	return maxMove;
@@ -41,7 +33,6 @@ public class AI{
 
 	private static int scoreMove(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 		int retVal;
-	    //bd.addChip(m, myColor);
 
 	    if (currDepth >= maxDepth) {
 	      	if(currDepth % 2 == 0){ //this means we are at a depth where we must eval for an opponent Move
@@ -50,7 +41,6 @@ public class AI{
 	      	}
 	      	else{
 	      		retVal = evaluate(bd, m, myColor);
-	      		//System.out.println("retVal: " + retVal);
 	      		bd.undoMove(m, myColor);
 	      	}
 	      	
@@ -82,28 +72,28 @@ public class AI{
 	    }
 	    return maxVal;
   	}
-	
+	/**
+	* evaluate() takes in a possible move to a board and returns an integer
+	* based on how good the move is. A higher number corresponds to a better move
+	* and vice versa.
+	* @param bd the current state of the board
+	* @param mv a possible move that will be scored
+	* @param color the color of the team machinePlayer is on.
+	* @return an integer between -1000 and 1000.
+	*/
 	public static int evaluate(Board bd, Move mv, int color){
 		int score = 0;
 		Board board = bd.copyBoard();		
 		Move move = mv;	
 		int pieces = bd.getPieces(color);
 		Board oldBoard = bd;
-
-		//System.out.println("Dumping oldBoard****************************************");
-		//oldBoard.dumpBoard();
-		
-		//some useful values to have
-		int exploreLength;
 		int enemyColor = getEnemyColor(color);
 		int prevConnections = oldBoard.howManyConnections(color);
 		int preMoveEnemyConnections = oldBoard.howManyConnections(enemyColor);
 
 		board.addChip(mv,color);
 
-		if(board.hasNetwork(color)){
-			//System.out.println("This makes a Network!");
-		}
+		
 		// If proposed move gives us a network...without giving the enemy a network.					
 		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
 			score = 1000;
@@ -120,16 +110,14 @@ public class AI{
 		// To spread out the chips a little more
 		if(board.getSurroundingEmpties(mv.x1, mv.y1) > 0)
 			score += board.getSurroundingEmpties(mv.x1, mv.y1) * 3;
+		
 		// If enemy has a network
 		if(board.hasNetwork(enemyColor))
 			score = -1000;
-
-		exploreLength = bd.getMaxExploreLength(); // must be after a network test.
-		// System.out.println("exploreLength is " + exploreLength);
 		
 
 		// Take the center in the beginning.
-		if (pieces <3){ //love pieces.
+		if (pieces <3){ 
 			if(mv.x1 > 2 && mv.x1 < 5 && mv.y1 > 2 && mv.y1 < 5)
 				score += 250;
 		}
@@ -138,11 +126,11 @@ public class AI{
 		if(pieces >= 4 && oldBoard.endGoalEmpty(color))
 		{				
 			if(!board.endGoalEmpty(color) || !board.startGoalEmpty(color)) 
-				score += 325; //Fixed it,						
+				score += 325;						
 		}
 
 
-		//Difference in enemy connections
+		//Difference in our connections
 		int diffConnections = board.howManyConnections(color) - prevConnections;
 		if (diffConnections < 0)
 			score -= diffConnections*115;
@@ -151,7 +139,7 @@ public class AI{
 		if (diffConnections == 0)
 			score -= 50;
 		
-		// Difference in enemy connections. I made offense more valuable then defense. This can change if needbe.
+		// Difference in enemy connections. 
 		int diffEnemyConnections = board.howManyConnections(enemyColor) - preMoveEnemyConnections;
 		if (diffEnemyConnections < 0)
 			score += diffEnemyConnections*75;
@@ -160,41 +148,22 @@ public class AI{
 		if (diffEnemyConnections == 0)
 			score += 50;
 
-		if(cluster(oldBoard,color) >= 0.5 && mv.x1 < 4){
-			//System.out.println("clustering on right side----------------------------------");
+		if(clusterRatio(oldBoard,color) >= 0.5 && mv.x1 < 4){
 			score += 500;
 		}
 
-		if(cluster(oldBoard,color) <= 0.5 && mv.x1 > 4){
-			//System.out.println("clustering on left side");
+		if(clusterRatio(oldBoard,color) <= 0.5 && mv.x1 > 4){
 			score += 100;
 		}
 
-		/*
-		// If proposed move neutralizes a critical threat
-		if(criticalThreat(oldBoard, color)){
-			System.out.println("CRITICAL THREAT");
-			
-			if(!criticalThreat(board, color)){	
-				System.out.println("BLOCKED");
-				score += 1500;
-				if(score >= 1000)
-				score = 999;
-			}
-				
-				
-		}
-
-		// If proposed move causes a critical threat.
-		if(criticalThreat(board, color)){
-			System.out.println("PULL OUT, SITUATION CRITICAL");
-			score = -1000;				
-		}
-		*/		
-		//System.out.println("\nEvaluation score:" +score);
 		return score; 		
 	}
-		
+	/**
+	* getEnemyColor() is a helper method that takes in machinePlayer's
+	* and returns the enemy's color.
+	* @param myColor is machinePlayer's color
+	* @return the int representing the enemyColor.
+	*/ 
 	private static int getEnemyColor(int myColor){
 		int enemyColor; 
 
@@ -206,84 +175,58 @@ public class AI{
 		return  enemyColor;
 	}
 
-
-/*
-	// Returns true if the enemy can place a wining move, but doesnt have a network YET
-	static boolean criticalThreat(Board bd, int color){	
-		Board critBoard = bd.copyBoard();		
-		int enemyColor = getEnemyColor(color);
-		boolean threat = false;
-		MoveIterator it3 = new MoveIterator(bd, enemyColor);
-		Move currMove;
-		
-		while((currMove = it3.getNext()) != null){
-			critBoard.addChip(currMove, enemyColor);
-			
-			if(critBoard.hasNetwork(enemyColor))
-				threat = true;
-
-			critBoard = bd.copyBoard();		
-		}
-		
-		return threat;								
-	}
+	/**
+	* clusterRatio() is a method that determines the ratio of friendly chips on the right side
+	* of the board and returns a float which evaluate uses to utilize more open board space.
+	* @param bd the current board.
+	* @param myColor is machinePlayer's color
+	* @return the ratio of friendly chips on one side.
 	*/
-
-	static float cluster(Board bd, int Mycolor){
+	private static float clusterRatio(Board bd, int myColor){
 		int colorCounter = 0;
 		int totalColor = 0;
 		float ratio = 0;
 		Chip temp;
-		Total:	for(int i = 0; i < 8; i++)
+		total: for(int i = 0; i < 8; i++)
 		{
 			
 			for(int j = 0; j < 8; j++)
 			{
 				if(i == 0 && j == 0)
-					continue Total;
+					continue total;
 				if(i == 0 && j == 7)
-					continue Total;
+					continue total;
 				if(i == 7 && j == 0)
-					continue Total;
+					continue total;
 				if(i == 7 && j == 7)
-					continue Total;
+					continue total;
 					
 				temp = bd.returnChip(i,j);
-				if(temp.returnColor() == Mycolor)
+				if(temp.returnColor() == myColor)
 					totalColor ++;	
-				
 			}
 	
 		
 		}
-		Counter:	for(int i = 4; i < 8; i++)
+		counter: for(int i = 4; i < 8; i++)
 		{
-			
 			for(int j = 0; j < 8; j++)
 			{
 				if(i == 0 && j == 0)
-					continue Counter;
+					continue counter;
 				if(i == 0 && j == 7)
-					continue Counter;
+					continue counter;
 				if(i == 7 && j == 0)
-					continue Counter;
+					continue counter;
 				if(i == 7 && j == 7)
-					continue Counter;
+					continue counter;
 				temp = bd.returnChip(i,j);
-				if(temp.returnColor() == Mycolor)
+				if(temp.returnColor() == myColor)
 					colorCounter ++;	
-				
 			}
-	
-		
 		}
 	
 		ratio = (float)colorCounter/(float)totalColor;
 		return ratio;
-		
-		
-	}
-								
-	
-		
+	}		
 }
