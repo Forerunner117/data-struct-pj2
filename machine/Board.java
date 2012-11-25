@@ -6,9 +6,7 @@ import player.*;
 
 public class Board{
 
-  private Chip[][] board = new Chip[8][8]; 
-  private Move whiteLastMove;
-  private Move blackLastMove;   
+  private Chip[][] board = new Chip[8][8];  
   private Chip neighbor;
   private int whitePieces;
   private int blackPieces;
@@ -37,7 +35,7 @@ public class Board{
   * copyBoard() creates a duplicate Board object reflecting the current state of the game.
   * Useful to store the state of the Board before changes.
   * @return a duplicate Board object.
-  */
+  **/
   public Board copyBoard(){
     Chip tempChip;
     Board newBoard = new Board();
@@ -65,13 +63,14 @@ public class Board{
   private void insertChip(int x, int y, Chip chip){
      board[x][y] = chip;  
   }
+
   /**
   * returnChip() returns a chip object from the desired location of the board.
   * @param x the x location
   * @param y the y location
   * @return a chip object.
   **/
-  public Chip returnChip(int x, int y){
+  Chip returnChip(int x, int y){
     return board[x][y];
   }
 
@@ -81,7 +80,7 @@ public class Board{
   * @param y the y location
   * @return int representing color.
   **/
-  public int chipColor(int x, int y){
+  int chipColor(int x, int y){
     Chip chip = returnChip(x,y);
     int color =  chip.returnColor();
     return color;
@@ -90,7 +89,7 @@ public class Board{
   /**
   * addChip() takes a move and a color and reflects that move on 'this' board, 
   * and also increments the piece count. STEP moves have their original 
-  * locations removes.
+  * locations removed.
   * @param m the desired move.
   * @param color the color of the team who made the move.
   **/
@@ -107,7 +106,13 @@ public class Board{
       return;  
   }
 
-  public void removeChip(int x, int y){ 
+  /**
+  * removeChip() takes an x and y coord on 'this' board and sets the Chip's 
+  * color at that location equal to EMPTY.
+  * @param x the x coord.
+  * @param y the y coord.
+  **/
+  void removeChip(int x, int y){ 
       board[x][y].color = Chip.EMPTY;
   }
 
@@ -115,7 +120,7 @@ public class Board{
    * undoMove() sets the slot from move m to EMPTY and decreases the piece count 
    * for ADD moves. Reverts a STEP move.
    **/
-  public void undoMove(Move m, int color){
+  void undoMove(Move m, int color){
   	  if(m.moveKind == m.ADD){
   	  	  board[m.x1][m.y1] = new Chip(m.x1, m.y1, Chip.EMPTY);    	  
           //this.decPieces(color);  	 
@@ -133,7 +138,7 @@ public class Board{
    * is called.
    * @param col the color of the team.
    **/
-  public void setPieces(int col){
+  void setPieces(int col){
     if(col == Chip.BLACK)
       ++blackPieces;
     if(col == Chip.WHITE)
@@ -141,11 +146,11 @@ public class Board{
   }
 
   /**
-   * decPieces decrements the count of white or black pieces every time undoMove
+   * decPieces() decrements the count of white or black pieces every time undoMove
    * is called.
    * @param col the color of the team.
    **/
-  public void decPieces(int col){
+  void decPieces(int col){
     if(col == Chip.BLACK)
       --blackPieces;
     if(col == Chip.WHITE)
@@ -157,7 +162,7 @@ public class Board{
    * when we want to determine if we should make an ADD or STEP move.
    * @param col the color of the team.
    **/
-  public int getPieces(int col){
+  int getPieces(int col){
     if(col == Chip.BLACK)
       return blackPieces;
     else if(col == Chip.WHITE)
@@ -167,13 +172,13 @@ public class Board{
   }
 
   /**
-   * public method getCurrChips() finds all of the current chips that have been
+   * getCurrChips() finds all of the current chips that have been
    * placed on the board by the given color, col. Once found, they are stored in
    * the 1D array currChips and then returned. Implemented so that we may make 
    * smart STEP moves by analyzing all legal STEP moves for all pieces in play.
    * @param col the color of the team.   
    **/
-  public Chip[] getCurrChips(int col){
+  Chip[] getCurrChips(int col){
     Chip[] currChips = new Chip[500];
     int counter = 0;
 
@@ -245,7 +250,7 @@ public class Board{
 
     board[x][y].flag();     
 
-    Direction curr_dir = Direction.N; // N is arbirary. There is not current direction yet.
+    Direction curr_dir = Direction.N; // N is arbitrary. There is not current direction yet.
       
     for (int i=-1; i<=1; i++) {
       for (int j=-1; j<=1; j++) {
@@ -302,15 +307,17 @@ public class Board{
             (col == Chip.WHITE && neighbor.getX() == 7)){
             if (len >= 5) return true;
         
-        }else{
+        }
+        else{
             if(explore(col, neighbor.getX(), neighbor.getY(), len+1, curr_dir))
                 return true;
-            }
+        }
         }//end second for
       }//end first for
     board[x][y].unflag();//chip has no neighbors...how sad.
     return false;
   }
+
  /**
   * endGoalEmpty() is a package protected method that checks if the
   * 8th column (if white) or 8th row (if black) is empty.
@@ -400,31 +407,6 @@ public class Board{
     }
     return count;
   }
-  
- /**
-  * setLastMove() is a public method that saves the last move made by a color
-  * in the instance variable blackLastMove or whiteLastMove, depending on color.
-  * @param m a Move object that represents the most recent move.
-  * @param color the color of the chip who made a move.
-  **/  
-  public void setLastMove(Move m, int color){
-      if(color == Chip.BLACK)
-        blackLastMove = new Move(m.x1, m.y1);
-      else
-        whiteLastMove = new Move(m.x1, m.y1);
-    }
-
- /**
-  * getLastMove() returns the last move made by the team of color col.
-  * @param color the color of the team.
-  * @return a Move object representing the most recent move.
-  **/
-  public Move getLastMove(int color){
-    if(color == Chip.BLACK)
-      return blackLastMove;
-    else
-      return whiteLastMove;
-  }
 
  /**
   * dumpBoard() prints out the current state of the board.
@@ -454,14 +436,14 @@ public class Board{
   }
 
  /**
-  * howManyConnections() is a public method that counts how many unique connctions
+  * howManyConnections() counts how many unique connctions
   * exist between all the chips on the board. A unique connection is one chip that can
   * see another chip of the same color excluding those in the start goal. This method 
   * avoids counting the same connection twice, hence, counts unique conncections.
   * @param col the color of chip to consider.
   * @return the number of connections on the board.
   **/  
-  public int howManyConnections(int col){
+  int howManyConnections(int col){
     connections = 0;
 
     if(col == Chip.WHITE){
@@ -489,7 +471,6 @@ public class Board{
     
 
   private void connectionExplore(int col, int x, int y){
-     
     board[x][y].touch();
       
     for (int i=-1; i<=1; i++) {

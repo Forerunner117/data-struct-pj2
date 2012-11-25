@@ -4,6 +4,7 @@ package player;
 
 import machine.*;
 import java.util.Random;
+
 /**
  *  An implementation of an automatic Network player.  Keeps track of moves
  *  made by both players.  Can select a move for itself.
@@ -56,7 +57,8 @@ public class MachinePlayer extends Player {
     }
 
     return AI.smartMove(bd, myColor, oppColor, searchDepth);   
-  } 
+  }
+   
   /**
    * oppnentMove() If the Move m is legal, records the move as a move by the opponent
    * (updates the internal game board) and returns true.  If the move is
@@ -68,7 +70,6 @@ public class MachinePlayer extends Player {
   public boolean opponentMove(Move m) {
     if(LegalMoves.isLegal(bd, m, oppColor)){
       bd.addChip(m, oppColor);
-      bd.setLastMove(m, oppColor);
       return true;
     } 
     else{

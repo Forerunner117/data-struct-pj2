@@ -8,6 +8,8 @@ public class EvaluateTestDrive{
 
 static Board bd = new Board();
 
+    
+
 public static void main(String[] args) {
 	
 
@@ -37,6 +39,7 @@ public static void main(String[] args) {
 		 white[7] = new Move(7, 4);
 		 white[8] = new Move(6, 6);
 		 // white[9] = new Move(7, 6);
+    
 
 		 for (int i=0; i<9; i++) {
 		 	black[i] = randomMove(Chip.BLACK);
@@ -79,11 +82,9 @@ public static void main(String[] args) {
 
     
     Move random = new Move(x,y);
-    
 
     while(!LegalMoves.isLegal(bd, random, myColor)){
-      prev = bd.getLastMove(myColor);
-      //prev = new Move(random.x1, random.y1);
+      prev = new Move(random.x1, random.y1);
       x = rn.nextInt(8);
       y = rn.nextInt(8);
 
@@ -102,13 +103,15 @@ public static void main(String[] args) {
     prev_x = random.x1;
     prev_y = random.y1;
     bd.setPieces(myColor);
-    bd.setLastMove(random, myColor);
+    
     
     //Network Testing
     // System.out.print("MachinePlayer has " + bd.howManyConnections(myColor) + " connections. ");
     
     return random; 	  	  	    	    	    	    	
+
   }
+ 
 }
 
 

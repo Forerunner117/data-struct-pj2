@@ -25,6 +25,7 @@ public class Chip{
 		x = 1;
 		y = 1;
 	}
+	
 	/**
      * Chip() constructs a chip object with specified (x,y) position and color.
      * @param x is the x coordinate.

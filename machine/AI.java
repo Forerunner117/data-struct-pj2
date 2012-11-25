@@ -5,12 +5,23 @@ package machine;
 import player.*;
 
 /**
- *	A package protected class that contains static methods that can evaluate a 
- *  given board and return the best possible move.
+ *	AI is a public class that contains methods that will perform 
+ *  game-tree search and implement the mini-max algorithm to search for all
+ *  possible moves and evaluate them. The search method will then return the 
+ *  highest rated Move.
  */
 
 public class AI{
 
+   /**
+	* smartMove() considers all possible legal moves and scores them. Once all
+	* possibleMoves have been exhausted, it returns the highest scored move.
+	* @param bd is the Board we want to look at.
+	* @param myColor is the color of the player calling this method.
+	* @param oppColor is the opponent's color.
+	* @param searchDepth is the amount of "levels" we wish to look.
+	* @return the Move with the highest score.
+	**/
 	public static Move smartMove(Board bd, int myColor, int oppColor, int searchDepth){
 	    int maxScore = -1000;
 	    int currScore;
@@ -26,11 +37,23 @@ public class AI{
 	      }
     	}
     	
-    	bd.addChip(maxMove, myColor);
-        bd.setLastMove(maxMove, myColor);
+    	bd.addChip(maxMove, myColor);     
     	return maxMove;
   	}
 
+   /**
+	* scoreMove() determines what action to take when considering a possibleMove.
+	* If we have already reached our max depth, we will begin to evaluate, 
+	* otherwise we will continue to recurse using tryAll.
+	* @param bd is the Board we wish to look at.
+	* @param m is the Move we wish to score.
+	* @param myColor is the color of the player calling this method.
+	* @param oppColor is the opponent's color.
+	* @param currDepth is the current search depth that the method was called on.
+	* @param maxDepth is the maximum search depth we will search.
+	* @param cutoff is the pruning value to stop at.
+	* @return the int value associated with the score of the Move.
+	**/
 	private static int scoreMove(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 		int retVal;
 
@@ -57,6 +80,19 @@ public class AI{
 	    return retVal;
   	}
 
+   /**
+    * tryAll() is somewhat of a wrapper-method that is used to continually recurse
+    * until we have reache our maxDepth. It acts much like smartMove in the way it
+    * loops through all possibleMoves.
+    * @param bd is the Board we wish to look at.
+	* @param m is the Move we wish to score.
+	* @param myColor is the color of the player calling this method.
+	* @param oppColor is the opponent's color.
+	* @param currDepth is the current search depth that the method was called on.
+	* @param maxDepth is the maximum search depth we will search.
+	* @param cutoff is the pruning value to stop at.
+	* @return the int value associated with the score of the Move.
+    **/
 	private static int tryAll(Board bd, Move m, int myColor, int oppColor, int currDepth, int maxDepth, int cutoff){
 	    int currVal, maxVal = -1000;
 	    MoveIterator it2 = new MoveIterator(bd, oppColor);
@@ -72,6 +108,7 @@ public class AI{
 	    }
 	    return maxVal;
   	}
+
 	/**
 	* evaluate() takes in a possible move to a board and returns an integer
 	* based on how good the move is. A higher number corresponds to a better move
@@ -93,7 +130,6 @@ public class AI{
 
 		board.addChip(mv,color);
 
-		
 		// If proposed move gives us a network...without giving the enemy a network.					
 		if(board.hasNetwork(color) && !board.hasNetwork(enemyColor)){//and enemy does NOT have network.
 			score = 1000;
@@ -158,6 +194,7 @@ public class AI{
 
 		return score; 		
 	}
+
 	/**
 	* getEnemyColor() is a helper method that takes in machinePlayer's
 	* and returns the enemy's color.
