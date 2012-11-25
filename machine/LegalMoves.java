@@ -11,9 +11,15 @@ import player.*;
 
 public class LegalMoves{	
 
-	// A package protected static method that takes a move and a color as 
-	// parameters and returns true for a legal move and false for an illegal
-	// move.
+	/**
+	 * isLegal() is a package protected static method that takes a move and a color as 
+     * parameters and returns true for a legal move and false for an illegal
+	 * move.
+	 * @param bd is the board isLegal looks at.
+	 * @param m a Move object representing the proposed move.
+	 * @param col is the color of team we're considering.
+	 * @return true if a move is legal, false in not legal.
+	 **/
 	public static boolean isLegal(Board bd, Move m, int col){
 		if(m.moveKind == m.QUIT)
 			return true;
@@ -79,12 +85,26 @@ public class LegalMoves{
 		return true;
 	}
 
-	// A static boolean class that returns true if the move is on the board and
-	// false if not.
+	/**
+	 * isOnBoard() is a static boolean method that returns true if the move is on the board and
+	 * false if not.
+	 * @param x the x coordinate
+	 * @param y the y coordinate
+	 * @return true if the move is on the board false if not on board.
+	 **/
 	static boolean isOnBoard(int x, int y){
 		return(x >= 0 && x <= 7 && y >= 0 && y <= 7);
 	}
 
+	/**
+	 * makesCluster() is a package protected static method that checks if a move makes a 
+	 * cluster on the board. A cluster is a group of three chips and one of them is
+	 * adjacent to the other two
+	 * @param bd the board makesCluster looks at.
+	 * @param m is the move to be considered.
+	 * @param col is the color of the team we're looking at.
+	 * @return true if m makes a cluster, false if it does not make a cluster.
+	 **/
 	static boolean makesCluster(Board bd, Move m, int col){
 		int x = m.x1;
 		int y = m.y1;
@@ -153,9 +173,13 @@ public class LegalMoves{
 		}
 		return false;
 	}
-	
- 	// A package protected static method that takes the color of the current player
- 	// and returns an array of valid Move objects. Calls the isLegal method.	
+	/**
+ 	 * possibleMoves() is a package protected static method that takes the color of the current player
+ 	 * and returns an array of valid Move objects. Calls the isLegal method.
+ 	 * @param bd the board the method looks at.
+ 	 * @param col the color of the team to consider.
+ 	 * @return an array of Move objects legal to put down.
+ 	 **/
 	public static Move[] possibleMoves(Board bd, int col){
 		Move[] possibleMoves = new Move[500]; 
 		Chip[] currentChips = bd.getCurrChips(col);

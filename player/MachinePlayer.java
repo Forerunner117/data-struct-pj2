@@ -15,8 +15,11 @@ public class MachinePlayer extends Player {
   private int oppColor;
   private int searchDepth;
 
-  // Creates a machine player with the given color.  Color is either 0 (black)
-  // or 1 (white).  (White has the first move.)
+  /**
+   * Constructs a machine player with the given color.  Color is either 0 (black)
+   * or 1 (white).  (White has the first move.)
+   * @param color an integer representing color.
+   **/
   public MachinePlayer(int color) {
     bd = new Board();
     myColor = color;
@@ -29,16 +32,22 @@ public class MachinePlayer extends Player {
     int searchDepth = 3;
   }
 
-
-  // Creates a machine player with the given color and search depth.  Color is
-  // either 0 (black) or 1 (white).  (White has the first move.)
+  /**
+   * Constructs a machine player with the given color and search depth.  Color is
+   * either 0 (black) or 1 (white).  (White has the first move.)
+   * @param color an integer representing color.
+   * @param searchDepth an integer of how far down the game tree to recurse.
+   **/
   public MachinePlayer(int color, int searchDepth) {
     this(color);
     this.searchDepth = searchDepth;
   }
 
-  // Returns a new move by "this" player.  Internally records the move (updates
-  // the internal game board) as a move by "this" player.
+  /**
+   * chooseMove() returns a new move by "this" player.  Internally records the move (updates
+   * the internal game board) as a move by "this" player.
+   * @return new move by "this" player.
+   **/
   public Move chooseMove() {    
     if(makeFirstMoves() != null){
       Move firstMove = makeFirstMoves();
@@ -48,11 +57,14 @@ public class MachinePlayer extends Player {
 
     return AI.smartMove(bd, myColor, oppColor, searchDepth);   
   } 
-
-  // If the Move m is legal, records the move as a move by the opponent
-  // (updates the internal game board) and returns true.  If the move is
-  // illegal, returns false without modifying the internal state of "this"
-  // player.  This method allows your opponents to inform you of their moves.
+  /**
+   * oppnentMove() If the Move m is legal, records the move as a move by the opponent
+   * (updates the internal game board) and returns true.  If the move is
+   * illegal, returns false without modifying the internal state of "this"
+   * player.  This method allows your opponents to inform you of their moves.
+   * @param m is the opponents move.
+   * @return true if move is legal, false if move is illegal.
+   **/
   public boolean opponentMove(Move m) {
     if(LegalMoves.isLegal(bd, m, oppColor)){
       bd.addChip(m, oppColor);
@@ -64,11 +76,15 @@ public class MachinePlayer extends Player {
     }     
   }
 
-  // If the Move m is legal, records the move as a move by "this" player
-  // (updates the internal game board) and returns true.  If the move is
-  // illegal, returns false without modifying the internal state of "this"
-  // player.  This method is used to help set up "Network problems" for your
-  // player to solve.
+  /**
+   * forceMove()  If the Move m is legal, records the move as a move by "this" player
+   * (updates the internal game board) and returns true.  If the move is
+   * illegal, returns false without modifying the internal state of "this"
+   * player.  This method is used to help set up "Network problems" for your
+   * player to solve.
+   * @param m is the move to be forced
+   * @return true if move is legal, false if move is illegal.
+   **/
   public boolean forceMove(Move m){
     if(LegalMoves.isLegal(bd, m, myColor)){
       bd.addChip(m, myColor);
@@ -78,51 +94,10 @@ public class MachinePlayer extends Player {
       return false;
   }
 
-  /*
-  private Move randomMove(){
-    int x;
-    int y;
-    int prev_x, prev_y;
-    Random rn = new Random();
-    Move prev; 
-
-    x = rn.nextInt(8);
-    y = rn.nextInt(8);
-
-    
-    Move random = new Move(x,y);
-    
-
-    while(!LegalMoves.isLegal(bd, random, myColor)){
-      prev = bd.getLastMove(myColor);
-      //prev = new Move(random.x1, random.y1);
-      x = rn.nextInt(8);
-      y = rn.nextInt(8);
-
-      System.out.println(x + "" + y);
-      //create STEP move if 10 pieces are down
-      if(bd.getPieces(myColor) >= 10){
-        random = new Move(x, y, prev.x1, prev.y1);
-        System.out.println("Created a STEP move.");
-        continue;
-      }
-
-      random = new Move(x, y);
-    }
-
-    bd.addChip(random, myColor); 
-    prev_x = random.x1;
-    prev_y = random.y1;
-    bd.setPieces(myColor);
-    bd.setLastMove(random, myColor);
-    
-    //Network Testing
-    System.out.print("hasNetwork is: " + bd.hasNetwork(myColor));
-    
-    return random; 	  	  	    	    	    	    	
-  }
-  */
-
+ /**
+  * makeFirstMoves() is used to take the center is the beginning of the game.
+  * @return a move that is in the center.
+  **/
   private Move makeFirstMoves(){
     Move center1 = new Move(3, 3);
     Move center2 = new Move(3, 4);
@@ -148,18 +123,22 @@ public class MachinePlayer extends Player {
     return null;
   }
 
+  // Gets the board.
   public Board getBoard(){
     return bd;
   }
 
+  // Gets MachineColor's color.
   public int getMyColor(){
     return myColor;
   }
 
+  // Gets opponent's color.
   public int getOppColor(){
     return oppColor;
   }
 
+  // Gets the search depth.
   public int getSearchDepth(){
     return searchDepth;
   }
